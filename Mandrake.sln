@@ -1,0 +1,40 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MandrakeLib", "MandrakeLib\MandrakeLib.csproj", "{4EAA0C83-A033-4B72-B67A-0E22A7213711}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MandrakeClient", "MandrakeClient\MandrakeClient.csproj", "{040C64E4-8E78-4F7D-8849-A502F96C7839}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MandrakeService", "MandrakeService\MandrakeService.csproj", "{54A14872-8CD5-4811-B0E0-419FE5FA19FB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MandrakeHost", "MandrakeHost\MandrakeHost.csproj", "{C4BF88B0-3412-4DFB-BA0F-328F4557E7F5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4EAA0C83-A033-4B72-B67A-0E22A7213711}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4EAA0C83-A033-4B72-B67A-0E22A7213711}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4EAA0C83-A033-4B72-B67A-0E22A7213711}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4EAA0C83-A033-4B72-B67A-0E22A7213711}.Release|Any CPU.Build.0 = Release|Any CPU
+		{040C64E4-8E78-4F7D-8849-A502F96C7839}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{040C64E4-8E78-4F7D-8849-A502F96C7839}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{040C64E4-8E78-4F7D-8849-A502F96C7839}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{040C64E4-8E78-4F7D-8849-A502F96C7839}.Release|Any CPU.Build.0 = Release|Any CPU
+		{54A14872-8CD5-4811-B0E0-419FE5FA19FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{54A14872-8CD5-4811-B0E0-419FE5FA19FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{54A14872-8CD5-4811-B0E0-419FE5FA19FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{54A14872-8CD5-4811-B0E0-419FE5FA19FB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C4BF88B0-3412-4DFB-BA0F-328F4557E7F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C4BF88B0-3412-4DFB-BA0F-328F4557E7F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C4BF88B0-3412-4DFB-BA0F-328F4557E7F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C4BF88B0-3412-4DFB-BA0F-328F4557E7F5}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
