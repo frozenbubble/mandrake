@@ -10,7 +10,7 @@ namespace Mandrake.Model
     [DataContract]
     [KnownType(typeof(IntervalOperation))]
     [KnownType(typeof(SinglePositionOperation))]
-    public abstract class Operation
+    public abstract class Operation: ICloneable
     {
         [DataMember]
         public Guid OwnerId { get; set; }
@@ -43,6 +43,8 @@ namespace Mandrake.Model
         {
             return !(this.IsPreceedingTo(o) || o.IsPreceedingTo(this));
         }
+
+        public abstract object Clone();
     }
 
     /// <summary>
@@ -102,6 +104,11 @@ namespace Mandrake.Model
         {
             return String.Format("Insert[{0}, {1}]", this.Literal, this.Position);
         }
+
+        public override object Clone()
+        {
+            throw new NotImplementedException();
+        }
     }
 
     [DataContract]
@@ -132,6 +139,11 @@ namespace Mandrake.Model
         public override string ToString()
         {
             return String.Format("Delete[{0}, {1}]", this.StartPosition, this.EndPosition);
+        }
+
+        public override object Clone()
+        {
+            return null;
         }
     }
 

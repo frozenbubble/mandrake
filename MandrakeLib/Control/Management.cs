@@ -158,7 +158,7 @@ namespace Mandrake.Management
         {
             var stringContent = content as string;
 
-            if (stringContent == null) throw new ArgumentException("Synchronization context is not string");
+            if (stringContent == null) throw new ArgumentException("Synchronization context is not of type string");
 
             using (editor.DeclareChangeBlock())
             {
