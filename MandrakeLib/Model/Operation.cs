@@ -60,7 +60,7 @@ namespace Mandrake.Model
         /// Gets the position of the operation
         /// </summary>
         [DataMember]
-        public int Position { get; protected set; }
+        public int Position { get; set; }
     }
 
     [DataContract]
@@ -70,16 +70,21 @@ namespace Mandrake.Model
         public IntervalOperation() : base() { }
 
         [DataMember]
-        public int StartPosition { get; protected set; }
+        public int StartPosition { get; set; }
         [DataMember]
-        public int EndPosition { get; protected set; }
+        public int EndPosition { get; set; }
     }
 
     [DataContract]
     public class InsertOperation : SinglePositionOperation
     {
         [DataMember]
-        public string Literal { get; private set; }
+        public string Literal { get; set; }
+
+        public int Length 
+        {
+            get { return Literal.Length; }
+        }
 
         public InsertOperation(int position, string literal)
             : base()
@@ -114,6 +119,11 @@ namespace Mandrake.Model
     [DataContract]
     public class DeleteOperation : IntervalOperation
     {
+        public int Length
+        {
+            get { return EndPosition - StartPosition; }
+        }
+
         public DeleteOperation(int startPosition, int endPosition)
             : base()
         {
