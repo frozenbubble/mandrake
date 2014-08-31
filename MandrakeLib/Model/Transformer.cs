@@ -116,6 +116,10 @@ namespace Mandrake.Model
                     copy.StartPosition += oa.Length;
                     copy.EndPosition += oa.Length;
                 }
+                else if (ob.StartPosition >= oa.StartPosition && oa.EndPosition >= ob.StartPosition) copy.EndPosition = copy.StartPosition;
+
+                else if (oa.StartPosition >= ob.StartPosition && ob.EndPosition >= ob.StartPosition) copy.EndPosition -= oa.Length;
+
                 else if (ob.StartPosition < oa.EndPosition) copy.StartPosition += oa.EndPosition - ob.StartPosition;
 
                 else if (oa.StartPosition < ob.EndPosition) copy.EndPosition -= ob.EndPosition - oa.StartPosition;
@@ -124,4 +128,23 @@ namespace Mandrake.Model
             return transformed;
         }
     }
+
+    class ShapeTransformer : ITransform
+    {
+        public void Transform(Operation o)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Operation Transform(Operation o1, Operation o2)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Clear()
+        {
+            throw new NotImplementedException();
+        }
+    }
+
 }

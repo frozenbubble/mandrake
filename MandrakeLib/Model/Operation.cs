@@ -157,4 +157,75 @@ namespace Mandrake.Model
         }
     }
 
+    public abstract class ShapeOperation : Operation
+    {
+        public int ShapeId { get; set; }
+
+        public override void TransformAgainst(Operation o)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override int GetNewPosition(int position)
+        {
+            throw new NotImplementedException();
+        }
+
+        //public override object Clone()
+
+    }
+
+    public class CreateOperation: ShapeOperation
+    {
+        public int PositionX { get; set; }
+        public int PositionY { get; set; }
+        public ShapeKind Kind { get; set; }
+
+        public override object Clone()
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class DragOperation: ShapeOperation
+    {
+        public int DeltaX { get; set; }
+        public int DeltaY { get; set; }
+
+        public override object Clone()
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class RotateOperation: ShapeOperation
+    {
+        public double Angle { get; set; }
+
+        public override object Clone()
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class ScaleOperation: ShapeOperation
+    {
+        public double Amount { get; set; }
+        public Axis Axis { get; set; }
+
+        public override object Clone()
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public enum Axis
+    {
+        X, Y
+    }
+
+    public enum ShapeKind
+    {
+        Rectangle, Triangle, Circle
+    }
 }
