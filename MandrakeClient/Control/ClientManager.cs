@@ -35,6 +35,7 @@ namespace Mandrake.Management.Client
             Log = new List<Operation>();
             this.Context = context; // Autofac
             transformer = new LogTransformer();     //autofac
+            //transformer = new TextTransformer();
         }
 
         public void Synchronize(object content)
@@ -101,7 +102,14 @@ namespace Mandrake.Management.Client
 
         public void Forward(OTMessage message)
         {
+            //old
             foreach (var o in message.Content) Execute(o);
+
+            //new
+            foreach (var o in message.Content)
+            {
+
+            }
         }
 
         public void SendAck(OTMessage message)

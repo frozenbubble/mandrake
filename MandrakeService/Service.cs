@@ -21,6 +21,7 @@ namespace Mandrake.Service
         private readonly object syncroot = new object();
         //ISynchronize syncManager = new TextEditorSynchronizer(editor); // autofac
         private ITransform transformer = new LogTransformer();           // autofac
+        private List<OTMessage> outgoing;
 
         public Dictionary<Guid, SynchronizingConnection> Clients { get; set; }
 
@@ -52,6 +53,9 @@ namespace Mandrake.Service
             lock (syncroot)
             {
                 var ops = message.Content;
+
+                //discard acknowledged messages
+                outgoing.RemoveAll(item => item.ServerMessages < message.ServerMessages);
 
                 foreach (var op in ops)
                 {
