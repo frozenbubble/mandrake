@@ -53,16 +53,19 @@ namespace Mandrake.Service
             lock (syncroot)
             {
                 var ops = message.Content;
-
-                //discard acknowledged messages
-                outgoing.RemoveAll(item => item.ServerMessages < message.ServerMessages);
+                var cached = Log.Where(item => item.ServerMessages > ops.FirstOrDefault().ServerMessages);
 
                 foreach (var op in ops)
                 {
-                    transformer.Transform(op);
+                    foreach (var cachedOp in cached)
+                    {
+                        transformer.Transform(cachedOp, op);
+                    }
+
                     Execute(op);
                 }
 
+                //to be updated ?
                 Broadcast(message);
                 SendAck(message);
             }
@@ -110,7 +113,9 @@ namespace Mandrake.Service
             {
                 if (manager.TryExecute(Context, o))
                 {
+                    //TODO: double check
                     o.ExecutedAt = DateTime.Now;
+                    o.ServerMessages = this.myMessages;
                     Log.Add(o);
 
                     if (OperationPerformed != null) OperationPerformed(this, o);

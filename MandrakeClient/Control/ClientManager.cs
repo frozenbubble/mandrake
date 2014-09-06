@@ -79,8 +79,6 @@ namespace Mandrake.Management.Client
 
         protected override void Execute(Operation o)
         {
-            Transform(o);
-
             foreach (var manager in ManagerChain)
             {
                 if (manager.TryExecute(Context, o))
@@ -94,21 +92,28 @@ namespace Mandrake.Management.Client
 
         protected override void Transform(Operation o)
         {
-            foreach (var logOp in Log)
+            Operation copy = (Operation)o.Clone();
+
+            foreach (var op in outgoing)
             {
-                if (o.IsIndependentFrom(logOp)) o.TransformAgainst(logOp);
+                transformer.Transform(op, o);
+
+                transformer.Transform(copy, op);
+                op.ServerMessages++;
             }
+
+            //foreach (var logOp in Log)
+            //{
+            //    if (o.IsIndependentFrom(logOp)) o.TransformAgainst(logOp);
+            //}
         }
 
         public void Forward(OTMessage message)
         {
-            //old
-            foreach (var o in message.Content) Execute(o);
-
-            //new
             foreach (var o in message.Content)
             {
-
+                Transform(o);
+                Execute(o);
             }
         }
 

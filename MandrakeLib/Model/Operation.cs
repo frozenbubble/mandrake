@@ -18,6 +18,10 @@ namespace Mandrake.Model
         public DateTime CreatedAt { get; set; }
         [DataMember]
         public DateTime ExecutedAt { get; set; }
+        [DataMember]
+        public long ClientMessages { get; set; }
+        [DataMember]
+        public long ServerMessages { get; set; }
 
         public Operation()
         {

@@ -77,56 +77,53 @@ namespace Mandrake.Model
         {
             Operation transformed = o2.Clone() as Operation;
 
-            if (o1 is InsertOperation && o2 is InsertOperation)
-            {
-                InsertOperation oa = o1 as InsertOperation;
-                InsertOperation ob = o2 as InsertOperation;
+            if (o1 is InsertOperation && o2 is InsertOperation) Transform((InsertOperation)o1, (InsertOperation)o2);
+            
+            else if (o1 is InsertOperation && o2 is DeleteOperation) Transform((InsertOperation)o1, (DeleteOperation)o2);             
+            
+            else if (o1 is DeleteOperation && o2 is InsertOperation) Transform((DeleteOperation)o1, (InsertOperation)o2);
 
-                if (oa.Position < ob.Position || (oa.Position == ob.Position && oa.OwnerId.CompareTo(ob.OwnerId) < 0))
-                {
-                    ((InsertOperation)transformed).Position += oa.Length;
-                }
-            }
-            else if (o1 is InsertOperation && o2 is DeleteOperation)
-            {
-                InsertOperation oa = o1 as InsertOperation;
-                DeleteOperation ob = o2 as DeleteOperation;
-
-                if (oa.Position < ob.StartPosition) ((DeleteOperation)transformed).StartPosition += oa.Literal.Length;
-
-                else if (oa.Position >= ob.StartPosition) ((DeleteOperation)transformed).EndPosition += oa.Length;                
-            }
-            else if (o1 is DeleteOperation && o2 is InsertOperation)
-            {
-                DeleteOperation oa = o1 as DeleteOperation;
-                InsertOperation ob = o2 as InsertOperation;
-
-                if (ob.Position > oa.EndPosition) ((InsertOperation)transformed).Position -= oa.Length;
-
-                else if (ob.Position >= oa.StartPosition) ob.Literal = "";
-            }
-            else 
-            {
-                DeleteOperation oa = o1 as DeleteOperation;
-                DeleteOperation ob = o2 as DeleteOperation;
-                DeleteOperation copy = transformed as DeleteOperation;
-
-                if (oa.EndPosition < ob.StartPosition)
-                {
-                    copy.StartPosition += oa.Length;
-                    copy.EndPosition += oa.Length;
-                }
-                else if (ob.StartPosition >= oa.StartPosition && oa.EndPosition >= ob.StartPosition) copy.EndPosition = copy.StartPosition;
-
-                else if (oa.StartPosition >= ob.StartPosition && ob.EndPosition >= ob.StartPosition) copy.EndPosition -= oa.Length;
-
-                else if (ob.StartPosition < oa.EndPosition) copy.StartPosition += oa.EndPosition - ob.StartPosition;
-
-                else if (oa.StartPosition < ob.EndPosition) copy.EndPosition -= ob.EndPosition - oa.StartPosition;
-            }
+            else if (o1 is DeleteOperation && o2 is DeleteOperation) Transform((DeleteOperation)o1, (DeleteOperation)o2);
 
             return transformed;
         }
+        private static void Transform(InsertOperation o1, InsertOperation o2)
+        {
+            if (o1.Position < o2.Position || (o1.Position == o2.Position && o1.OwnerId.CompareTo(o2.OwnerId) < 0))
+            {
+                o2.Position += o1.Length;
+            }
+        }
+        private static void Transform(InsertOperation o1, DeleteOperation o2)
+        {
+            if (o1.Position < o2.StartPosition) o2.StartPosition += o1.Literal.Length;
+
+            else if (o1.Position >= o2.StartPosition) o2.EndPosition += o1.Length;
+        }
+
+        private static void Transform(DeleteOperation o1, InsertOperation o2)
+        {
+            if (o2.Position > o1.EndPosition) o2.Position -= o1.Length;
+
+            else if (o2.Position >= o1.StartPosition) o2.Literal = "";
+        }
+
+        private static void Transform(DeleteOperation oa, DeleteOperation ob)
+        {
+            if (oa.EndPosition < ob.StartPosition)
+            {
+                ob.StartPosition += oa.Length;
+                ob.EndPosition += oa.Length;
+            }
+            else if (ob.StartPosition >= oa.StartPosition && oa.EndPosition >= ob.StartPosition) ob.EndPosition = ob.StartPosition;
+
+            else if (oa.StartPosition >= ob.StartPosition && ob.EndPosition >= ob.StartPosition) ob.EndPosition -= oa.Length;
+
+            else if (ob.StartPosition < oa.EndPosition) ob.StartPosition += oa.EndPosition - ob.StartPosition;
+
+            else if (oa.StartPosition < ob.EndPosition) ob.EndPosition -= ob.EndPosition - oa.StartPosition;
+        }
+
     }
 
     class ShapeTransformer : ITransform
