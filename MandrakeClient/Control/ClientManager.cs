@@ -14,8 +14,6 @@ namespace Mandrake.Management.Client
     {
         private List<Operation> outgoing;
         private bool acknowledged = true;
-        private ISynchronize syncManager;
-        private ITransform transformer;
 
         public event OperationActionEventHandler OperationPerformed;
 
@@ -53,9 +51,13 @@ namespace Mandrake.Management.Client
             {
                 if ((o = manager.TryRecognize(sender, e)) != null)
                 {
+                    this.myMessages++;
+
                     o.OwnerId = Id;
+                    o.ClientMessages = myMessages;
+                    o.ServerMessages = otherMessages;
+                    
                     TrySend(o);
-                    myMessages++;
                 }
             }
         }
@@ -72,21 +74,11 @@ namespace Mandrake.Management.Client
             else outgoing.Add(o);
         }
 
-        public void OnOperationPerformed(object sender, Operation o)
-        {
-            Execute(o);
-        }
-
         protected override void Execute(Operation o)
         {
             foreach (var manager in ManagerChain)
             {
-                if (manager.TryExecute(Context, o))
-                {
-                    o.ExecutedAt = DateTime.Now;
-                    Log.Add(o);
-                    return;
-                }
+                if (manager.TryExecute(Context, o)) return;
             }
         }
 
@@ -101,11 +93,6 @@ namespace Mandrake.Management.Client
                 transformer.Transform(copy, op);
                 op.ServerMessages++;
             }
-
-            //foreach (var logOp in Log)
-            //{
-            //    if (o.IsIndependentFrom(logOp)) o.TransformAgainst(logOp);
-            //}
         }
 
         public void Forward(OTMessage message)
@@ -114,11 +101,21 @@ namespace Mandrake.Management.Client
             {
                 Transform(o);
                 Execute(o);
+
+                this.otherMessages++;
+                o.ExecutedAt = DateTime.Now;
+                o.ClientMessages = this.myMessages;
+                o.ServerMessages = this.otherMessages;
+                Log.Add(o);
+
             }
         }
 
+        //TODO: server shouldn't return the entire message - waste of resources
         public void SendAck(OTMessage message)
         {
+            //TODO: throw away acknowledged messages from log ?
+
             if (outgoing.Count != 0)
             {
                 Service.Send(new OTMessage(myMessages, otherMessages, outgoing));

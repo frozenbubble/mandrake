@@ -13,6 +13,8 @@ namespace Mandrake.Management
     {
         protected int myMessages;
         protected int otherMessages;
+        protected ISynchronize syncManager;
+        protected ITransform transformer;
 
         public IOTAwareContext Context { get; set; }
         public List<IOperationManager> ManagerChain { get; set; }

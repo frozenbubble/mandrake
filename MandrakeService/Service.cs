@@ -19,9 +19,6 @@ namespace Mandrake.Service
     public class OTAwareService : OTManager, IOTAwareService
     {
         private readonly object syncroot = new object();
-        //ISynchronize syncManager = new TextEditorSynchronizer(editor); // autofac
-        private ITransform transformer = new LogTransformer();           // autofac
-        private List<OTMessage> outgoing;
 
         public Dictionary<Guid, SynchronizingConnection> Clients { get; set; }
 
@@ -32,6 +29,8 @@ namespace Mandrake.Service
 
         public OTAwareService()
         {
+            transformer = new LogTransformer();           // autofac
+
             // for now - autofac?
             ManagerChain = new List<IOperationManager>();
             ManagerChain.Add(new BasicInsertOperationManager());
@@ -63,9 +62,10 @@ namespace Mandrake.Service
                     }
 
                     Execute(op);
+
+                    this.otherMessages++;
                 }
 
-                //to be updated ?
                 Broadcast(message);
                 SendAck(message);
             }
@@ -74,9 +74,7 @@ namespace Mandrake.Service
         private void SendAck(OTMessage msg)
         {
             var to = Clients.Where(c => c.Key == msg.Content.FirstOrDefault().OwnerId).FirstOrDefault();
-
             to.Value.ClientMessages += msg.Content.Count;
-            myMessages += msg.Content.Count;
 
             var ack = new OTMessage(to.Value.ClientMessages, myMessages, msg.Content.Last());
 
@@ -115,7 +113,7 @@ namespace Mandrake.Service
                 {
                     //TODO: double check
                     o.ExecutedAt = DateTime.Now;
-                    o.ServerMessages = this.myMessages;
+                    o.ServerMessages = this.otherMessages;
                     Log.Add(o);
 
                     if (OperationPerformed != null) OperationPerformed(this, o);
