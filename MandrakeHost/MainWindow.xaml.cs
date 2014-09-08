@@ -51,14 +51,25 @@ namespace Mandrake.Host
             chain.Add(new EditorDeleteOperationManager());
             service.ManagerChain = chain;
 
-            service.OperationArrived += service_OperationArrived;
+            
             service.OperationPerformed += service_OperationPerformed;
-            service.OperationSent += service_OperationSent;
+            service.MessageArrived += service_MessageArrived;
+            service.MessageSent += service_MessageSent;
             service.RegistrationCompleted += service_RegistrationCompleted;
             
 
             host = new ServiceHost(service);
             host.Open();
+        }
+
+        void service_MessageArrived(object sender, OTMessage message)
+        {
+            Console.WriteLine("Message arrived");
+        }
+
+        void service_MessageSent(object sender, OTMessage message)
+        {
+            Console.WriteLine("Message sent");
         }
 
         void service_RegistrationCompleted(object sender, Mandrake.Model.Operation o)
@@ -70,19 +81,9 @@ namespace Mandrake.Host
             }
         }
 
-        void service_OperationSent(object sender, Mandrake.Model.Operation o)
-        {
-            throw new NotImplementedException();
-        }
-
         void service_OperationPerformed(object sender, Mandrake.Model.Operation o)
         {
             opLog.AppendText(String.Format("[{0}]: {1} from client with Id: {2}", DateTime.Now, o.ToString(), o.OwnerId) + Environment.NewLine);
-        }
-
-        void service_OperationArrived(object sender, Mandrake.Model.Operation o)
-        {
-            throw new NotImplementedException();
         }
     }
 }

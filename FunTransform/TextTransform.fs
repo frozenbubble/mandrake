@@ -14,7 +14,7 @@ type TextTransformer() =
 
     interface ITransform with
         member this.Transform(o1: Operation, o2: Operation)=
-        null
+            null
 
         member this.Clear()= ()
 

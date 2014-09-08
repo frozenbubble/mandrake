@@ -10,34 +10,44 @@ using Mandrake.Management;
 
 namespace Mandrake.Service
 {
+    public delegate void OTMessageEventHandler(object sender, OTMessage message);
+
     [DataContract]
     public class OTMessage
 	{
         [DataMember]
         public List<Operation> Content { get; set; }
-        [DataMember]
-        public int ClientMessages { get; private set;}
-        [DataMember]
-        public int ServerMessages { get; private set;}
 
-        public OTMessage(int clientMessages, int serverMessages)
+        public OTMessage()
+        {
+            Content = new List<Operation>();
+        }
+
+        public OTMessage(List<Operation> content)
+        {
+            Content = content;
+        }
+
+        public OTMessage(Operation operation): this()
+        {
+            Content.Add(operation);
+        }
+	}
+
+    [DataContract]
+    public class OTAck
+    {
+        [DataMember]
+        public int ClientMessages { get; set; }
+        [DataMember]
+        public int ServerMessages { get; set; }
+
+        public OTAck(int clientMessages, int serverMessages)
         {
             ClientMessages = clientMessages;
             ServerMessages = serverMessages;
         }
-
-        public OTMessage(int clientMessages, int serverMessages, List<Operation> content): this(clientMessages, serverMessages)
-        {
-            this.Content = content;
-        }
-
-        public OTMessage(int clientMessages, int serverMessages, Operation o): this(clientMessages, serverMessages)
-        {
-            Content = new List<Operation>();
-            Content.Add(o);
-        }
-
-	}    
+    }
 
     [ServiceContract(CallbackContract = typeof(IOTCallback))]
     public interface IOTAwareService
@@ -55,7 +65,7 @@ namespace Mandrake.Service
         [OperationContract]
         void Forward(OTMessage message);
         [OperationContract]
-        void SendAck(OTMessage acknowledgement);
+        void SendAck(OTAck ack);
         [OperationContract]
         void Synchronize(object content);
         [OperationContract]

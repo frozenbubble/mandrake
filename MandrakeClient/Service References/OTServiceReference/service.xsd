@@ -53,7 +53,7 @@
   <xs:element name="SendAck">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/Mandrake.Service" minOccurs="0" name="acknowledgement" nillable="true" type="q4:OTMessage" />
+        <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/Mandrake.Service" minOccurs="0" name="ack" nillable="true" type="q4:OTAck" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

@@ -3,10 +3,15 @@
   <xs:import namespace="http://schemas.datacontract.org/2004/07/Mandrake.Model" />
   <xs:complexType name="OTMessage">
     <xs:sequence>
-      <xs:element minOccurs="0" name="ClientMessages" type="xs:int" />
       <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/Mandrake.Model" minOccurs="0" name="Content" nillable="true" type="q1:ArrayOfOperation" />
-      <xs:element minOccurs="0" name="ServerMessages" type="xs:int" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="OTMessage" nillable="true" type="tns:OTMessage" />
+  <xs:complexType name="OTAck">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ClientMessages" type="xs:int" />
+      <xs:element minOccurs="0" name="ServerMessages" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="OTAck" nillable="true" type="tns:OTAck" />
 </xs:schema>

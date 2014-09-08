@@ -14,7 +14,7 @@ using System.Windows.Threading;
 
 namespace Mandrake.Service
 {
-    [ServiceBehavior(ConcurrencyMode = ConcurrencyMode.Reentrant, 
+    [ServiceBehavior(ConcurrencyMode = ConcurrencyMode.Reentrant,
                      InstanceContextMode = InstanceContextMode.Single)]
     public class OTAwareService : OTManager, IOTAwareService
     {
@@ -22,9 +22,9 @@ namespace Mandrake.Service
 
         public Dictionary<Guid, SynchronizingConnection> Clients { get; set; }
 
-        public event OperationActionEventHandler OperationArrived;
+        public event OTMessageEventHandler MessageArrived;
         public event OperationActionEventHandler OperationPerformed;
-        public event OperationActionEventHandler OperationSent;
+        public event OTMessageEventHandler MessageSent;
         public event OperationActionEventHandler RegistrationCompleted;
 
         public OTAwareService()
@@ -41,16 +41,12 @@ namespace Mandrake.Service
             Context = new OTAwareDocument();
         }
 
-        //for now
-        private void CreateContext()
-        {
-            Context = new OTAwareEditor();
-        }
-
         public void Send(OTMessage message)
         {
             lock (syncroot)
             {
+                if (MessageArrived != null) MessageArrived(this, message);
+
                 var ops = message.Content;
                 var cached = Log.Where(item => item.ServerMessages > ops.FirstOrDefault().ServerMessages);
 
@@ -63,7 +59,7 @@ namespace Mandrake.Service
 
                     Execute(op);
 
-                    this.otherMessages++;
+                    this.serverMessages++;
                 }
 
                 Broadcast(message);
@@ -76,7 +72,7 @@ namespace Mandrake.Service
             var to = Clients.Where(c => c.Key == msg.Content.FirstOrDefault().OwnerId).FirstOrDefault();
             to.Value.ClientMessages += msg.Content.Count;
 
-            var ack = new OTMessage(to.Value.ClientMessages, myMessages, msg.Content.Last());
+            var ack = new OTAck(to.Value.ClientMessages, this.serverMessages);
 
             to.Value.Client.SendAck(ack);
         }
@@ -85,7 +81,12 @@ namespace Mandrake.Service
         {
             var to = Clients.Where(c => c.Key != msg.Content.FirstOrDefault().OwnerId);
 
-            foreach (var entry in to) entry.Value.Client.Forward(msg);
+            foreach (var entry in to)
+            {
+                entry.Value.Client.Forward(msg);
+
+                if (MessageSent != null) MessageSent(this, msg);
+            }
         }
 
 
@@ -111,9 +112,8 @@ namespace Mandrake.Service
             {
                 if (manager.TryExecute(Context, o))
                 {
-                    //TODO: double check
                     o.ExecutedAt = DateTime.Now;
-                    o.ServerMessages = this.otherMessages;
+                    o.ServerMessages = this.serverMessages;
                     Log.Add(o);
 
                     if (OperationPerformed != null) OperationPerformed(this, o);
@@ -133,8 +133,6 @@ namespace Mandrake.Service
                 connection.Value.Client.Echo("Hello from" + connection.Key);
             }
         }
-
-        
     }
 
     public class SynchronizingConnection

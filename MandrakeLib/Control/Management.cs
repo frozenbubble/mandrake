@@ -11,8 +11,7 @@ namespace Mandrake.Management
 
     public abstract class OTManager
     {
-        protected int myMessages;
-        protected int otherMessages;
+        protected int serverMessages;
         protected ISynchronize syncManager;
         protected ITransform transformer;
 

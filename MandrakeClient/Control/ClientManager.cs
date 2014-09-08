@@ -12,16 +12,13 @@ namespace Mandrake.Management.Client
 
     public class ClientManager : OTManager, IOTAwareServiceCallback
     {
+        protected int clientMessages;
+
         private List<Operation> outgoing;
         private bool acknowledged = true;
 
         public event OperationActionEventHandler OperationPerformed;
 
-        private bool Acknowledged
-        {
-            get { return acknowledged; }
-            set { acknowledged = value; }
-        }
         public Guid Id { get; set; }
         public Mandrake.Client.OTServiceReference.IOTAwareService Service { get; set; }
 
@@ -51,11 +48,11 @@ namespace Mandrake.Management.Client
             {
                 if ((o = manager.TryRecognize(sender, e)) != null)
                 {
-                    this.myMessages++;
+                    this.clientMessages++;
 
                     o.OwnerId = Id;
-                    o.ClientMessages = myMessages;
-                    o.ServerMessages = otherMessages;
+                    o.ClientMessages = clientMessages;
+                    o.ServerMessages = serverMessages;
                     
                     TrySend(o);
                 }
@@ -64,11 +61,11 @@ namespace Mandrake.Management.Client
 
         private void TrySend(Operation o)
         {
-            if (Acknowledged)
+            if (acknowledged)
             {
-                Acknowledged = false;
+                acknowledged = false;
                 
-                Parallel.Invoke(() => Service.Send(new OTMessage(myMessages, otherMessages, o)));
+                Parallel.Invoke(() => Service.Send(new OTMessage(o)));
             }
 
             else outgoing.Add(o);
@@ -102,27 +99,25 @@ namespace Mandrake.Management.Client
                 Transform(o);
                 Execute(o);
 
-                this.otherMessages++;
+                this.serverMessages++;
                 o.ExecutedAt = DateTime.Now;
-                o.ClientMessages = this.myMessages;
-                o.ServerMessages = this.otherMessages;
+                o.ClientMessages = this.clientMessages;
+                o.ServerMessages = this.serverMessages;
                 Log.Add(o);
-
             }
         }
 
-        //TODO: server shouldn't return the entire message - waste of resources
-        public void SendAck(OTMessage message)
+        public void SendAck(OTAck ack)
         {
             //TODO: throw away acknowledged messages from log ?
 
             if (outgoing.Count != 0)
             {
-                Service.Send(new OTMessage(myMessages, otherMessages, outgoing));
+                Service.Send(new OTMessage(outgoing));
                 outgoing.Clear();
             }
 
-            else Acknowledged = true;
+            else acknowledged = true;
         }
 
         public void Echo(string msg)

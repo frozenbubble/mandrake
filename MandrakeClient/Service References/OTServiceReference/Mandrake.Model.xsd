@@ -9,31 +9,14 @@
   <xs:element name="ArrayOfOperation" nillable="true" type="tns:ArrayOfOperation" />
   <xs:complexType name="Operation">
     <xs:sequence>
+      <xs:element minOccurs="0" name="ClientMessages" type="xs:long" />
       <xs:element minOccurs="0" name="CreatedAt" type="xs:dateTime" />
       <xs:element minOccurs="0" name="ExecutedAt" type="xs:dateTime" />
       <xs:element minOccurs="0" name="OwnerId" type="ser:guid" />
+      <xs:element minOccurs="0" name="ServerMessages" type="xs:long" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="Operation" nillable="true" type="tns:Operation" />
-  <xs:complexType name="IntervalOperation">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:Operation">
-        <xs:sequence>
-          <xs:element minOccurs="0" name="EndPosition" type="xs:int" />
-          <xs:element minOccurs="0" name="StartPosition" type="xs:int" />
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="IntervalOperation" nillable="true" type="tns:IntervalOperation" />
-  <xs:complexType name="DeleteOperation">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:IntervalOperation">
-        <xs:sequence />
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="DeleteOperation" nillable="true" type="tns:DeleteOperation" />
   <xs:complexType name="SinglePositionOperation">
     <xs:complexContent mixed="false">
       <xs:extension base="tns:Operation">
@@ -54,4 +37,23 @@
     </xs:complexContent>
   </xs:complexType>
   <xs:element name="InsertOperation" nillable="true" type="tns:InsertOperation" />
+  <xs:complexType name="IntervalOperation">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:Operation">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="EndPosition" type="xs:int" />
+          <xs:element minOccurs="0" name="StartPosition" type="xs:int" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="IntervalOperation" nillable="true" type="tns:IntervalOperation" />
+  <xs:complexType name="DeleteOperation">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:IntervalOperation">
+        <xs:sequence />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="DeleteOperation" nillable="true" type="tns:DeleteOperation" />
 </xs:schema>
