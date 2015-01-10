@@ -10,7 +10,7 @@ namespace Mandrake.Model
     {
         //void Transform(Operation o);
         Operation Transform(Operation o1, Operation o2);
-        void Clear();
+        //void Clear();
     }
 
     public class TransformationException : System.Exception
@@ -68,17 +68,6 @@ namespace Mandrake.Model
 
     public class TextTransformer : ITransform
     {
-        public void Transform(Operation o)
-        {
-            return;
-        }
-
-        public void Clear()
-        {
-            throw new NotImplementedException();
-        }
-
-
         public Operation Transform(Operation o1, Operation o2)
         {
             Operation transformed = o2.Clone() as Operation;
@@ -93,6 +82,7 @@ namespace Mandrake.Model
 
             return transformed;
         }
+
         private static void Transform(InsertOperation o1, InsertOperation o2)
         {
             if (o1.Position < o2.Position || (o1.Position == o2.Position && o1.CreatedAt < o2.CreatedAt))
@@ -100,6 +90,7 @@ namespace Mandrake.Model
                 o2.Position += o1.Length;
             }
         }
+
         private static void Transform(InsertOperation o1, DeleteOperation o2)
         {
             if (o1.Position < o2.StartPosition) o2.StartPosition += o1.Literal.Length;
@@ -134,17 +125,7 @@ namespace Mandrake.Model
 
     class ShapeTransformer : ITransform
     {
-        public void Transform(Operation o)
-        {
-            throw new NotImplementedException();
-        }
-
         public Operation Transform(Operation o1, Operation o2)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Clear()
         {
             throw new NotImplementedException();
         }
