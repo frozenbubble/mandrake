@@ -8,10 +8,16 @@ namespace Mandrake.Model
 {
     public interface ITransform
     {
-        void Transform(Operation o);
+        //void Transform(Operation o);
         Operation Transform(Operation o1, Operation o2);
         void Clear();
     }
+
+    public class TransformationException : System.Exception
+    {
+        public TransformationException(String message) : base(message) { }
+    }
+
     public class LogTransformer : ITransform
     {
         private List<Operation> log = new List<Operation>();
@@ -89,7 +95,7 @@ namespace Mandrake.Model
         }
         private static void Transform(InsertOperation o1, InsertOperation o2)
         {
-            if (o1.Position < o2.Position || (o1.Position == o2.Position && o1.OwnerId.CompareTo(o2.OwnerId) < 0))
+            if (o1.Position < o2.Position || (o1.Position == o2.Position && o1.CreatedAt < o2.CreatedAt))
             {
                 o2.Position += o1.Length;
             }
@@ -117,7 +123,7 @@ namespace Mandrake.Model
             }
             else if (ob.StartPosition >= oa.StartPosition && oa.EndPosition >= ob.StartPosition) ob.EndPosition = ob.StartPosition;
 
-            else if (oa.StartPosition >= ob.StartPosition && ob.EndPosition >= ob.StartPosition) ob.EndPosition -= oa.Length;
+            else if (oa.StartPosition >= ob.StartPosition && ob.EndPosition >= oa.StartPosition) ob.EndPosition -= oa.Length;
 
             else if (ob.StartPosition < oa.EndPosition) ob.StartPosition += oa.EndPosition - ob.StartPosition;
 

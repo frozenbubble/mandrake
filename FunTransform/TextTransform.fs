@@ -2,6 +2,8 @@
 
 open Mandrake.Model
 
+
+
 type TextTransformer() = 
 
     member this.InsertInsert(o) = o
@@ -12,13 +14,22 @@ type TextTransformer() =
 
     member this.DeleteDelete() = ()
 
-    interface ITransform with
-        member this.Transform(o1: Operation, o2: Operation)=
-            null
+//    member this.Transform (oa: Operation) (ob: Operation) = 
+//        match oa, ob with 
+//        | InsertOperation o1, InsertOperation o2 -> //transformation
+//        | DeleteOperation o1, InsertOperation o2 -> //transformation
+//        | InsertOperation o1, DeleteOperation o2 -> //transformation
+//        | DeleteOperation o1, DeleteOperation o2 -> //transformation
 
-        member this.Clear()= ()
+    
 
-        member this.Transform(o: Operation)= ()
+//    interface ITransform with
+//        member this.Transform(o1: Operation, o2: Operation)=
+//            null
+//
+//        member this.Clear()= ()
+//
+//        member this.Transform(o: Operation)= ()
 
         
         
