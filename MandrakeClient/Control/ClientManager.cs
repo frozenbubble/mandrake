@@ -1,20 +1,23 @@
-﻿using Mandrake.Model;
+﻿using System;
 using System.Collections.Generic;
-using Mandrake.Client.OTServiceReference;
-using System;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Mandrake.Model;
 using Mandrake.View.Controls;
 using Mandrake.Service;
-using System.Threading.Tasks;
+using Mandrake.Client.OTServiceReference;
 
 namespace Mandrake.Management.Client
 {
+
     public delegate void OperationActionEventHandler(object sender, Operation o);
 
     public class ClientManager : OTManager, IOTAwareServiceCallback
     {
         protected int clientMessages;
 
-        private List<Operation> outgoing;
+        private List<Operation> outgoing = new List<Operation>();
         private bool acknowledged = true;
 
         public event OperationActionEventHandler OperationPerformed;
@@ -53,7 +56,7 @@ namespace Mandrake.Management.Client
                     o.OwnerId = Id;
                     o.ClientMessages = clientMessages;
                     o.ServerMessages = serverMessages;
-                    
+
                     TrySend(o);
                 }
             }
@@ -64,7 +67,7 @@ namespace Mandrake.Management.Client
             if (acknowledged)
             {
                 acknowledged = false;
-                
+
                 Parallel.Invoke(() => Service.Send(new OTMessage(o)));
             }
 
@@ -83,13 +86,19 @@ namespace Mandrake.Management.Client
         {
             Operation copy = (Operation)o.Clone();
 
-            foreach (var op in outgoing)
+            outgoing.Select(x => 
             {
-                transformer.Transform(op, o);
+                o = transformer.Transform(x, o);
+                return transformer.Transform(copy, x);
+            });
 
-                transformer.Transform(copy, op);
-                op.ServerMessages++;
-            }
+            //foreach (var op in outgoing)
+            //{
+            //    transformer.Transform(op, o);
+
+            //    transformer.Transform(copy, op);
+            //    op.ServerMessages++;
+            //}
         }
 
         public void Forward(OTMessage message)

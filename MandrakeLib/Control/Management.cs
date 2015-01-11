@@ -3,8 +3,8 @@ using Mandrake.Model;
 using Mandrake.View.Controls;
 using System;
 using System.Collections.Generic;
-using System.Windows;
-using System.Windows.Threading;
+
+
 namespace Mandrake.Management
 {
     public delegate void OperationActionEventHandler(object sender, Operation o);
