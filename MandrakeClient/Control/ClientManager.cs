@@ -7,6 +7,7 @@ using Mandrake.Model;
 using Mandrake.View.Controls;
 using Mandrake.Service;
 using Mandrake.Client.OTServiceReference;
+using System.ServiceModel;
 
 namespace Mandrake.Management.Client
 {

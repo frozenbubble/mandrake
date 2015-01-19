@@ -8,8 +8,8 @@ using System.Threading.Tasks;
 namespace Mandrake.Model
 {
     [DataContract]
-    [KnownType(typeof(IntervalOperation))]
-    [KnownType(typeof(SinglePositionOperation))]
+    //[KnownType(typeof(IntervalOperation))]
+    //[KnownType(typeof(SinglePositionOperation))]
     public abstract class Operation: ICloneable
     {
         [DataMember]
@@ -83,7 +83,7 @@ namespace Mandrake.Model
     /// Base class for operations that refer to a single position in the document
     /// </summary>
     [DataContract]
-    [KnownType(typeof(InsertOperation))]
+    //[KnownType(typeof(InsertOperation))]
     public abstract class SinglePositionOperation : Operation
     {
         public SinglePositionOperation() : base() { }
@@ -96,7 +96,7 @@ namespace Mandrake.Model
     }
 
     [DataContract]
-    [KnownType(typeof(DeleteOperation))]
+    //[KnownType(typeof(DeleteOperation))]
     public abstract class IntervalOperation : Operation
     {
         public IntervalOperation() : base() { }

@@ -18,6 +18,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Mandrake.Host.View.Converters;
 using System.Collections.ObjectModel;
+using ServiceModelEx;
 
 namespace Mandrake.Host
 {
@@ -59,6 +60,7 @@ namespace Mandrake.Host
             
 
             host = new ServiceHost(service);
+            host.AddGenericResolver();
             host.Open();
         }
 

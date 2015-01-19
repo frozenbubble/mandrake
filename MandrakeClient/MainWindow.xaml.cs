@@ -19,6 +19,7 @@ using System.ServiceModel;
 using Mandrake.Management.Client;
 using Mandrake.Client.OTServiceReference;
 using Mandrake.Model;
+using ServiceModelEx;
 
 namespace Mandrake.Client
 {
@@ -45,6 +46,8 @@ namespace Mandrake.Client
                 {
                     var ic = new InstanceContext(callback);
                     proxy = new OTAwareServiceClient(ic);
+                    proxy.AddGenericResolver();
+
                     callback.Service = proxy;
                     callback.Id = Guid.NewGuid();
 
