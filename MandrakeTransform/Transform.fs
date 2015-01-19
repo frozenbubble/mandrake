@@ -1,12 +1,13 @@
 ﻿namespace Mandrake
 
 open Mandrake.Model
+open System
 
 module Transform = 
 
     type TextTransformer() = 
         
-        let (|Insert | Delete | Unknown |) (o: Operation) = 
+        let (|Insert | Delete | Unknown|) (o: Operation) = 
             match o with
             | :? InsertOperation as iop -> Insert iop
             | :? DeleteOperation as dop -> Delete dop
@@ -29,7 +30,7 @@ module Transform =
         member this.Transform(o1: InsertOperation, o2: InsertOperation) =
             if o1.Position < o2.Position || (o1.Position = o2.Position && o1.CreatedAt < o2.CreatedAt)
             
-            then o2.Position <- o2.Position + o1.Length           
+            then o2.Position <- o2.Position + o1.Length
 
         
         member this.Transform(o1: InsertOperation, o2: DeleteOperation) = 
@@ -56,3 +57,22 @@ module Transform =
             else if ob.StartPosition < oa.EndPosition then ob.StartPosition <- ob.StartPosition + oa.EndPosition - ob.StartPosition
 
             else if oa.StartPosition < ob.EndPosition then ob.EndPosition <- ob.EndPosition - (ob.EndPosition - oa.StartPosition)
+
+
+    type ShapeTransformer() = 
+
+        let (|Drag | Rotate | Scale |)(o: Operation) = 
+            match o with
+            | :? DragOperation as dop -> Drag dop
+            | :? RotateOperation as rop -> Rotate rop
+            | :? ScaleOperation as sop -> Scale sop 
+            | _ -> raise(new TransformationException("Operation type not eligible for shape transformation"))
+        
+        interface ITransform with
+            member this.Transform(o1: Operation, o2: Operation) = 
+                let o' = o2.Clone() :?> Operation
+                
+//                match (o1, o') with
+//                | Drag
+
+                o'

@@ -29,7 +29,7 @@ namespace Mandrake.Service
 
         public OTAwareService()
         {
-            transformer = new LogTransformer();           // autofac
+            transformer = new TextTransformer();//LogTransformer();           // autofac
 
             // for now - autofac?
             ManagerChain = new List<IOperationManager>();

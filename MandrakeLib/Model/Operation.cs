@@ -29,6 +29,12 @@ namespace Mandrake.Model
             this.ExecutedAt = DateTime.MaxValue;
         }
 
+        public Operation(Operation o)
+        {
+            this.CreatedAt = o.CreatedAt;
+            this.ExecutedAt = o.ExecutedAt;
+        }
+
         /// <summary>
         /// Transforms the operation against another operation updating its referenced positions.
         /// </summary>
@@ -49,6 +55,28 @@ namespace Mandrake.Model
         }
 
         public abstract object Clone();
+
+        protected void Initialize(Operation o)
+        {
+            o.ExecutedAt = this.ExecutedAt;
+            o.CreatedAt = this.CreatedAt;
+            o.OwnerId = this.OwnerId;
+            o.ClientMessages = this.ClientMessages;
+            o.ServerMessages = this.ServerMessages;
+        }
+
+        protected static Operation Prototype<T>(T op) where T: Operation, new()
+        {
+            Operation o = new T();
+            o.ExecutedAt = op.ExecutedAt;
+            o.CreatedAt = op.CreatedAt;
+            o.OwnerId = op.OwnerId;
+            o.ClientMessages = op.ClientMessages;
+            o.ServerMessages = op.ServerMessages;
+            
+            return o;
+        }
+
     }
 
     /// <summary>
@@ -85,6 +113,7 @@ namespace Mandrake.Model
         [DataMember]
         public string Literal { get; set; }
 
+        //[DataMember]
         public int Length 
         {
             get { return Literal.Length; }
@@ -116,7 +145,10 @@ namespace Mandrake.Model
 
         public override object Clone()
         {
-            throw new NotImplementedException();
+            var o = new InsertOperation(this.Position, this.Literal);
+            Initialize(o);
+
+            return o;
         }
     }
 
@@ -157,7 +189,10 @@ namespace Mandrake.Model
 
         public override object Clone()
         {
-            return null;
+            var o = new DeleteOperation(this.StartPosition, this.EndPosition);
+            Initialize(o);
+
+            return o;
         }
     }
 

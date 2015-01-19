@@ -32,8 +32,8 @@ namespace Mandrake.Management.Client
             //syncManager = new TextEditorSynchronizer((OTAwareDocument) context); // Autofac
             Log = new List<Operation>();
             this.Context = context; // Autofac
-            transformer = new LogTransformer();     //autofac
-            //transformer = new TextTransformer();
+            //transformer = new LogTransformer();     //autofac
+            transformer = new TextTransformer();
         }
 
         public void Synchronize(object content)

@@ -48,10 +48,10 @@ namespace Mandrake.Client.OTServiceReference {
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(Mandrake.Service.OTAck))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(Mandrake.Model.Operation[]))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(Mandrake.Model.Operation))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(Mandrake.Model.SinglePositionOperation))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(Mandrake.Model.InsertOperation))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(Mandrake.Model.IntervalOperation))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(Mandrake.Model.DeleteOperation))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(Mandrake.Model.SinglePositionOperation))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(Mandrake.Model.InsertOperation))]
         void Synchronize(object content);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IOTAwareService/Echo", ReplyAction="http://tempuri.org/IOTAwareService/EchoResponse")]
