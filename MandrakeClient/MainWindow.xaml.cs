@@ -43,17 +43,17 @@ namespace Mandrake.Client
             editor.Document.Changed += callback.OnChange;
 
             Task t = new Task(() =>
-                {
-                    var ic = new InstanceContext(callback);
-                    proxy = new OTAwareServiceClient(ic);
-                    proxy.AddGenericResolver();
+            {
+                var ic = new InstanceContext(callback);
+                proxy = new OTAwareServiceClient(ic);
+                proxy.AddGenericResolver();
 
-                    callback.Service = proxy;
-                    callback.Id = Guid.NewGuid();
+                callback.Service = proxy;
+                callback.Id = Guid.NewGuid();
 
-                    proxy.Register(callback.Id);
-                    proxy.Hello("Hello there!");
-                });
+                proxy.Register(callback.Id);
+                proxy.Hello("Hello there!");
+            });
 
             t.Start();
         }
