@@ -1,1 +1,1 @@
-﻿<%@ ServiceHost Language="C#" Debug="true" Service="Mandrake.Service.OTAwareService" Factory="Mandrake.Service.OTServiceHostFactory"  %>
+﻿<%@ ServiceHost Language="C#" Debug="true" Service="Mandrake.Service.OTAwareService" %>
