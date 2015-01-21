@@ -14,6 +14,9 @@ EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "MandrakeTransform", "MandrakeTransform\MandrakeTransform.fsproj", "{AC5CAA13-6B85-4DBC-A1BD-8618C073E103}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MendrakeServiceStandalone", "MendrakeServiceStandalone\MendrakeServiceStandalone.csproj", "{9D169B88-3EBC-40FC-93E4-7F95986A9D30}"
+	ProjectSection(ProjectDependencies) = postProject
+		{54A14872-8CD5-4811-B0E0-419FE5FA19FB} = {54A14872-8CD5-4811-B0E0-419FE5FA19FB}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

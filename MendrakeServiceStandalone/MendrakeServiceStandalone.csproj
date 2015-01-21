@@ -77,6 +77,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\MandrakeService\MandrakeService.csproj">
       <Project>{54a14872-8cd5-4811-b0e0-419fe5fa19fb}</Project>
       <Name>MandrakeService</Name>

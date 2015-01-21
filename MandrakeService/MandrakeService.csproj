@@ -67,9 +67,7 @@
     <Compile Include="Service.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config">
-      <SubType>Designer</SubType>
-    </None>
+    <None Include="asd.qwe" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

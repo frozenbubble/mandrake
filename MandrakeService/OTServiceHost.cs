@@ -15,6 +15,7 @@ namespace Mandrake.Service
         public OTServiceHost(Type t, params Uri[] baseAddresses): base(t, baseAddresses)
         {
             this.AddGenericResolver();
+            Console.WriteLine("OTServiceHost CREATED");
         }
     }
 
@@ -22,6 +23,7 @@ namespace Mandrake.Service
     {
         protected override ServiceHost CreateServiceHost(Type serviceType, Uri[] baseAddresses)
         {
+            Console.WriteLine("OTServiceHostFactory CALLED");
             return new OTServiceHost(serviceType, baseAddresses);
         }
     }
