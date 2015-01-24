@@ -183,9 +183,9 @@
   </wsdl:binding>
   <wsdl:service name="OTAwareService">
     <wsdl:port name="TcpEndpoint" binding="tns:TcpEndpoint">
-      <soap12:address location="net.tcp://localhost:8036/OTService" />
+      <soap12:address location="net.tcp://localhost:8062/OTService" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://localhost:8036/OTService</wsa10:Address>
+        <wsa10:Address>net.tcp://localhost:8062/OTService</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
           <Upn>ARROW\Peter</Upn>
         </Identity>

@@ -1,7 +1,7 @@
 ﻿<Window x:Class="Mandrake.Host.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:mandrake="clr-namespace:Mandrake.View.Controls;assembly=MandrakeLib"
+        xmlns:mandrake="clr-namespace:Mandrake.Sample.Client.Document;assembly=MandrakeAppLib"
         xmlns:convert="clr-namespace:Mandrake.Host.View.Converters"
         Title="MainWindow" Height="350" Width="525">
     <Window.Resources>

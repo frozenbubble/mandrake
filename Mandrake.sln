@@ -18,6 +18,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MendrakeServiceStandalone",
 		{54A14872-8CD5-4811-B0E0-419FE5FA19FB} = {54A14872-8CD5-4811-B0E0-419FE5FA19FB}
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MandrakeAppLib", "MandrakeAppLib\MandrakeAppLib.csproj", "{D7A90BF8-2A6E-441C-982F-59CD14EBD2A4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MandrakeClientBase", "MandrakeClientBase\MandrakeClientBase.csproj", "{93DACC06-B320-4C33-90DF-D4CB127CD9CD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -48,6 +52,14 @@ Global
 		{9D169B88-3EBC-40FC-93E4-7F95986A9D30}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9D169B88-3EBC-40FC-93E4-7F95986A9D30}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9D169B88-3EBC-40FC-93E4-7F95986A9D30}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D7A90BF8-2A6E-441C-982F-59CD14EBD2A4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D7A90BF8-2A6E-441C-982F-59CD14EBD2A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D7A90BF8-2A6E-441C-982F-59CD14EBD2A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D7A90BF8-2A6E-441C-982F-59CD14EBD2A4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{93DACC06-B320-4C33-90DF-D4CB127CD9CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{93DACC06-B320-4C33-90DF-D4CB127CD9CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{93DACC06-B320-4C33-90DF-D4CB127CD9CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{93DACC06-B320-4C33-90DF-D4CB127CD9CD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

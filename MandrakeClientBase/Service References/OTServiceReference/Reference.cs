@@ -8,11 +8,11 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Mandrake.Client.OTServiceReference {
+namespace Mandrake.Client.Base.OTServiceReference {
     
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    [System.ServiceModel.ServiceContractAttribute(ConfigurationName="OTServiceReference.IOTAwareService", CallbackContract=typeof(Mandrake.Client.OTServiceReference.IOTAwareServiceCallback))]
+    [System.ServiceModel.ServiceContractAttribute(ConfigurationName="OTServiceReference.IOTAwareService", CallbackContract=typeof(Mandrake.Client.Base.OTServiceReference.IOTAwareServiceCallback))]
     public interface IOTAwareService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IOTAwareService/Register", ReplyAction="http://tempuri.org/IOTAwareService/RegisterResponse")]
@@ -48,10 +48,6 @@ namespace Mandrake.Client.OTServiceReference {
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(Mandrake.Service.OTAck))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(Mandrake.Model.Operation[]))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(Mandrake.Model.Operation))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(Mandrake.Model.IntervalOperation))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(Mandrake.Model.DeleteOperation))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(Mandrake.Model.SinglePositionOperation))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(Mandrake.Model.InsertOperation))]
         void Synchronize(object content);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IOTAwareService/Echo", ReplyAction="http://tempuri.org/IOTAwareService/EchoResponse")]
@@ -59,12 +55,12 @@ namespace Mandrake.Client.OTServiceReference {
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public interface IOTAwareServiceChannel : Mandrake.Client.OTServiceReference.IOTAwareService, System.ServiceModel.IClientChannel {
+    public interface IOTAwareServiceChannel : Mandrake.Client.Base.OTServiceReference.IOTAwareService, System.ServiceModel.IClientChannel {
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public partial class OTAwareServiceClient : System.ServiceModel.DuplexClientBase<Mandrake.Client.OTServiceReference.IOTAwareService>, Mandrake.Client.OTServiceReference.IOTAwareService {
+    public partial class OTAwareServiceClient : System.ServiceModel.DuplexClientBase<Mandrake.Client.Base.OTServiceReference.IOTAwareService>, Mandrake.Client.Base.OTServiceReference.IOTAwareService {
         
         public OTAwareServiceClient(System.ServiceModel.InstanceContext callbackInstance) : 
                 base(callbackInstance) {

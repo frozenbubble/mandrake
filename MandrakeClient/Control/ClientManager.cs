@@ -4,135 +4,132 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Mandrake.Model;
-using Mandrake.View.Controls;
+using Mandrake.Model.Document;
 using Mandrake.Service;
-using Mandrake.Client.OTServiceReference;
+//using Mandrake.Client.OTServiceReference;
 using System.ServiceModel;
 
 namespace Mandrake.Management.Client
 {
+    //public class ClientManager : OTManager, IOTAwareServiceCallback
+    //{
+    //    protected int clientMessages;
 
-    public delegate void OperationActionEventHandler(object sender, Operation o);
+    //    private List<Operation> outgoing = new List<Operation>();
+    //    private bool acknowledged = true;
 
-    public class ClientManager : OTManager, IOTAwareServiceCallback
-    {
-        protected int clientMessages;
+    //    public event OperationActionEventHandler OperationPerformed;
 
-        private List<Operation> outgoing = new List<Operation>();
-        private bool acknowledged = true;
+    //    public Guid Id { get; set; }
+    //    public Mandrake.Client.OTServiceReference.IOTAwareService Service { get; set; }
 
-        public event OperationActionEventHandler OperationPerformed;
+    //    public ClientManager(IOTAwareContext context)
+    //    {
+    //        outgoing = new List<Operation>();
+    //        Log = new List<Operation>();
+    //        this.Context = context;
+    //        //ManagerChain = new List<IOperationManager>(); // Autofac
+    //        //syncManager = new TextEditorSynchronizer((OTAwareDocument) context); // Autofac
+    //        //transformer = new LogTransformer();     //autofac
+    //        //transformer = new TextTransformer();
+    //    }
 
-        public Guid Id { get; set; }
-        public Mandrake.Client.OTServiceReference.IOTAwareService Service { get; set; }
+    //    public void Synchronize(object content)
+    //    {
+    //        syncManager.Synchronize(content);
+    //    }
 
-        public ClientManager(IOTAwareContext context)
-        {
-            outgoing = new List<Operation>();
-            ManagerChain = new List<IOperationManager>(); // Autofac
-            //syncManager = new TextEditorSynchronizer((OTAwareDocument) context); // Autofac
-            Log = new List<Operation>();
-            this.Context = context; // Autofac
-            //transformer = new LogTransformer();     //autofac
-            transformer = new TextTransformer();
-        }
+    //    public void OnChange(object sender, EventArgs e)
+    //    {
+    //        if (!Context.IsUpdatedByUser) return;
 
-        public void Synchronize(object content)
-        {
-            syncManager.Synchronize(content);
-        }
+    //        Operation o = null;
 
-        public void OnChange(object sender, EventArgs e)
-        {
-            if (!Context.IsUpdatedByUser) return;
+    //        foreach (var manager in ManagerChain)
+    //        {
+    //            if ((o = manager.TryRecognize(sender, e)) != null)
+    //            {
+    //                this.clientMessages++;
 
-            Operation o = null;
+    //                o.OwnerId = Id;
+    //                o.ClientMessages = clientMessages;
+    //                o.ServerMessages = serverMessages;
 
-            foreach (var manager in ManagerChain)
-            {
-                if ((o = manager.TryRecognize(sender, e)) != null)
-                {
-                    this.clientMessages++;
+    //                TrySend(o);
+    //            }
+    //        }
+    //    }
 
-                    o.OwnerId = Id;
-                    o.ClientMessages = clientMessages;
-                    o.ServerMessages = serverMessages;
+    //    private void TrySend(Operation o)
+    //    {
+    //        if (acknowledged)
+    //        {
+    //            acknowledged = false;
 
-                    TrySend(o);
-                }
-            }
-        }
+    //            Parallel.Invoke(() => Service.Send(new OTMessage(o)));
+    //        }
 
-        private void TrySend(Operation o)
-        {
-            if (acknowledged)
-            {
-                acknowledged = false;
+    //        else outgoing.Add(o);
+    //    }
 
-                Parallel.Invoke(() => Service.Send(new OTMessage(o)));
-            }
+    //    protected override void Execute(Operation o)
+    //    {
+    //        foreach (var manager in ManagerChain)
+    //        {
+    //            if (manager.TryExecute(Context, o)) return;
+    //        }
+    //    }
 
-            else outgoing.Add(o);
-        }
+    //    protected override void Transform(Operation o)
+    //    {
+    //        Operation copy = (Operation)o.Clone();
 
-        protected override void Execute(Operation o)
-        {
-            foreach (var manager in ManagerChain)
-            {
-                if (manager.TryExecute(Context, o)) return;
-            }
-        }
+    //        outgoing.Select(x => 
+    //        {
+    //            o = transformer.Transform(x, o);
+    //            return transformer.Transform(copy, x);
+    //        });
 
-        protected override void Transform(Operation o)
-        {
-            Operation copy = (Operation)o.Clone();
+    //        //foreach (var op in outgoing)
+    //        //{
+    //        //    transformer.Transform(op, o);
 
-            outgoing.Select(x => 
-            {
-                o = transformer.Transform(x, o);
-                return transformer.Transform(copy, x);
-            });
+    //        //    transformer.Transform(copy, op);
+    //        //    op.ServerMessages++;
+    //        //}
+    //    }
 
-            //foreach (var op in outgoing)
-            //{
-            //    transformer.Transform(op, o);
+    //    public void Forward(OTMessage message)
+    //    {
+    //        foreach (var o in message.Content)
+    //        {
+    //            Transform(o);
+    //            Execute(o);
 
-            //    transformer.Transform(copy, op);
-            //    op.ServerMessages++;
-            //}
-        }
+    //            this.serverMessages++;
+    //            o.ExecutedAt = DateTime.Now;
+    //            o.ClientMessages = this.clientMessages;
+    //            o.ServerMessages = this.serverMessages;
+    //            Log.Add(o);
+    //        }
+    //    }
 
-        public void Forward(OTMessage message)
-        {
-            foreach (var o in message.Content)
-            {
-                Transform(o);
-                Execute(o);
+    //    public void SendAck(OTAck ack)
+    //    {
+    //        //TODO: throw away acknowledged messages from log ?
 
-                this.serverMessages++;
-                o.ExecutedAt = DateTime.Now;
-                o.ClientMessages = this.clientMessages;
-                o.ServerMessages = this.serverMessages;
-                Log.Add(o);
-            }
-        }
+    //        if (outgoing.Count != 0)
+    //        {
+    //            Service.Send(new OTMessage(outgoing));
+    //            outgoing.Clear();
+    //        }
 
-        public void SendAck(OTAck ack)
-        {
-            //TODO: throw away acknowledged messages from log ?
+    //        else acknowledged = true;
+    //    }
 
-            if (outgoing.Count != 0)
-            {
-                Service.Send(new OTMessage(outgoing));
-                outgoing.Clear();
-            }
-
-            else acknowledged = true;
-        }
-
-        public void Echo(string msg)
-        {
-            Console.WriteLine(this.Id + " got: " + msg);
-        }
-    }
+    //    public void Echo(string msg)
+    //    {
+    //        Console.WriteLine(this.Id + " got: " + msg);
+    //    }
+    //}
 }

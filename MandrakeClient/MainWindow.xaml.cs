@@ -14,12 +14,14 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Mandrake.Service;
 using Mandrake.Management;
-using Mandrake.View.Controls;
+using Mandrake.Model.Document;
 using System.ServiceModel;
 using Mandrake.Management.Client;
-using Mandrake.Client.OTServiceReference;
+//using Mandrake.Client.OTServiceReference;
 using Mandrake.Model;
 using ServiceModelEx;
+using Mandrake.Client.Base;
+using Mandrake.Client.Base.OTServiceReference;
 
 namespace Mandrake.Client
 {
@@ -38,8 +40,8 @@ namespace Mandrake.Client
             callback = new ClientManager(editor);
             //callback = new ClientManager(editor);
 
-            callback.ManagerChain.Add(new EditorInsertOperationManager());
-            callback.ManagerChain.Add(new EditorDeleteOperationManager());
+            //callback.ManagerChain.Add(new EditorInsertOperationManager());
+            //callback.ManagerChain.Add(new EditorDeleteOperationManager());
             editor.Document.Changed += callback.OnChange;
 
             Task t = new Task(() =>

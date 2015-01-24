@@ -46,6 +46,11 @@
     <None Include="Script.fsx" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\MandrakeAppLib\MandrakeAppLib.csproj">
+      <Name>MandrakeAppLib</Name>
+      <Project>{d7a90bf8-2a6e-441c-982f-59cd14ebd2a4}</Project>
+      <Private>True</Private>
+    </ProjectReference>
     <ProjectReference Include="..\MandrakeLib\MandrakeLib.csproj">
       <Name>MandrakeLib</Name>
       <Project>{4eaa0c83-a033-4b72-b67a-0e22a7213711}</Project>

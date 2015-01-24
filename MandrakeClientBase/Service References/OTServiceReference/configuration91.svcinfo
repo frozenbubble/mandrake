@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<SavedWcfConfigurationInformation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="9.1" CheckSum="dt/YJHYDUScQFKfnildtW1zIUZM=">
+<SavedWcfConfigurationInformation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="9.1" CheckSum="hMucIQHyLa53p4geNbOR1xq6ItY=">
   <bindingConfigurations>
     <bindingConfiguration bindingType="netTcpBinding" name="TcpEndpoint">
       <properties>
@@ -118,10 +118,10 @@
     </bindingConfiguration>
   </bindingConfigurations>
   <endpoints>
-    <endpoint name="TcpEndpoint" contract="OTServiceReference.IOTAwareService" bindingType="netTcpBinding" address="net.tcp://localhost:8036/OTService" bindingConfiguration="TcpEndpoint">
+    <endpoint name="TcpEndpoint" contract="OTServiceReference.IOTAwareService" bindingType="netTcpBinding" address="net.tcp://localhost:8062/OTService" bindingConfiguration="TcpEndpoint">
       <properties>
         <property path="/address" isComplexType="false" isExplicitlyDefined="true" clrType="System.Uri, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <serializedValue>net.tcp://localhost:8036/OTService</serializedValue>
+          <serializedValue>net.tcp://localhost:8062/OTService</serializedValue>
         </property>
         <property path="/behaviorConfiguration" isComplexType="false" isExplicitlyDefined="false" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue />

@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{4EAA0C83-A033-4B72-B67A-0E22A7213711}</ProjectGuid>
+    <ProjectGuid>{D7A90BF8-2A6E-441C-982F-59CD14EBD2A4}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Mandrake</RootNamespace>
-    <AssemblyName>MandrakeLib</AssemblyName>
+    <RootNamespace>MandrakeAppLib</RootNamespace>
+    <AssemblyName>MandrakeAppLib</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -30,22 +30,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ICSharpCode.AvalonEdit, Version=4.4.2.9744, Culture=neutral, PublicKeyToken=9cc39be672370310, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\AvalonEdit.4.4.2.9744\lib\Net40\ICSharpCode.AvalonEdit.dll</HintPath>
-    </Reference>
-    <Reference Include="log4net">
-      <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
+    <Reference Include="ICSharpCode.AvalonEdit">
+      <HintPath>..\packages\AvalonEdit.5.0.2\lib\Net40\ICSharpCode.AvalonEdit.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="ServiceModelEx">
-      <HintPath>Assets\ServiceModelEx.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
-    <Reference Include="System.ComponentModel.Composition" />
-    <Reference Include="System.ComponentModel.Composition.Registration" />
-    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
@@ -58,11 +48,17 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Control\Management.cs" />
-    <Compile Include="Model\Operation.cs" />
-    <Compile Include="Model\Transformer.cs" />
+    <Compile Include="Transform.cs" />
+    <Compile Include="Document.cs" />
+    <Compile Include="ClientManagement.cs" />
+    <Compile Include="ClientOperation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="View\Controls.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MandrakeLib\MandrakeLib.csproj">
+      <Project>{4eaa0c83-a033-4b72-b67a-0e22a7213711}</Project>
+      <Name>MandrakeLib</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

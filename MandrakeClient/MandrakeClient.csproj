@@ -34,9 +34,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ICSharpCode.AvalonEdit, Version=4.4.2.9744, Culture=neutral, PublicKeyToken=9cc39be672370310, processorArchitecture=MSIL">
+    <Reference Include="ICSharpCode.AvalonEdit, Version=5.0.1.0, Culture=neutral, PublicKeyToken=9cc39be672370310, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\AvalonEdit.4.4.2.9744\lib\Net40\ICSharpCode.AvalonEdit.dll</HintPath>
+      <HintPath>..\packages\AvalonEdit.5.0.2\lib\Net40\ICSharpCode.AvalonEdit.dll</HintPath>
     </Reference>
     <Reference Include="log4net">
       <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
@@ -66,11 +66,6 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Control\ClientManager.cs" />
-    <Compile Include="Service References\OTServiceReference\Reference.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -108,19 +103,6 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
-    <None Include="Service References\OTServiceReference\Mandrake.Model.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\OTServiceReference\Mandrake.Service.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\OTServiceReference\service.wsdl" />
-    <None Include="Service References\OTServiceReference\service.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\OTServiceReference\service1.xsd">
-      <SubType>Designer</SubType>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -129,6 +111,14 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\MandrakeAppLib\MandrakeAppLib.csproj">
+      <Project>{d7a90bf8-2a6e-441c-982f-59cd14ebd2a4}</Project>
+      <Name>MandrakeAppLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MandrakeClientBase\MandrakeClientBase.csproj">
+      <Project>{93dacc06-b320-4c33-90df-d4cb127cd9cd}</Project>
+      <Name>MandrakeClientBase</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MandrakeLib\MandrakeLib.csproj">
       <Project>{4eaa0c83-a033-4b72-b67a-0e22a7213711}</Project>
       <Name>MandrakeLib</Name>
@@ -139,19 +129,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <WCFMetadataStorage Include="Service References\OTServiceReference\" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Service References\OTServiceReference\configuration91.svcinfo" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Service References\OTServiceReference\configuration.svcinfo" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Service References\OTServiceReference\Reference.svcmap">
-      <Generator>WCF Proxy Generator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
+    <Folder Include="View\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

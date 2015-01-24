@@ -1,11 +1,12 @@
-﻿namespace Mandrake
+﻿namespace Mandrake.Sample.Transform
 
 open Mandrake.Model
+open Mandrake.Sample.Client.Operations
 open System
 
 module Transform = 
 
-    type TextTransformer() = 
+    type TextTransformer() =
         
         let (|Insert | Delete | Unknown|) (o: Operation) = 
             match o with
@@ -59,20 +60,20 @@ module Transform =
             else if oa.StartPosition < ob.EndPosition then ob.EndPosition <- ob.EndPosition - (ob.EndPosition - oa.StartPosition)
 
 
-    type ShapeTransformer() = 
-
-        let (|Drag | Rotate | Scale |)(o: Operation) = 
-            match o with
-            | :? DragOperation as dop -> Drag dop
-            | :? RotateOperation as rop -> Rotate rop
-            | :? ScaleOperation as sop -> Scale sop 
-            | _ -> raise(new TransformationException("Operation type not eligible for shape transformation"))
-        
-        interface ITransform with
-            member this.Transform(o1: Operation, o2: Operation) = 
-                let o' = o2.Clone() :?> Operation
-                
-//                match (o1, o') with
-//                | Drag
-
-                o'
+//    type ShapeTransformer() = 
+//
+//        let (|Drag | Rotate | Scale |)(o: Operation) = 
+//            match o with
+//            | :? DragOperation as dop -> Drag dop
+//            | :? RotateOperation as rop -> Rotate rop
+//            | :? ScaleOperation as sop -> Scale sop 
+//            | _ -> raise(new TransformationException("Operation type not eligible for shape transformation"))
+//        
+//        interface ITransform with
+//            member this.Transform(o1: Operation, o2: Operation) = 
+//                let o' = o2.Clone() :?> Operation
+//                
+////                match (o1, o') with
+////                | Drag
+//
+//                o'

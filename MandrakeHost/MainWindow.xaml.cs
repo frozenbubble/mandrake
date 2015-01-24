@@ -48,8 +48,8 @@ namespace Mandrake.Host
             service.Context = editor;
 
             List<IOperationManager> chain = new List<IOperationManager>();
-            chain.Add(new EditorInsertOperationManager());
-            chain.Add(new EditorDeleteOperationManager());
+            //chain.Add(new EditorInsertOperationManager());
+            //chain.Add(new EditorDeleteOperationManager());
             service.ManagerChain = chain;
 
             

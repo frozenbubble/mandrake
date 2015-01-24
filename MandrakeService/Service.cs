@@ -7,7 +7,7 @@ using System.Text;
 using Mandrake.Management;
 using System.Runtime.CompilerServices;
 using Mandrake.Model;
-using Mandrake.View.Controls;
+using Mandrake.Model.Document;
 using System.Threading;
 using ICSharpCode.AvalonEdit.Document;
 using System.Windows.Threading;
@@ -29,16 +29,16 @@ namespace Mandrake.Service
 
         public OTAwareService()
         {
-            transformer = new TextTransformer();//LogTransformer();           // autofac
+            Log = new List<Operation>();
+            //transformer = new TextTransformer();
 
             // for now - autofac?
-            ManagerChain = new List<IOperationManager>();
-            ManagerChain.Add(new BasicInsertOperationManager());
-            ManagerChain.Add(new BasicDeleteOperationManager());
+            //ManagerChain = new List<IOperationManager>();
+            //ManagerChain.Add(new BasicInsertOperationManager());
+            //ManagerChain.Add(new BasicDeleteOperationManager());
 
-            Log = new List<Operation>();
             //???????
-            Context = new OTAwareDocument();
+            //Context = new OTAwareDocument();
         }
 
         public void Send(OTMessage message)

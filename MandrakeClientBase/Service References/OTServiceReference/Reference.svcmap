@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="5850d5db-ea0a-419b-945a-79fcf02644b6" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="net.tcp://localhost:8062/OTService/mex" Protocol="mex" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="service.wsdl" MetadataType="Wsdl" ID="fe2350ac-950f-49ca-88e2-c2decd6913b0" SourceId="1" SourceUrl="net.tcp://localhost:8062/OTService/mex" />
+    <MetadataFile FileName="service.xsd" MetadataType="Schema" ID="4c41e56a-ff61-4986-872c-2e4d6de82810" SourceId="1" SourceUrl="net.tcp://localhost:8062/OTService/mex" />
+    <MetadataFile FileName="service1.xsd" MetadataType="Schema" ID="561253c3-e563-4b9c-8544-9877acf55444" SourceId="1" SourceUrl="net.tcp://localhost:8062/OTService/mex" />
+    <MetadataFile FileName="Mandrake.Service.xsd" MetadataType="Schema" ID="bc4f6680-241d-406b-8dbc-17722c5b0a75" SourceId="1" SourceUrl="net.tcp://localhost:8062/OTService/mex" />
+    <MetadataFile FileName="Mandrake.Model.xsd" MetadataType="Schema" ID="c5a52fb8-fe3d-44e3-8b20-f3902f67e2a3" SourceId="1" SourceUrl="net.tcp://localhost:8062/OTService/mex" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>
