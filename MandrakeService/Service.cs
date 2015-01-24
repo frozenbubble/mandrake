@@ -27,18 +27,9 @@ namespace Mandrake.Service
         public event OTMessageEventHandler MessageSent;
         public event OperationActionEventHandler RegistrationCompleted;
 
-        public OTAwareService()
+        public OTAwareService(): base() 
         {
-            Log = new List<Operation>();
-            //transformer = new TextTransformer();
-
-            // for now - autofac?
-            //ManagerChain = new List<IOperationManager>();
-            //ManagerChain.Add(new BasicInsertOperationManager());
-            //ManagerChain.Add(new BasicDeleteOperationManager());
-
-            //???????
-            //Context = new OTAwareDocument();
+            Clients = new Dictionary<Guid, SynchronizingConnection>();
         }
 
         public void Send(OTMessage message)
@@ -93,8 +84,6 @@ namespace Mandrake.Service
         public void Register(Guid id)
         {
             var callback = OperationContext.Current.GetCallbackChannel<IOTCallback>();
-
-            if (Clients == null) Clients = new Dictionary<Guid, SynchronizingConnection>();
 
             Clients.Add(id, new SynchronizingConnection(callback));
 

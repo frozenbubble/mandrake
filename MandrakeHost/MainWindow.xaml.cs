@@ -50,7 +50,7 @@ namespace Mandrake.Host
             List<IOperationManager> chain = new List<IOperationManager>();
             //chain.Add(new EditorInsertOperationManager());
             //chain.Add(new EditorDeleteOperationManager());
-            service.ManagerChain = chain;
+            //service.ManagerChain = chain;
 
             
             service.OperationPerformed += service_OperationPerformed;

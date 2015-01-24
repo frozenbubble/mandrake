@@ -3,9 +3,11 @@
 open Mandrake.Model
 open Mandrake.Sample.Client.Operations
 open System
+open System.ComponentModel.Composition
 
 module Transform = 
 
+    [<Export(typedefof<ITransform>)>]
     type TextTransformer() =
         
         let (|Insert | Delete | Unknown|) (o: Operation) = 

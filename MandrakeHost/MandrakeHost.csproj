@@ -45,6 +45,7 @@
       <HintPath>..\Assets\ServiceModelEx.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Data" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml" />

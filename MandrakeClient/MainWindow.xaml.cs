@@ -17,11 +17,13 @@ using Mandrake.Management;
 using Mandrake.Model.Document;
 using System.ServiceModel;
 using Mandrake.Management.Client;
-//using Mandrake.Client.OTServiceReference;
 using Mandrake.Model;
 using ServiceModelEx;
 using Mandrake.Client.Base;
 using Mandrake.Client.Base.OTServiceReference;
+using System.Reflection;
+using System.ComponentModel.Composition.Hosting;
+using System.ComponentModel.Composition;
 
 namespace Mandrake.Client
 {
@@ -32,32 +34,17 @@ namespace Mandrake.Client
     {
         private ClientManager callback;
 
-        OTAwareServiceClient proxy;
         public MainWindow()
         {
             InitializeComponent();
 
             callback = new ClientManager(editor);
-            //callback = new ClientManager(editor);
-
-            //callback.ManagerChain.Add(new EditorInsertOperationManager());
-            //callback.ManagerChain.Add(new EditorDeleteOperationManager());
             editor.Document.Changed += callback.OnChange;
 
-            Task t = new Task(() =>
-            {
-                var ic = new InstanceContext(callback);
-                proxy = new OTAwareServiceClient(ic);
-                proxy.AddGenericResolver();
-
-                callback.Service = proxy;
-                callback.Id = Guid.NewGuid();
-
-                proxy.Register(callback.Id);
-                proxy.Hello("Hello there!");
-            });
-
-            t.Start();
+            //Task t = new Task(() => { });
+            //t.Start();
+            //callback.Connect();
+            new Task( () => callback.Connect() ).Start();
         }
     }
 }

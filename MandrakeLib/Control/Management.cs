@@ -4,6 +4,7 @@ using Mandrake.Model.Document;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
+using System.ComponentModel.Composition.Hosting;
 
 
 namespace Mandrake.Management
@@ -14,20 +15,39 @@ namespace Mandrake.Management
     {
         protected int serverMessages;
 
-        [Import(typeof(ISynchronize))]
+        //[Import(typeof(ISynchronize))]
         protected ISynchronize syncManager;
-        
+
         [Import(typeof(ITransform))]
-        protected ITransform transformer;
+        public ITransform transformer { get; set; }
 
         [Import(typeof(IOTAwareContext))]
         public IOTAwareContext Context { get; set; }
         
-        [ImportMany(typeof(IOperationManager))]
+        [ImportMany]
         public IEnumerable<IOperationManager> ManagerChain { get; set; }
         
         
         public List<Operation> Log { get; protected set; }
+
+        public OTManager()
+        {
+            Log = new List<Operation>();
+
+            var catalog = new AggregateCatalog();
+            Array.ForEach(AppDomain.CurrentDomain.GetAssemblies(), x => catalog.Catalogs.Add(new AssemblyCatalog(x)));
+
+            var container = new CompositionContainer(catalog);
+
+            try
+            {
+                container.ComposeParts(this);
+            }
+            catch (CompositionException compositionException)
+            {
+                Console.WriteLine(compositionException.ToString());
+            }
+        }
 
         protected abstract void Transform(Operation o);
         protected abstract void Execute(Operation o);
@@ -38,6 +58,11 @@ namespace Mandrake.Management
     {
         Operation TryRecognize(object sender, EventArgs e);
         bool TryExecute(object context, Operation o);
+    }
+
+    public interface IOperationManagerMetaData
+    {
+        Type OperationType { get; }
     }
 
     

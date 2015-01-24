@@ -2,12 +2,14 @@
 using Mandrake.Sample.Client.Operations;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Mandrake.Sample.Client.Transform
 {
+    [Export(typeof(ITransform))]
     public class TextTransformer : ITransform
     {
         public Operation Transform(Operation o1, Operation o2)

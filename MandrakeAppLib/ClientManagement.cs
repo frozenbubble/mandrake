@@ -5,12 +5,14 @@ using Mandrake.Sample.Client.Document;
 using Mandrake.Sample.Client.Operations;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Mandrake.Sample.Client.Management
 {
+    //[Export(typeof(IOperationManager))]
     public class BasicInsertOperationManager : IOperationManager
     {
         public Operation TryRecognize(object sender, EventArgs e)
@@ -34,6 +36,7 @@ namespace Mandrake.Sample.Client.Management
         }
     }
 
+    //[Export(typeof(IOperationManager))]
     public class BasicDeleteOperationManager : IOperationManager
     {
         public Operation TryRecognize(object sender, EventArgs e)
@@ -58,6 +61,7 @@ namespace Mandrake.Sample.Client.Management
         }
     }
 
+    [Export(typeof(IOperationManager))]
     public class EditorInsertOperationManager : IOperationManager
     {
         public Operation TryRecognize(object sender, EventArgs e)
@@ -90,6 +94,7 @@ namespace Mandrake.Sample.Client.Management
         }
     }
 
+    [Export(typeof(IOperationManager))]
     public class EditorDeleteOperationManager : IOperationManager
     {
         public Operation TryRecognize(object sender, EventArgs e)

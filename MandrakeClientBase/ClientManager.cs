@@ -6,8 +6,12 @@ using Mandrake.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.ServiceModel;
 using System.Text;
 using System.Threading.Tasks;
+using ServiceModelEx;
+using System.ComponentModel.Composition.Hosting;
+using System.ComponentModel.Composition;
 
 namespace Mandrake.Client.Base
 {
@@ -23,14 +27,10 @@ namespace Mandrake.Client.Base
         public Guid Id { get; set; }
         public Mandrake.Client.Base.OTServiceReference.IOTAwareService Service { get; set; }
 
-        public ClientManager(IOTAwareContext context)
+        public ClientManager(IOTAwareContext context): base()
         {
-            outgoing = new List<Operation>();
-            Log = new List<Operation>();
-            this.Context = context; // Autofac
-            //ManagerChain = new List<IOperationManager>(); // Autofac
-            //syncManager = new TextEditorSynchronizer((OTAwareDocument) context); // Autofac
-            //transformer = new TextTransformer();
+            Context = context;
+            Id = Guid.NewGuid();
         }
 
         public void Synchronize(object content)
@@ -129,6 +129,17 @@ namespace Mandrake.Client.Base
         public void Echo(string msg)
         {
             Console.WriteLine(this.Id + " got: " + msg);
+        }
+
+        public void Connect()
+        {
+            var ic = new InstanceContext(this);
+            var proxy = new OTAwareServiceClient(ic);
+            proxy.AddGenericResolver();
+
+            Service = proxy;
+            proxy.Register(Id);
+            proxy.Hello("Hello Server!");
         }
     }
 }

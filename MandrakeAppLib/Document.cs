@@ -2,6 +2,7 @@
 using Mandrake.Model.Document;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -36,6 +37,7 @@ namespace Mandrake.Sample.Client.Document
         }
     }
 
+    [Export(typeof(IOTAwareContext))]
     public class OTAwareDocument : IOTAwareContext
     {
         public bool IsUpdatedByUser { get; set; }
