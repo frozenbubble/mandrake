@@ -139,6 +139,7 @@ namespace Mandrake.Client.Base
 
             Service = proxy;
             proxy.Register(Id);
+            //new Task(() => proxy.Hello("Hello Server!")).Start();
             proxy.Hello("Hello Server!");
         }
     }

@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace Mandrake.Sample.Client.Document
 {
+    [Export(typeof(IOTAwareContext))]
     public class OTAwareEditor : TextEditor, IOTAwareContext
     {
         public bool IsUpdatedByUser { get; set; }
@@ -37,7 +38,7 @@ namespace Mandrake.Sample.Client.Document
         }
     }
 
-    [Export(typeof(IOTAwareContext))]
+    
     public class OTAwareDocument : IOTAwareContext
     {
         public bool IsUpdatedByUser { get; set; }
