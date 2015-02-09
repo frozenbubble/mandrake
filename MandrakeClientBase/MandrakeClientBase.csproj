@@ -30,10 +30,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ServiceModelEx, Version=4.0.0.0, Culture=neutral, PublicKeyToken=d0f8277329bba7a0, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\MandrakeLib\Assets\ServiceModelEx.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
@@ -62,6 +58,10 @@
     <ProjectReference Include="..\MandrakeService\MandrakeService.csproj">
       <Project>{54a14872-8cd5-4811-b0e0-419fe5fa19fb}</Project>
       <Name>MandrakeService</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ServiceModelEx\ServiceModelEx.csproj">
+      <Project>{0858c710-af53-4049-b98e-cfe3638d1228}</Project>
+      <Name>ServiceModelEx</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

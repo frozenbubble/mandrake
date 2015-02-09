@@ -11,11 +11,13 @@ using Mandrake.Model.Document;
 using System.Threading;
 using ICSharpCode.AvalonEdit.Document;
 using System.Windows.Threading;
+using System.Configuration;
+using Mandrake.Service.Configuration;
+using System.Reflection;
 
 namespace Mandrake.Service
 {
-    [ServiceBehavior(ConcurrencyMode = ConcurrencyMode.Reentrant,
-                     InstanceContextMode = InstanceContextMode.Single)]
+    [ServiceBehavior(ConcurrencyMode = ConcurrencyMode.Reentrant, InstanceContextMode = InstanceContextMode.Single)]
     public class OTAwareService : OTManager, IOTAwareService
     {
         private readonly object syncroot = new object();
@@ -30,6 +32,22 @@ namespace Mandrake.Service
         public OTAwareService(): base() 
         {
             Clients = new Dictionary<Guid, SynchronizingConnection>();
+
+            var contextInfo = ConfigurationManager.GetSection("Mandrake/ContextMetaData") as ServiceContextConfiguration;
+            if (contextInfo != null && contextInfo.Context.Assembly != string.Empty && contextInfo.Context.Type != string.Empty)
+            {
+                try
+                {
+                    var contextElement = contextInfo.Context;
+                    Type contextType = Assembly.Load(contextElement.Assembly).GetType(contextElement.Type);
+
+                    Context = (IOTAwareContext)Activator.CreateInstance(contextType);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Could not instantiate context object" + Environment.NewLine + ex.Message);
+                }
+            }
         }
 
         public void Send(OTMessage message)

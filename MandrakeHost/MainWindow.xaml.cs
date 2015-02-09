@@ -18,7 +18,6 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Mandrake.Host.View.Converters;
 using System.Collections.ObjectModel;
-using ServiceModelEx;
 
 namespace Mandrake.Host
 {
@@ -47,7 +46,7 @@ namespace Mandrake.Host
             service = new OTAwareService();
             service.Context = editor;
 
-            List<IOperationManager> chain = new List<IOperationManager>();
+            //List<IOperationManager> chain = new List<IOperationManager>();
             //chain.Add(new EditorInsertOperationManager());
             //chain.Add(new EditorDeleteOperationManager());
             //service.ManagerChain = chain;
@@ -57,11 +56,11 @@ namespace Mandrake.Host
             service.MessageArrived += service_MessageArrived;
             service.MessageSent += service_MessageSent;
             service.RegistrationCompleted += service_RegistrationCompleted;
-            
 
-            host = new ServiceHost(service);
-            host.AddGenericResolver();
+            host = new OTServiceHost(service);
             host.Open();
+
+            
         }
 
         void service_MessageArrived(object sender, OTMessage message)

@@ -40,6 +40,9 @@ namespace Mandrake.Client
             callback = new ClientManager(editor);
             editor.Document.Changed += callback.OnChange;
 
+            //Task t = new Task(() => { });
+            //t.Start();
+            //callback.Connect();
             new Task( () => callback.Connect() ).Start();
         }
     }

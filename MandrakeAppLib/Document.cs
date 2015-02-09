@@ -15,7 +15,6 @@ namespace Mandrake.Sample.Client.Document
         public bool IsUpdatedByUser { get; set; }
 
         public OTAwareEditor()
-            : base()
         {
             IsUpdatedByUser = true;
         }

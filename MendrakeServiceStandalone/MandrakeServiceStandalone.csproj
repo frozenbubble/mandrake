@@ -60,7 +60,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="OTService.svc" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -80,9 +82,17 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\MandrakeAppLib\MandrakeAppLib.csproj">
+      <Project>{d7a90bf8-2a6e-441c-982f-59cd14ebd2a4}</Project>
+      <Name>MandrakeAppLib</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MandrakeService\MandrakeService.csproj">
       <Project>{54a14872-8cd5-4811-b0e0-419fe5fa19fb}</Project>
       <Name>MandrakeService</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ServiceModelEx\ServiceModelEx.csproj">
+      <Project>{0858c710-af53-4049-b98e-cfe3638d1228}</Project>
+      <Name>ServiceModelEx</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

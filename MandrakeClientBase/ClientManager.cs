@@ -88,14 +88,6 @@ namespace Mandrake.Client.Base
                 o = transformer.Transform(x, o);
                 return transformer.Transform(copy, x);
             });
-
-            //foreach (var op in outgoing)
-            //{
-            //    transformer.Transform(op, o);
-
-            //    transformer.Transform(copy, op);
-            //    op.ServerMessages++;
-            //}
         }
 
         public void Forward(OTMessage message)
@@ -139,7 +131,6 @@ namespace Mandrake.Client.Base
 
             Service = proxy;
             proxy.Register(Id);
-            //new Task(() => proxy.Hello("Hello Server!")).Start();
             proxy.Hello("Hello Server!");
         }
     }

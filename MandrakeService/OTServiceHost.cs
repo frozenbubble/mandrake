@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ServiceModelEx;
 using System.ServiceModel.Activation;
+using System.Reflection;
 
 
 namespace Mandrake.Service
@@ -14,9 +15,23 @@ namespace Mandrake.Service
     {
         public OTServiceHost(Type t, params Uri[] baseAddresses): base(t, baseAddresses)
         {
-            this.AddGenericResolver();
+            try
+            {
+                this.AddGenericResolver();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                //throw;
+            }
             Console.WriteLine("OTServiceHost CREATED");
         }
+
+        public OTServiceHost(object singletonInstance, params Uri[] baseAddresses): base(singletonInstance, baseAddresses)
+        {
+            this.AddGenericResolver();
+        }
+
     }
 
     public class OTServiceHostFactory: ServiceHostFactory
