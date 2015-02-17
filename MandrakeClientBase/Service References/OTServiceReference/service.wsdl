@@ -39,6 +39,7 @@
       <xsd:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Mandrake.Service" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Mandrake.Model" />
+      <xsd:import namespace="http://schemas.datacontract.org/2004/07/Mandrake.Management" />
     </xsd:schema>
   </wsdl:types>
   <wsdl:message name="IOTAwareService_Register_InputMessage">
@@ -58,6 +59,12 @@
   </wsdl:message>
   <wsdl:message name="IOTAwareService_Hello_OutputMessage">
     <wsdl:part name="parameters" element="tns:HelloResponse" />
+  </wsdl:message>
+  <wsdl:message name="IOTAwareService_SendChatMessage_InputMessage">
+    <wsdl:part name="parameters" element="tns:SendChatMessage" />
+  </wsdl:message>
+  <wsdl:message name="IOTAwareService_SendChatMessage_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SendChatMessageResponse" />
   </wsdl:message>
   <wsdl:message name="IOTAwareService_Forward_OutputCallbackMessage">
     <wsdl:part name="parameters" element="tns:Forward" />
@@ -83,6 +90,12 @@
   <wsdl:message name="IOTAwareService_Echo_InputCallbackMessage">
     <wsdl:part name="parameters" element="tns:EchoResponse" />
   </wsdl:message>
+  <wsdl:message name="IOTAwareService_ForwardChatMessage_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:ForwardChatMessage" />
+  </wsdl:message>
+  <wsdl:message name="IOTAwareService_ForwardChatMessage_InputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:ForwardChatMessageResponse" />
+  </wsdl:message>
   <wsdl:portType name="IOTAwareService">
     <wsdl:operation name="Register">
       <wsdl:input wsaw:Action="http://tempuri.org/IOTAwareService/Register" message="tns:IOTAwareService_Register_InputMessage" />
@@ -95,6 +108,10 @@
     <wsdl:operation name="Hello">
       <wsdl:input wsaw:Action="http://tempuri.org/IOTAwareService/Hello" message="tns:IOTAwareService_Hello_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IOTAwareService/HelloResponse" message="tns:IOTAwareService_Hello_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SendChatMessage">
+      <wsdl:input wsaw:Action="http://tempuri.org/IOTAwareService/SendChatMessage" message="tns:IOTAwareService_SendChatMessage_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IOTAwareService/SendChatMessageResponse" message="tns:IOTAwareService_SendChatMessage_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="Forward">
       <wsdl:output wsaw:Action="http://tempuri.org/IOTAwareService/Forward" message="tns:IOTAwareService_Forward_OutputCallbackMessage" />
@@ -111,6 +128,10 @@
     <wsdl:operation name="Echo">
       <wsdl:output wsaw:Action="http://tempuri.org/IOTAwareService/Echo" message="tns:IOTAwareService_Echo_OutputCallbackMessage" />
       <wsdl:input wsaw:Action="http://tempuri.org/IOTAwareService/EchoResponse" message="tns:IOTAwareService_Echo_InputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ForwardChatMessage">
+      <wsdl:output wsaw:Action="http://tempuri.org/IOTAwareService/ForwardChatMessage" message="tns:IOTAwareService_ForwardChatMessage_OutputCallbackMessage" />
+      <wsdl:input wsaw:Action="http://tempuri.org/IOTAwareService/ForwardChatMessageResponse" message="tns:IOTAwareService_ForwardChatMessage_InputCallbackMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="TcpEndpoint" type="tns:IOTAwareService">
@@ -137,6 +158,15 @@
     </wsdl:operation>
     <wsdl:operation name="Hello">
       <soap12:operation soapAction="http://tempuri.org/IOTAwareService/Hello" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SendChatMessage">
+      <soap12:operation soapAction="http://tempuri.org/IOTAwareService/SendChatMessage" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -173,6 +203,15 @@
     </wsdl:operation>
     <wsdl:operation name="Echo">
       <soap12:operation soapAction="http://tempuri.org/IOTAwareService/Echo" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ForwardChatMessage">
+      <soap12:operation soapAction="http://tempuri.org/IOTAwareService/ForwardChatMessage" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

@@ -133,5 +133,11 @@ namespace Mandrake.Client.Base
             proxy.Register(Id);
             proxy.Hello("Hello Server!");
         }
+
+
+        public void ForwardChatMessage(ChatMessage msg)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

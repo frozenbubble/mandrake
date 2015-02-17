@@ -58,6 +58,8 @@ namespace Mandrake.Service
         void Send(OTMessage message);
         [OperationContract]
         void Hello(string msg);
+        [OperationContract]
+        void SendChatMessage(ChatMessage msg);
     }
 
     public interface IOTCallback
@@ -70,5 +72,7 @@ namespace Mandrake.Service
         void Synchronize(object content);
         [OperationContract]
         void Echo(string msg);
+        [OperationContract]
+        void ForwardChatMessage(ChatMessage msg);
     }
 }

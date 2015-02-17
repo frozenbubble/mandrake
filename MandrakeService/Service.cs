@@ -24,9 +24,11 @@ namespace Mandrake.Service
 
         public Dictionary<Guid, SynchronizingConnection> Clients { get; set; }
 
-        public event OTMessageEventHandler MessageArrived;
-        public event OperationActionEventHandler OperationPerformed;
         public event OTMessageEventHandler MessageSent;
+        public event OTMessageEventHandler MessageArrived;
+        public event ChatMessageEventHandler ChatMessageArrived;
+        public event ChatMessageEventHandler ChatMessageAcknowledged;
+        public event OperationActionEventHandler OperationPerformed;
         public event OperationActionEventHandler RegistrationCompleted;
 
         public OTAwareService(): base() 
@@ -67,7 +69,6 @@ namespace Mandrake.Service
                     }
 
                     Execute(op);
-
                     this.serverMessages++;
                 }
 
@@ -82,7 +83,6 @@ namespace Mandrake.Service
             to.Value.ClientMessages += msg.Content.Count;
 
             var ack = new OTAck(to.Value.ClientMessages, this.serverMessages);
-
             to.Value.Client.SendAck(ack);
         }
 
@@ -102,7 +102,6 @@ namespace Mandrake.Service
         public void Register(Guid id)
         {
             var callback = OperationContext.Current.GetCallbackChannel<IOTCallback>();
-
             Clients.Add(id, new SynchronizingConnection(callback));
 
             if (RegistrationCompleted != null) RegistrationCompleted(this, null);
@@ -124,8 +123,6 @@ namespace Mandrake.Service
                     Log.Add(o);
 
                     if (OperationPerformed != null) OperationPerformed(this, o);
-
-                    return;
                 }
             }
         }
@@ -135,10 +132,15 @@ namespace Mandrake.Service
         {
             Console.WriteLine("server got hello");
 
-            foreach (var connection in Clients)
-            {
-                connection.Value.Client.Echo("Hello from" + connection.Key);
-            }
+            foreach (var connection in Clients) connection.Value.Client.Echo("Hello from" + connection.Key);
+        }
+
+
+        public void SendChatMessage(ChatMessage msg)
+        {
+            chatMessages.Add(msg);
+
+            if (ChatMessageArrived != null) ChatMessageArrived(this, msg);
         }
     }
 

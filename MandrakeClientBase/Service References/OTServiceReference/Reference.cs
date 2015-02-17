@@ -32,6 +32,12 @@ namespace Mandrake.Client.Base.OTServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IOTAwareService/Hello", ReplyAction="http://tempuri.org/IOTAwareService/HelloResponse")]
         System.Threading.Tasks.Task HelloAsync(string msg);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IOTAwareService/SendChatMessage", ReplyAction="http://tempuri.org/IOTAwareService/SendChatMessageResponse")]
+        void SendChatMessage(Mandrake.Management.ChatMessage msg);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IOTAwareService/SendChatMessage", ReplyAction="http://tempuri.org/IOTAwareService/SendChatMessageResponse")]
+        System.Threading.Tasks.Task SendChatMessageAsync(Mandrake.Management.ChatMessage msg);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -48,10 +54,14 @@ namespace Mandrake.Client.Base.OTServiceReference {
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(Mandrake.Service.OTAck))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(Mandrake.Model.Operation[]))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(Mandrake.Model.Operation))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(Mandrake.Management.ChatMessage))]
         void Synchronize(object content);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IOTAwareService/Echo", ReplyAction="http://tempuri.org/IOTAwareService/EchoResponse")]
         void Echo(string msg);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IOTAwareService/ForwardChatMessage", ReplyAction="http://tempuri.org/IOTAwareService/ForwardChatMessageResponse")]
+        void ForwardChatMessage(Mandrake.Management.ChatMessage msg);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -104,6 +114,14 @@ namespace Mandrake.Client.Base.OTServiceReference {
         
         public System.Threading.Tasks.Task HelloAsync(string msg) {
             return base.Channel.HelloAsync(msg);
+        }
+        
+        public void SendChatMessage(Mandrake.Management.ChatMessage msg) {
+            base.Channel.SendChatMessage(msg);
+        }
+        
+        public System.Threading.Tasks.Task SendChatMessageAsync(Mandrake.Management.ChatMessage msg) {
+            return base.Channel.SendChatMessageAsync(msg);
         }
     }
 }

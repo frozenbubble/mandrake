@@ -6,10 +6,11 @@ using System.ComponentModel.Composition;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 
 namespace Mandrake.Sample.Client.Document
 {
-    [Export(typeof(IOTAwareContext))]
+    //[Export(typeof(IOTAwareContext))]
     public class OTAwareEditor : TextEditor, IOTAwareContext
     {
         public bool IsUpdatedByUser { get; set; }
@@ -57,6 +58,28 @@ namespace Mandrake.Sample.Client.Document
         public void RemoveText(int position, int length)
         {
             document.Remove(position, length);
+        }
+    }
+
+    [Export(typeof(IOTAwareContext))]
+    public class OTAwareRichTextBox: RichTextBox, IOTAwareContext
+    {
+
+        public bool IsUpdatedByUser { get; set; }
+
+        public OTAwareRichTextBox()
+        {
+            this.IsUpdatedByUser = true;
+        }
+
+        public void InsertText(string text, int position)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void RemoveText(int position, int length)
+        {
+            throw new NotImplementedException();
         }
     }
 }

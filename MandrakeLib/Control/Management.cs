@@ -7,15 +7,18 @@ using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
 using System.Reflection;
+using System.Runtime.Serialization;
 
 
 namespace Mandrake.Management
 {
     public delegate void OperationActionEventHandler(object sender, Operation o);
+    public delegate void ChatMessageEventHandler(object sender, ChatMessage msg);
 
     public abstract class OTManager
     {
         protected int serverMessages;
+        protected List<ChatMessage> chatMessages;
 
         //[Import(typeof(ISynchronize))]
         protected ISynchronize syncManager;
@@ -59,6 +62,28 @@ namespace Mandrake.Management
         protected abstract void Execute(Operation o);
     }
 
+    [DataContract]
+    public class ChatMessage
+    {
+        [DataMember]
+        public Guid SenderId { get; private set; }
+        [DataMember]
+        public string Message { get; private set; }
+        [DataMember]
+        public string SenderName { get; private set; }
+        [DataMember]
+        public DateTime TimeStamp { get; private set; }
+
+        public ChatMessage(string message, string sender, Guid id)
+        {
+            SenderId = id;
+            Message = message;
+            SenderName = sender;
+            TimeStamp = DateTime.Now;
+        }
+
+    }
+
 
     public interface IOperationManager
     {
@@ -66,39 +91,8 @@ namespace Mandrake.Management
         bool TryExecute(object context, Operation o);
     }
 
-    public interface IOperationManagerMetaData
-    {
-        Type OperationType { get; }
-    }
-
-    
-
     public interface ISynchronize
     {
         void Synchronize(object content);
     }
-
-    //public class TextEditorSynchronizer: ISynchronize
-    //{
-    //    public OTAwareEditor editor { get; set; }
-
-    //    public TextEditorSynchronizer(OTAwareEditor editor)
-    //    {
-    //        this.editor = editor;
-    //    }
-
-    //    public void Synchronize(object content)
-    //    {
-    //        var stringContent = content as string;
-
-    //        if (stringContent == null) throw new ArgumentException("Synchronization context is not of type string");
-
-    //        using (editor.DeclareChangeBlock())
-    //        {
-    //            editor.Document.Text = stringContent;
-    //        }
-
-    //    }
-
-    //}
 }
