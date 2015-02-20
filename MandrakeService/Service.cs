@@ -141,6 +141,11 @@ namespace Mandrake.Service
             chatMessages.Add(msg);
 
             if (ChatMessageArrived != null) ChatMessageArrived(this, msg);
+
+            var to = Clients.Where(c => c.Key != msg.SenderId);
+            
+            foreach (var client in to) client.Value.Client.ForwardChatMessage(msg);
+
         }
     }
 

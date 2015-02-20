@@ -49,6 +49,10 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Events.cs" />
+    <Compile Include="MultiCursorTextEditor.xaml.cs">
+      <DependentUpon>MultiCursorTextEditor.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Transform.cs" />
     <Compile Include="Document.cs" />
     <Compile Include="ClientManagement.cs" />
@@ -63,6 +67,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="MultiCursorTextEditor.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

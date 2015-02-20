@@ -23,6 +23,7 @@ namespace Mandrake.Client.Base
         private bool acknowledged = true;
 
         public event OperationActionEventHandler OperationPerformed;
+        public event ChatMessageEventHandler MessageArrived;
 
         public Guid Id { get; set; }
         public Mandrake.Client.Base.OTServiceReference.IOTAwareService Service { get; set; }
@@ -137,7 +138,7 @@ namespace Mandrake.Client.Base
 
         public void ForwardChatMessage(ChatMessage msg)
         {
-            throw new NotImplementedException();
+            if (MessageArrived != null) MessageArrived(this, msg);
         }
     }
 }

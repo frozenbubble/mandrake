@@ -122,6 +122,31 @@ namespace Mandrake.Sample.Client.Operations
         }
     }
 
+    public class CaretPositionOperation: SinglePositionOperation
+    {
+        public int Offset { get; set; }
+
+        public CaretPositionOperation(int offset)
+        {
+            this.Offset = offset;
+        }
+
+        public override void TransformAgainst(Operation o)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override int GetNewPosition(int position)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override object Clone()
+        {
+            throw new NotImplementedException();
+        }
+    }
+
     public abstract class ShapeOperation : Operation
     {
         public int ShapeId { get; set; }

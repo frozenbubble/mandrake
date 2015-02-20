@@ -2,10 +2,12 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mandrake="clr-namespace:Mandrake.Sample.Client.Document;assembly=MandrakeAppLib"
+        xmlns:app="clr-namespace:Mandrake.Client.View;assembly=MandrakeAppLib"
         Title="MainWindow" Height="350" Width="525">
     <Grid>
-        <mandrake:OTAwareEditor x:Name="editor" Background="Wheat" />
+        <!--<mandrake:OTAwareEditor x:Name="editor" Background="Wheat" />-->
         <!--<mandrake:OTAwareEditor x:Name="editor2" Background="Transparent" />-->
         
+        <app:MultiCursorTextEditor x:Name="editor" />
     </Grid>
 </Window>
