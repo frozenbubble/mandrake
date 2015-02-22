@@ -24,6 +24,7 @@ namespace Mandrake.Client.Base
 
         public event OperationActionEventHandler OperationPerformed;
         public event ChatMessageEventHandler MessageArrived;
+        public event ClientRegisteredEventHandler ClientRegistered;
 
         public Guid Id { get; set; }
         public Mandrake.Client.Base.OTServiceReference.IOTAwareService Service { get; set; }
@@ -124,14 +125,14 @@ namespace Mandrake.Client.Base
             Console.WriteLine(this.Id + " got: " + msg);
         }
 
-        public void Connect()
+        public void Connect(string name)
         {
             var ic = new InstanceContext(this);
             var proxy = new OTAwareServiceClient(ic);
             proxy.AddGenericResolver();
 
             Service = proxy;
-            proxy.Register(Id);
+            proxy.Register(new RegistrationMessage() { Id = this.Id, Name = name});
             proxy.Hello("Hello Server!");
         }
 
@@ -139,6 +140,12 @@ namespace Mandrake.Client.Base
         public void ForwardChatMessage(ChatMessage msg)
         {
             if (MessageArrived != null) MessageArrived(this, msg);
+        }
+
+
+        public void RegisterClient(Guid id)
+        {
+            if (ClientRegistered != null) ClientRegistered(this, id);
         }
     }
 }

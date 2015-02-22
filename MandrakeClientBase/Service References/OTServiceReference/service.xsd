@@ -1,24 +1,26 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:tns="http://tempuri.org/" elementFormDefault="qualified" targetNamespace="http://tempuri.org/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-  <xs:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
-  <xs:import namespace="http://schemas.datacontract.org/2004/07/Mandrake.Service" />
   <xs:import namespace="http://schemas.datacontract.org/2004/07/Mandrake.Management" />
+  <xs:import namespace="http://schemas.datacontract.org/2004/07/Mandrake.Service" />
+  <xs:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
   <xs:element name="Register">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q1="http://schemas.microsoft.com/2003/10/Serialization/" minOccurs="0" name="id" type="q1:guid" />
+        <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/Mandrake.Management" minOccurs="0" name="msg" nillable="true" type="q1:RegistrationMessage" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="RegisterResponse">
     <xs:complexType>
-      <xs:sequence />
+      <xs:sequence>
+        <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/Mandrake.Management" minOccurs="0" name="RegisterResult" nillable="true" type="q2:ArrayOfRegistrationMessage" />
+      </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="Send">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/Mandrake.Service" minOccurs="0" name="message" nillable="true" type="q2:OTMessage" />
+        <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/Mandrake.Service" minOccurs="0" name="message" nillable="true" type="q3:OTMessage" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -42,7 +44,7 @@
   <xs:element name="SendChatMessage">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/Mandrake.Management" minOccurs="0" name="msg" nillable="true" type="q3:ChatMessage" />
+        <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/Mandrake.Management" minOccurs="0" name="msg" nillable="true" type="q4:ChatMessage" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -54,7 +56,7 @@
   <xs:element name="Forward">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/Mandrake.Service" minOccurs="0" name="message" nillable="true" type="q4:OTMessage" />
+        <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/Mandrake.Service" minOccurs="0" name="message" nillable="true" type="q5:OTMessage" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -66,7 +68,7 @@
   <xs:element name="SendAck">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/Mandrake.Service" minOccurs="0" name="ack" nillable="true" type="q5:OTAck" />
+        <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/Mandrake.Service" minOccurs="0" name="ack" nillable="true" type="q6:OTAck" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -102,11 +104,23 @@
   <xs:element name="ForwardChatMessage">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/Mandrake.Management" minOccurs="0" name="msg" nillable="true" type="q6:ChatMessage" />
+        <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/Mandrake.Management" minOccurs="0" name="msg" nillable="true" type="q7:ChatMessage" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="ForwardChatMessageResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RegisterClient">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q8="http://schemas.microsoft.com/2003/10/Serialization/" minOccurs="0" name="id" type="q8:guid" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RegisterClientResponse">
     <xs:complexType>
       <xs:sequence />
     </xs:complexType>

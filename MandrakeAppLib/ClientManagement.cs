@@ -15,6 +15,8 @@ using System.Windows.Controls;
 
 namespace Mandrake.Sample.Client.Management
 {
+    #region OTAware editor
+
     //[Export(typeof(IOperationManager))]
     public class EditorInsertOperationManager : IOperationManager
     {
@@ -81,7 +83,11 @@ namespace Mandrake.Sample.Client.Management
             return true;
         }
     }
+    #endregion
 
+    #region MultiCaret Text Editor
+    
+    [Export(typeof(IOperationManager))]
     public class CaretPositionOperationManager: IOperationManager
     {
         public Operation TryRecognize(object sender, EventArgs e)
@@ -99,9 +105,79 @@ namespace Mandrake.Sample.Client.Management
 
             if (move == null) return false;
 
-            editor.Editor.CaretOffset = move.Offset;
+            editor.MoveCaret(move.OwnerId, move.Offset);
 
             return true;
         }
     }
+
+    [Export(typeof(IOperationManager))]
+    public class MultiCaretInsertOperationManager: IOperationManager
+    {
+
+        public Operation TryRecognize(object sender, EventArgs e)
+        {
+            var change = e as DocumentChangeEventArgs;
+
+            if (change != null && change.InsertionLength > 0) return new InsertOperation(change.Offset, change.InsertedText.Text);
+            else return null;
+        }
+
+        public bool TryExecute(object context, Operation o)
+        {
+            var insert = o as InsertOperation;
+            var editor = context as MultiCaretTextEditor;
+
+            if (insert == null || editor == null) return false;
+
+            editor.Dispatcher.BeginInvoke(new Action(() =>
+            {
+                using (editor.Editor.DeclareChangeBlock())
+                {
+                    editor.IsUpdatedByUser = false;
+                    editor.InsertText(insert.Literal, insert.Position);
+                    editor.IsUpdatedByUser = true;
+                }
+
+            }));
+
+            return true;
+        }
+    }
+
+    [Export(typeof(IOperationManager))]
+    public class MultiCaretDeleteOperationManager : IOperationManager
+    {
+
+        public Operation TryRecognize(object sender, EventArgs e)
+        {
+            var change = e as DocumentChangeEventArgs;
+
+            if (change != null && change.RemovalLength > 0) return new DeleteOperation(change.Offset, change.Offset + change.RemovalLength);
+            else return null;
+        }
+
+        public bool TryExecute(object context, Operation o)
+        {
+            var remove = o as DeleteOperation;
+            var editor = context as MultiCaretTextEditor;
+
+            if (remove == null || editor == null) return false;
+
+            editor.Dispatcher.BeginInvoke(new Action(() =>
+            {
+                using (editor.Editor.DeclareChangeBlock())
+                {
+                    editor.IsUpdatedByUser = false;
+                    editor.RemoveText(remove.StartPosition, remove.EndPosition - remove.StartPosition);
+                    editor.IsUpdatedByUser = true;
+                }
+
+            }));
+
+            return true;
+        }
+    }
+    
+    #endregion
 }

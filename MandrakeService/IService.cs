@@ -53,7 +53,7 @@ namespace Mandrake.Service
     public interface IOTAwareService
     {
         [OperationContract]
-        void Register(Guid id);
+        IEnumerable<RegistrationMessage> Register(RegistrationMessage msg);
         [OperationContract]
         void Send(OTMessage message);
         [OperationContract]
@@ -74,5 +74,7 @@ namespace Mandrake.Service
         void Echo(string msg);
         [OperationContract]
         void ForwardChatMessage(ChatMessage msg);
+        [OperationContract]
+        void RegisterClient(Guid id);
     }
 }

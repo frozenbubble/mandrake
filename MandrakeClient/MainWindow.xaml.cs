@@ -36,13 +36,20 @@ namespace Mandrake.Client
         public MainWindow()
         {
             InitializeComponent();
+            //editor.RegisterCursor(Guid.NewGuid(), "Test");
 
-            //callback = new ClientManager(editor);
+            callback = new ClientManager(editor);
 
-            //editor.DocumentChanged += callback.OnChange;
-            //editor.CaretPositionChanged += callback.OnChange;
+            editor.DocumentChanged += callback.OnChange;
+            editor.CaretPositionChanged += callback.OnChange;
+            callback.ClientRegistered += callback_ClientRegistered;
 
-            //new Task( () => callback.Connect() ).Start();
+            new Task( () => callback.Connect("Test") ).Start();
+        }
+
+        void callback_ClientRegistered(object sender, Guid id)
+        {
+            editor.Dispatcher.BeginInvoke(new Action(() => editor.RegisterCursor(id, "Test")));
         }
     }
 }

@@ -51,8 +51,8 @@
   <ItemGroup>
     <Compile Include="ColoredCaret.cs" />
     <Compile Include="Events.cs" />
-    <Compile Include="MultiCursorTextEditor.xaml.cs">
-      <DependentUpon>MultiCursorTextEditor.xaml</DependentUpon>
+    <Compile Include="MultiCaretTextEditor.xaml.cs">
+      <DependentUpon>MultiCaretTextEditor.xaml</DependentUpon>
     </Compile>
     <Compile Include="Transform.cs" />
     <Compile Include="Document.cs" />
@@ -70,7 +70,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="MultiCursorTextEditor.xaml">
+    <Page Include="MultiCaretTextEditor.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

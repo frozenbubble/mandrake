@@ -37,49 +37,4 @@ namespace Mandrake.Sample.Client.Document
             }
         }
     }
-
-    
-    public class OTAwareDocument : IOTAwareContext
-    {
-        public bool IsUpdatedByUser { get; set; }
-        public StringBuilder document { get; set; }
-
-        public OTAwareDocument()
-        {
-            IsUpdatedByUser = true;
-            this.document = new StringBuilder();
-        }
-
-        public void InsertText(string text, int position)
-        {
-            document.Insert(position, text);
-        }
-
-        public void RemoveText(int position, int length)
-        {
-            document.Remove(position, length);
-        }
-    }
-
-    [Export(typeof(IOTAwareContext))]
-    public class OTAwareRichTextBox: RichTextBox, IOTAwareContext
-    {
-
-        public bool IsUpdatedByUser { get; set; }
-
-        public OTAwareRichTextBox()
-        {
-            this.IsUpdatedByUser = true;
-        }
-
-        public void InsertText(string text, int position)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void RemoveText(int position, int length)
-        {
-            throw new NotImplementedException();
-        }
-    }
 }

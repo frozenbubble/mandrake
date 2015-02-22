@@ -25,9 +25,9 @@
     <MetadataFile FileName="service.wsdl" MetadataType="Wsdl" ID="6ba7398f-911f-4a91-bc83-68cde5ac6439" SourceId="1" SourceUrl="net.tcp://localhost:8062/OTService/mex" />
     <MetadataFile FileName="service.xsd" MetadataType="Schema" ID="a2a58657-e8c9-4cc4-96f1-48507ce4ac78" SourceId="1" SourceUrl="net.tcp://localhost:8062/OTService/mex" />
     <MetadataFile FileName="service1.xsd" MetadataType="Schema" ID="98b8be2f-d344-470b-9433-f71cdca5e09c" SourceId="1" SourceUrl="net.tcp://localhost:8062/OTService/mex" />
+    <MetadataFile FileName="Mandrake.Management.xsd" MetadataType="Schema" ID="27f22296-aa5e-4587-8bae-74329ec27cae" SourceId="1" SourceUrl="net.tcp://localhost:8062/OTService/mex" />
     <MetadataFile FileName="Mandrake.Service.xsd" MetadataType="Schema" ID="29fa03aa-438f-4d2f-bda8-613772421e2c" SourceId="1" SourceUrl="net.tcp://localhost:8062/OTService/mex" />
     <MetadataFile FileName="Mandrake.Model.xsd" MetadataType="Schema" ID="fb811435-d399-4fc3-b260-551fd8a8e185" SourceId="1" SourceUrl="net.tcp://localhost:8062/OTService/mex" />
-    <MetadataFile FileName="Mandrake.Management.xsd" MetadataType="Schema" ID="27f22296-aa5e-4587-8bae-74329ec27cae" SourceId="1" SourceUrl="net.tcp://localhost:8062/OTService/mex" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />

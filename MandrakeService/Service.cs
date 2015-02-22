@@ -99,12 +99,17 @@ namespace Mandrake.Service
         }
 
 
-        public void Register(Guid id)
+        public IEnumerable<RegistrationMessage> Register(RegistrationMessage msg)
         {
             var callback = OperationContext.Current.GetCallbackChannel<IOTCallback>();
-            Clients.Add(id, new SynchronizingConnection(callback));
+            Clients.Add(msg.Id, new SynchronizingConnection(callback));
+            
+            var others = Clients.Where(c => c.Key != msg.Id).ToList();
+            others.ForEach(c => c.Value.Client.RegisterClient(msg.Id));
 
             if (RegistrationCompleted != null) RegistrationCompleted(this, null);
+
+            return others.Select(c => new RegistrationMessage() { Id = c.Key, Name = c.Value.Name });
         }
 
         protected override void Transform(Operation o)
@@ -153,6 +158,7 @@ namespace Mandrake.Service
     {
         public int ClientMessages { get; set; }
         public IOTCallback Client { get; set; }
+        public string Name { get; set; }
 
         public SynchronizingConnection(IOTCallback cb)
         {

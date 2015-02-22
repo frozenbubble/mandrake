@@ -14,6 +14,7 @@ namespace Mandrake.Management
 {
     public delegate void OperationActionEventHandler(object sender, Operation o);
     public delegate void ChatMessageEventHandler(object sender, ChatMessage msg);
+    public delegate void ClientRegisteredEventHandler(object sender, Guid id);
 
     public abstract class OTManager
     {
@@ -82,6 +83,15 @@ namespace Mandrake.Management
             TimeStamp = DateTime.Now;
         }
 
+    }
+
+    [DataContract]
+    public class RegistrationMessage
+    {
+        [DataMember]
+        public Guid Id { get; set; }
+        [DataMember]
+        public string Name { get; set; }
     }
 
 

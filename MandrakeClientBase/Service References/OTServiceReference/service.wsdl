@@ -37,9 +37,9 @@
     <xsd:schema targetNamespace="http://tempuri.org/Imports">
       <xsd:import namespace="http://tempuri.org/" />
       <xsd:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import namespace="http://schemas.datacontract.org/2004/07/Mandrake.Management" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Mandrake.Service" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Mandrake.Model" />
-      <xsd:import namespace="http://schemas.datacontract.org/2004/07/Mandrake.Management" />
     </xsd:schema>
   </wsdl:types>
   <wsdl:message name="IOTAwareService_Register_InputMessage">
@@ -96,6 +96,12 @@
   <wsdl:message name="IOTAwareService_ForwardChatMessage_InputCallbackMessage">
     <wsdl:part name="parameters" element="tns:ForwardChatMessageResponse" />
   </wsdl:message>
+  <wsdl:message name="IOTAwareService_RegisterClient_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:RegisterClient" />
+  </wsdl:message>
+  <wsdl:message name="IOTAwareService_RegisterClient_InputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:RegisterClientResponse" />
+  </wsdl:message>
   <wsdl:portType name="IOTAwareService">
     <wsdl:operation name="Register">
       <wsdl:input wsaw:Action="http://tempuri.org/IOTAwareService/Register" message="tns:IOTAwareService_Register_InputMessage" />
@@ -132,6 +138,10 @@
     <wsdl:operation name="ForwardChatMessage">
       <wsdl:output wsaw:Action="http://tempuri.org/IOTAwareService/ForwardChatMessage" message="tns:IOTAwareService_ForwardChatMessage_OutputCallbackMessage" />
       <wsdl:input wsaw:Action="http://tempuri.org/IOTAwareService/ForwardChatMessageResponse" message="tns:IOTAwareService_ForwardChatMessage_InputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="RegisterClient">
+      <wsdl:output wsaw:Action="http://tempuri.org/IOTAwareService/RegisterClient" message="tns:IOTAwareService_RegisterClient_OutputCallbackMessage" />
+      <wsdl:input wsaw:Action="http://tempuri.org/IOTAwareService/RegisterClientResponse" message="tns:IOTAwareService_RegisterClient_InputCallbackMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="TcpEndpoint" type="tns:IOTAwareService">
@@ -212,6 +222,15 @@
     </wsdl:operation>
     <wsdl:operation name="ForwardChatMessage">
       <soap12:operation soapAction="http://tempuri.org/IOTAwareService/ForwardChatMessage" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RegisterClient">
+      <soap12:operation soapAction="http://tempuri.org/IOTAwareService/RegisterClient" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

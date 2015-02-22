@@ -5,6 +5,7 @@ using Mandrake.Model.Document;
 using Mandrake.Sample.Client.Event;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,6 +24,7 @@ namespace Mandrake.Client.View
     /// <summary>
     /// Interaction logic for MultiCursorTextEditor.xaml
     /// </summary>
+    [Export(typeof(IOTAwareContext))]
     public partial class MultiCaretTextEditor : UserControl, IOTAwareContext //cannot create instance when it's otaware
     {
         public Dictionary<Guid, ColoredCaret> ColoredCursors { get; set; }
@@ -34,9 +36,9 @@ namespace Mandrake.Client.View
         public MultiCaretTextEditor()
         {
             InitializeComponent();
-            
-            //Editor.Document.Changed += Document_Changed;
-            //Editor.TextArea.Caret.PositionChanged += Caret_PositionChanged;
+
+            Editor.Document.Changed += Document_Changed;
+            Editor.TextArea.Caret.PositionChanged += Caret_PositionChanged;
 
             IsUpdatedByUser = true;
             ColoredCursors = new Dictionary<Guid, ColoredCaret>();
@@ -55,7 +57,7 @@ namespace Mandrake.Client.View
             if (DocumentChanged != null) DocumentChanged(sender, e);
         }
 
-        public void OnCursorMoved(Guid id, int offset)
+        public void MoveCaret(Guid id, int offset)
         {
             var visualPosition = Editor.TextArea.TextView.GetVisualPosition(Editor.TextArea.Caret.Position, VisualYPosition.LineTop);
             ColoredCursors[id].Position = visualPosition;
@@ -63,19 +65,19 @@ namespace Mandrake.Client.View
 
         public void RegisterCursor(Guid id, string name)
         {
-            int fontsize = Convert.ToInt32(Editor.TextArea.FontSize);
-            ColoredCursors.Add(id, new ColoredCaret(CursorCanvas, new Point(0, 0), id, name, fontsize));
+            //int fontsize = Convert.ToInt32(Editor.TextArea.FontSize);
+            ColoredCursors.Add(id, new ColoredCaret(CursorCanvas, new Point(0, 0), id, name, 16));
         }
 
 
         public void InsertText(string text, int position)
         {
-            //throw new NotImplementedException();
+            using (Editor.DeclareChangeBlock()) Editor.Document.Insert(position, text);
         }
 
         public void RemoveText(int position, int length)
         {
-            //throw new NotImplementedException();
+            using (Editor.DeclareChangeBlock()) Editor.Document.Remove(position, length);
         }
     }
 }

@@ -45,12 +45,11 @@ namespace Mandrake.Client.View
 
         public ColoredCaret(Canvas canvas, Point position, Guid id, string name, int fontSize)
         {
+            this.Color = GenerateColor();
             this.CursorCanvas = canvas;
-            this.Position = position;
             this.Id = id;
             this.Name = name;
             this.FontSize = fontSize;
-            this.Color = GenerateColor();
 
             head = new Rectangle();
             head.Height = 5;
@@ -62,15 +61,18 @@ namespace Mandrake.Client.View
             head.Width = 1;
             head.Fill = new SolidColorBrush(Color);
 
-            Canvas.SetLeft(head, 0);
-            Canvas.SetTop(head, 0);
-            Canvas.SetLeft(body, 2);
-            Canvas.SetTop(body, 0);
-            canvas.Children.Add(head);
             canvas.Children.Add(body);
+            canvas.Children.Add(head);
+            
+            this.Position = position;
 
-            head.MouseEnter += MouseEnter;
-            body.MouseEnter += MouseEnter;
+            //Canvas.SetLeft(head, 5);
+            //Canvas.SetTop(head, 5);
+            //Canvas.SetLeft(body, 7);
+            //Canvas.SetTop(body, 0);
+
+            //head.MouseEnter += MouseEnter;
+            //body.MouseEnter += MouseEnter;
         }
 
 
@@ -85,9 +87,10 @@ namespace Mandrake.Client.View
 
             return new Color()
             {
-                R = (byte)random.Next(256),
-                G = (byte)random.Next(256),
-                B = (byte)random.Next(256)
+                R = (byte)random.Next(255),
+                G = (byte)random.Next(255),
+                B = (byte)random.Next(255),
+                A = 255
             };
         }
     }

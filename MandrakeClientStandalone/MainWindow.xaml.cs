@@ -43,7 +43,7 @@ namespace Mandrake.Client
             //Task t = new Task(() => { });
             //t.Start();
             //callback.Connect();
-            new Task( () => callback.Connect() ).Start();
+            //new Task( () => callback.Connect() ).Start();
         }
     }
 }

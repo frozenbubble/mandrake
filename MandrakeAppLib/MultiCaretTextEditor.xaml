@@ -7,12 +7,8 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
-        <Canvas x:Name="CursorCanvas" Background="White" >
-            <!--<Canvas x:Name="caret">
-                <Rectangle Height="3" Width="3" Fill="Red" Canvas.Left="20"></Rectangle>
-                <Rectangle Height="12" Width="1" Fill="Red" Canvas.Left="21"></Rectangle>
-            </Canvas>-->
-        </Canvas>
+        <Canvas x:Name="CursorCanvas" Background="White" ></Canvas>
+        
         <avalon:TextEditor x:Name="Editor" Background="Transparent" SyntaxHighlighting="C#" />
     </Grid>
 </UserControl>
