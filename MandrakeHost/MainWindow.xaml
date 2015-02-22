@@ -43,7 +43,7 @@
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
-            <mandrake:OTAwareRichTextBox x:Name="editor" Background="Beige" IsEnabled="False" />
+            <!--<mandrake:OTAwareRichTextBox x:Name="editor" Background="Beige" IsEnabled="False" />-->
             
             <TextBox x:Name="opLog" Grid.Row="1"/>
         </Grid>

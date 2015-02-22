@@ -8,6 +8,6 @@
         <!--<mandrake:OTAwareEditor x:Name="editor" Background="Wheat" />-->
         <!--<mandrake:OTAwareEditor x:Name="editor2" Background="Transparent" />-->
         
-        <app:MultiCursorTextEditor x:Name="editor" />
+        <!--<app:MultiCaretTextEditor x:Name="editor" />-->
     </Grid>
 </Window>

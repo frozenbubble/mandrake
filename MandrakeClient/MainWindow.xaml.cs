@@ -37,10 +37,10 @@ namespace Mandrake.Client
         {
             InitializeComponent();
 
-            callback = new ClientManager(editor);
+            //callback = new ClientManager(editor);
 
-            editor.DocumentChanged += callback.OnChange;
-            editor.CaretPositionChanged += callback.OnChange;
+            //editor.DocumentChanged += callback.OnChange;
+            //editor.CaretPositionChanged += callback.OnChange;
 
             //new Task( () => callback.Connect() ).Start();
         }

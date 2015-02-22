@@ -13,7 +13,7 @@ namespace Mandrake.Client.View
 {
     public delegate void CursorHoverEventHandler(object sender, MouseEventArgs e);
 
-    public class ColoredCursor
+    public class ColoredCaret
     {
 
         private Rectangle head;
@@ -41,9 +41,9 @@ namespace Mandrake.Client.View
         public Color Color { get; set; }
         public int FontSize { get; set; }
 
-        public ColoredCursor(Canvas canvas, Guid id, string name) : this(canvas, new Point(), id, name, 12) { }
+        public ColoredCaret(Canvas canvas, Guid id, string name) : this(canvas, new Point(), id, name, 12) { }
 
-        public ColoredCursor(Canvas canvas, Point position, Guid id, string name, int fontSize)
+        public ColoredCaret(Canvas canvas, Point position, Guid id, string name, int fontSize)
         {
             this.CursorCanvas = canvas;
             this.Position = position;

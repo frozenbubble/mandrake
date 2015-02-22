@@ -95,7 +95,7 @@ namespace Mandrake.Sample.Client.Management
         public bool TryExecute(object context, Operation o)
         {
             var move = o as CaretPositionOperation;
-            var editor = context as MultiCursorTextEditor;
+            var editor = context as MultiCaretTextEditor;
 
             if (move == null) return false;
 

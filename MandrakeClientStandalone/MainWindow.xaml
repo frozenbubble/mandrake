@@ -4,6 +4,6 @@
         xmlns:mandrake="clr-namespace:Mandrake.Sample.Client.Document;assembly=MandrakeAppLib"
         Title="MainWindow" Height="350" Width="525">
     <Grid>
-        <mandrake:OTAwareEditor x:Name="editor" Background="Wheat"/>
+        <!--<mandrake:OTAwareEditor x:Name="editor" Background="Wheat"/>-->
     </Grid>
 </Window>

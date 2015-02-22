@@ -23,15 +23,15 @@ namespace Mandrake.Client.View
     /// <summary>
     /// Interaction logic for MultiCursorTextEditor.xaml
     /// </summary>
-    public partial class MultiCursorTextEditor : UserControl, IOTAwareContext //cannot create instance when it's otaware
+    public partial class MultiCaretTextEditor : UserControl, IOTAwareContext //cannot create instance when it's otaware
     {
-        public Dictionary<Guid, ColoredCursor> ColoredCursors { get; set; }
+        public Dictionary<Guid, ColoredCaret> ColoredCursors { get; set; }
         public bool IsUpdatedByUser { get; set; }
 
         public event EventHandler<DocumentChangeEventArgs> DocumentChanged;
         public event EventHandler<CaretPositionChangedEventArgs> CaretPositionChanged;
 
-        public MultiCursorTextEditor()
+        public MultiCaretTextEditor()
         {
             InitializeComponent();
             
@@ -39,7 +39,7 @@ namespace Mandrake.Client.View
             //Editor.TextArea.Caret.PositionChanged += Caret_PositionChanged;
 
             IsUpdatedByUser = true;
-            ColoredCursors = new Dictionary<Guid, ColoredCursor>();
+            ColoredCursors = new Dictionary<Guid, ColoredCaret>();
         }
 
         void Caret_PositionChanged(object sender, EventArgs e)
@@ -64,7 +64,7 @@ namespace Mandrake.Client.View
         public void RegisterCursor(Guid id, string name)
         {
             int fontsize = Convert.ToInt32(Editor.TextArea.FontSize);
-            ColoredCursors.Add(id, new ColoredCursor(CursorCanvas, new Point(0, 0), id, name, fontsize));
+            ColoredCursors.Add(id, new ColoredCaret(CursorCanvas, new Point(0, 0), id, name, fontsize));
         }
 
 
