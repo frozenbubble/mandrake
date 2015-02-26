@@ -41,6 +41,7 @@ namespace Mandrake.Client
 
             editor.DocumentChanged += callback.OnChange;
             editor.CaretPositionChanged += callback.OnChange;
+            editor.SelectionChanged += callback.OnChange;
             callback.ClientRegistered += callback_ClientRegistered;
 
             new Task( () => callback.Connect("Test") ).Start();
@@ -48,7 +49,7 @@ namespace Mandrake.Client
 
         void callback_ClientRegistered(object sender, ClientMetaData meta)
         {
-            editor.Dispatcher.BeginInvoke(new Action(() => editor.RegisterCursor(meta.Id, meta.Name)));
+            editor.Dispatcher.BeginInvoke(new Action(() => editor.RegisterClient(meta.Id, meta.Name)));
         }
     }
 }

@@ -15,4 +15,16 @@ namespace Mandrake.Sample.Client.Event
             this.Offset = offset;
         }
     }
+
+    public class TextSelectionChangedEventArgs: EventArgs
+    {
+        public int SelectionStart { get; set; }
+        public int SelectionEnd { get; set; }
+
+        public TextSelectionChangedEventArgs(int startPosition, int endPosition)
+        {
+            SelectionStart = startPosition;
+            SelectionEnd = endPosition;
+        }
+    }
 }

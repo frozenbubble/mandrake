@@ -14,7 +14,7 @@ namespace Mandrake.Sample.Client.Operations
     [DataContract]
     public abstract class SinglePositionOperation : Operation
     {
-        public SinglePositionOperation() : base() { }
+        public SinglePositionOperation() { }
 
         /// <summary>
         /// Gets the position of the operation
@@ -26,7 +26,11 @@ namespace Mandrake.Sample.Client.Operations
     [DataContract]
     public abstract class IntervalOperation : Operation
     {
-        public IntervalOperation() : base() { }
+        public IntervalOperation(int startPosition, int endPosition) 
+        {
+            this.StartPosition = startPosition;
+            this.EndPosition = endPosition;
+        }
 
         [DataMember]
         public int StartPosition { get; set; }
@@ -74,12 +78,7 @@ namespace Mandrake.Sample.Client.Operations
             get { return EndPosition - StartPosition; }
         }
 
-        public DeleteOperation(int startPosition, int endPosition)
-            : base()
-        {
-            this.StartPosition = startPosition;
-            this.EndPosition = endPosition;
-        }
+        public DeleteOperation(int startPosition, int endPosition): base(startPosition, endPosition) { }
 
         public override string ToString()
         {
@@ -103,9 +102,6 @@ namespace Mandrake.Sample.Client.Operations
             this.Position = offset;
         }
 
-        [DataMember]
-        public int MyProperty { get; set; }
-
         public override string ToString()
         {
             return String.Format("Move[{0}]", this.Position);
@@ -114,6 +110,20 @@ namespace Mandrake.Sample.Client.Operations
         public override object Clone()
         {
             var o = new CaretPositionOperation(this.Position);
+            Initialize(o);
+
+            return o;
+        }
+    }
+
+    [DataContract]
+    public class SelectionOperation: IntervalOperation
+    {
+        public SelectionOperation(int startPosition, int endPosition): base(startPosition, endPosition) { }
+
+        public override object Clone()
+        {
+            var o = new SelectionOperation(this.StartPosition, this.EndPosition);
             Initialize(o);
 
             return o;

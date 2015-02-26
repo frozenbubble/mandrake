@@ -61,7 +61,7 @@ namespace Mandrake.Client.Base
 
                     TrySend(o);
 
-                    break;
+                    //break;
                 }
             }
         }

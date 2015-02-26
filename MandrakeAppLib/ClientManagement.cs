@@ -173,6 +173,36 @@ namespace Mandrake.Sample.Client.Management
             return true;
         }
     }
+
+    [Export(typeof(IOperationManager))]
+    public class MultiCaretSelectionOperationManager : IOperationManager
+    {
+
+        public Operation TryRecognize(object sender, EventArgs e)
+        {
+            var select = e as TextSelectionChangedEventArgs;
+
+            if (select != null) return new SelectionOperation(select.SelectionStart, select.SelectionEnd);
+            else return null;
+        }
+
+        public bool TryExecute(object context, Operation o)
+        {
+            var select = o as SelectionOperation;
+            var editor = context as MultiCaretTextEditor;
+
+            if (select == null || editor == null) return false;
+
+            editor.Dispatcher.BeginInvoke(new Action(() =>
+            {
+                editor.IsUpdatedByUser = false;
+                editor.Select(select.OwnerId, select.StartPosition, select.EndPosition);
+                editor.IsUpdatedByUser = true;
+            }));
+
+            return true;
+        }
+    }
     
     #endregion
 }

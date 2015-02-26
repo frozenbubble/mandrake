@@ -72,7 +72,11 @@ namespace Mandrake.Host
 
         void service_MessageSent(object sender, OTMessage message)
         {
-            Console.WriteLine("Message sent");
+            Console.WriteLine("Message sent. Content:");
+            foreach (var item in message.Content)
+            {
+                Console.WriteLine("\t" + item);
+            }
         }
 
         void service_RegistrationCompleted(object sender, Mandrake.Model.Operation o)
