@@ -45,7 +45,7 @@ namespace Mandrake.Client.View
 
         public ColoredCaret(Canvas canvas, Point position, Guid id, string name, int fontSize)
         {
-            this.Color = GenerateColor();
+            this.Color = GenerateColor(id);
             this.CursorCanvas = canvas;
             this.Id = id;
             this.Name = name;
@@ -57,9 +57,9 @@ namespace Mandrake.Client.View
             head.Fill = new SolidColorBrush(Color);
 
             body = new Rectangle();
-            head.Height = FontSize;
-            head.Width = 1;
-            head.Fill = new SolidColorBrush(Color);
+            body.Height = FontSize;
+            body.Width = 1;
+            body.Fill = new SolidColorBrush(Color);
 
             canvas.Children.Add(body);
             canvas.Children.Add(head);
@@ -81,17 +81,10 @@ namespace Mandrake.Client.View
             if (Hover != null) Hover(sender, e);
         }
 
-        private Color GenerateColor()
+        private Color GenerateColor(Guid id)
         {
-            var random = new Random();
-
-            return new Color()
-            {
-                R = (byte)random.Next(255),
-                G = (byte)random.Next(255),
-                B = (byte)random.Next(255),
-                A = 255
-            };
+            var bytes = BitConverter.GetBytes(id.GetHashCode());
+            return Color.FromArgb(255, bytes[0], bytes[1], bytes[2]);
         }
     }
 }

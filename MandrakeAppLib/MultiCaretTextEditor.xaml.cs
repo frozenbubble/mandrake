@@ -46,6 +46,8 @@ namespace Mandrake.Client.View
 
         void Caret_PositionChanged(object sender, EventArgs e)
         {
+            if (!this.IsUpdatedByUser) return;
+
             var s = sender as Caret;
             var args = new CaretPositionChangedEventArgs(s.Offset);
             if (CaretPositionChanged != null) CaretPositionChanged(sender, args);
@@ -53,14 +55,26 @@ namespace Mandrake.Client.View
 
         void Document_Changed(object sender, DocumentChangeEventArgs e)
         {
+            if (!this.IsUpdatedByUser) return;
+
             var visualPosition = Editor.TextArea.TextView.GetVisualPosition(Editor.TextArea.Caret.Position, VisualYPosition.LineTop);
             if (DocumentChanged != null) DocumentChanged(sender, e);
         }
 
         public void MoveCaret(Guid id, int offset)
         {
-            var visualPosition = Editor.TextArea.TextView.GetVisualPosition(Editor.TextArea.Caret.Position, VisualYPosition.LineTop);
-            ColoredCursors[id].Position = visualPosition;
+            if (!ColoredCursors.ContainsKey(id)) return;
+
+            Editor.Dispatcher.BeginInvoke(new Action(() => 
+            {
+                //Editor.TextArea.Caret.PositionChanged -= Caret_PositionChanged;
+
+                var visualPosition = Editor.TextArea.TextView.GetVisualPosition(Editor.TextArea.Caret.Position, VisualYPosition.LineTop);
+                ColoredCursors[id].Position = visualPosition;
+
+                //Editor.TextArea.Caret.PositionChanged += Caret_PositionChanged;
+            }));
+
         }
 
         public void RegisterCursor(Guid id, string name)
@@ -72,12 +86,19 @@ namespace Mandrake.Client.View
 
         public void InsertText(string text, int position)
         {
-            using (Editor.DeclareChangeBlock()) Editor.Document.Insert(position, text);
+            using (Editor.DeclareChangeBlock()) 
+            {
+                Editor.Document.Changed -= Document_Changed;
+                Editor.Document.Insert(position, text);
+                Editor.Document.Changed += Document_Changed;
+            } 
         }
 
         public void RemoveText(int position, int length)
         {
+            Editor.Document.Changed -= Document_Changed;
             using (Editor.DeclareChangeBlock()) Editor.Document.Remove(position, length);
+            Editor.Document.Changed += Document_Changed;
         }
     }
 }

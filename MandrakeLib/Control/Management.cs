@@ -14,7 +14,7 @@ namespace Mandrake.Management
 {
     public delegate void OperationActionEventHandler(object sender, Operation o);
     public delegate void ChatMessageEventHandler(object sender, ChatMessage msg);
-    public delegate void ClientRegisteredEventHandler(object sender, Guid id);
+    public delegate void ClientRegisteredEventHandler(object sender, ClientMetaData meta);
 
     public abstract class OTManager
     {
@@ -41,22 +41,22 @@ namespace Mandrake.Management
             Log = new List<Operation>();
             var catalog = new AggregateCatalog();
 
-            //Array.ForEach(AppDomain.CurrentDomain.GetAssemblies(), x => catalog.Catalogs.Add(new AssemblyCatalog(x)));
-            //if (Assembly.GetEntryAssembly() == null)
-            //{
-            //    Array.ForEach(GenericResolverInstaller.GetWebAssemblies(), x => catalog.Catalogs.Add(new AssemblyCatalog(x)));
-            //}
+            Array.ForEach(AppDomain.CurrentDomain.GetAssemblies(), x => catalog.Catalogs.Add(new AssemblyCatalog(x)));
+            if (Assembly.GetEntryAssembly() == null)
+            {
+                Array.ForEach(GenericResolverInstaller.GetWebAssemblies(), x => catalog.Catalogs.Add(new AssemblyCatalog(x)));
+            }
 
-            //var container = new CompositionContainer(catalog);
+            var container = new CompositionContainer(catalog);
 
-            //try
-            //{
-            //    container.ComposeParts(this);
-            //}
-            //catch (CompositionException compositionException)
-            //{
-            //    Console.WriteLine(compositionException.ToString());
-            //}
+            try
+            {
+                container.ComposeParts(this);
+            }
+            catch (CompositionException compositionException)
+            {
+                Console.WriteLine(compositionException.ToString());
+            }
         }
 
         protected abstract void Transform(Operation o);
@@ -86,7 +86,7 @@ namespace Mandrake.Management
     }
 
     [DataContract]
-    public class RegistrationMessage
+    public class ClientMetaData
     {
         [DataMember]
         public Guid Id { get; set; }

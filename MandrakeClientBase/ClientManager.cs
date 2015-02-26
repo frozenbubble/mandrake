@@ -12,9 +12,12 @@ using System.Threading.Tasks;
 using ServiceModelEx;
 using System.ComponentModel.Composition.Hosting;
 using System.ComponentModel.Composition;
+using System.Reflection;
 
 namespace Mandrake.Client.Base
 {
+    [CallbackBehavior(ConcurrencyMode = ConcurrencyMode.Reentrant,
+        UseSynchronizationContext = false)]
     public class ClientManager : OTManager, IOTAwareServiceCallback
     {
         protected int clientMessages;
@@ -57,6 +60,8 @@ namespace Mandrake.Client.Base
                     o.ServerMessages = serverMessages;
 
                     TrySend(o);
+
+                    break;
                 }
             }
         }
@@ -67,7 +72,9 @@ namespace Mandrake.Client.Base
             {
                 acknowledged = false;
 
-                Parallel.Invoke(() => Service.Send(new OTMessage(o)));
+                //Parallel.Invoke(() => Service.Send(new OTMessage(o)));
+                //Task.Factory.StartNew(() => Service.SendAsync(new OTMessage(o)));
+                Service.SendAsync(new OTMessage(o));
             }
 
             else outgoing.Add(o);
@@ -94,6 +101,12 @@ namespace Mandrake.Client.Base
 
         public void Forward(OTMessage message)
         {
+            //Task.Factory.StartNew(() => ProcessMessage(message));
+            ProcessMessage(message);
+        }
+
+        private void ProcessMessage(OTMessage message)
+        {
             foreach (var o in message.Content)
             {
                 Transform(o);
@@ -109,11 +122,11 @@ namespace Mandrake.Client.Base
 
         public void SendAck(OTAck ack)
         {
-            //TODO: throw away acknowledged messages from log ?
-
             if (outgoing.Count != 0)
             {
-                Service.Send(new OTMessage(outgoing));
+                var msg = new OTMessage(outgoing);
+                
+                Task.Factory.StartNew(() => Service.SendAsync(msg));
                 outgoing.Clear();
             }
 
@@ -130,9 +143,11 @@ namespace Mandrake.Client.Base
             var ic = new InstanceContext(this);
             var proxy = new OTAwareServiceClient(ic);
             proxy.AddGenericResolver();
-
             Service = proxy;
-            proxy.Register(new RegistrationMessage() { Id = this.Id, Name = name});
+
+            var others = proxy.Register(new ClientMetaData() { Id = this.Id, Name = name});
+            Array.ForEach(others, c => RegisterClient(c));
+
             proxy.Hello("Hello Server!");
         }
 
@@ -143,9 +158,9 @@ namespace Mandrake.Client.Base
         }
 
 
-        public void RegisterClient(Guid id)
+        public void RegisterClient(ClientMetaData meta)
         {
-            if (ClientRegistered != null) ClientRegistered(this, id);
+            if (ClientRegistered != null) ClientRegistered(this, meta);
         }
     }
 }

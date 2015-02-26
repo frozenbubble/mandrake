@@ -23,9 +23,12 @@ namespace Mandrake.Service
             Content = new List<Operation>();
         }
 
-        public OTMessage(List<Operation> content)
+        public OTMessage(List<Operation> content): this()
         {
-            Content = content;
+            foreach (var item in content)
+            {
+                Content.Add(item);
+            }
         }
 
         public OTMessage(Operation operation): this()
@@ -53,7 +56,7 @@ namespace Mandrake.Service
     public interface IOTAwareService
     {
         [OperationContract]
-        IEnumerable<RegistrationMessage> Register(RegistrationMessage msg);
+        IEnumerable<ClientMetaData> Register(ClientMetaData msg);
         [OperationContract]
         void Send(OTMessage message);
         [OperationContract]
@@ -75,6 +78,6 @@ namespace Mandrake.Service
         [OperationContract]
         void ForwardChatMessage(ChatMessage msg);
         [OperationContract]
-        void RegisterClient(Guid id);
+        void RegisterClient(ClientMetaData meta);
     }
 }

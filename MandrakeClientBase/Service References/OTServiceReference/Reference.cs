@@ -16,10 +16,10 @@ namespace Mandrake.Client.Base.OTServiceReference {
     public interface IOTAwareService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IOTAwareService/Register", ReplyAction="http://tempuri.org/IOTAwareService/RegisterResponse")]
-        Mandrake.Management.RegistrationMessage[] Register(Mandrake.Management.RegistrationMessage msg);
+        Mandrake.Management.ClientMetaData[] Register(Mandrake.Management.ClientMetaData msg);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IOTAwareService/Register", ReplyAction="http://tempuri.org/IOTAwareService/RegisterResponse")]
-        System.Threading.Tasks.Task<Mandrake.Management.RegistrationMessage[]> RegisterAsync(Mandrake.Management.RegistrationMessage msg);
+        System.Threading.Tasks.Task<Mandrake.Management.ClientMetaData[]> RegisterAsync(Mandrake.Management.ClientMetaData msg);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IOTAwareService/Send", ReplyAction="http://tempuri.org/IOTAwareService/SendResponse")]
         void Send(Mandrake.Service.OTMessage message);
@@ -50,8 +50,8 @@ namespace Mandrake.Client.Base.OTServiceReference {
         void SendAck(Mandrake.Service.OTAck ack);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IOTAwareService/Synchronize", ReplyAction="http://tempuri.org/IOTAwareService/SynchronizeResponse")]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(Mandrake.Management.RegistrationMessage))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(Mandrake.Management.RegistrationMessage[]))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(Mandrake.Management.ClientMetaData))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(Mandrake.Management.ClientMetaData[]))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(Mandrake.Management.ChatMessage))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(Mandrake.Service.OTMessage))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(Mandrake.Service.OTAck))]
@@ -66,7 +66,7 @@ namespace Mandrake.Client.Base.OTServiceReference {
         void ForwardChatMessage(Mandrake.Management.ChatMessage msg);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IOTAwareService/RegisterClient", ReplyAction="http://tempuri.org/IOTAwareService/RegisterClientResponse")]
-        void RegisterClient(System.Guid id);
+        void RegisterClient(Mandrake.Management.ClientMetaData meta);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -97,11 +97,11 @@ namespace Mandrake.Client.Base.OTServiceReference {
                 base(callbackInstance, binding, remoteAddress) {
         }
         
-        public Mandrake.Management.RegistrationMessage[] Register(Mandrake.Management.RegistrationMessage msg) {
+        public Mandrake.Management.ClientMetaData[] Register(Mandrake.Management.ClientMetaData msg) {
             return base.Channel.Register(msg);
         }
         
-        public System.Threading.Tasks.Task<Mandrake.Management.RegistrationMessage[]> RegisterAsync(Mandrake.Management.RegistrationMessage msg) {
+        public System.Threading.Tasks.Task<Mandrake.Management.ClientMetaData[]> RegisterAsync(Mandrake.Management.ClientMetaData msg) {
             return base.Channel.RegisterAsync(msg);
         }
         

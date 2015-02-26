@@ -36,7 +36,6 @@ namespace Mandrake.Client
         public MainWindow()
         {
             InitializeComponent();
-            //editor.RegisterCursor(Guid.NewGuid(), "Test");
 
             callback = new ClientManager(editor);
 
@@ -47,9 +46,9 @@ namespace Mandrake.Client
             new Task( () => callback.Connect("Test") ).Start();
         }
 
-        void callback_ClientRegistered(object sender, Guid id)
+        void callback_ClientRegistered(object sender, ClientMetaData meta)
         {
-            editor.Dispatcher.BeginInvoke(new Action(() => editor.RegisterCursor(id, "Test")));
+            editor.Dispatcher.BeginInvoke(new Action(() => editor.RegisterCursor(meta.Id, meta.Name)));
         }
     }
 }

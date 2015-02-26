@@ -35,25 +35,6 @@ namespace Mandrake.Model
             this.ExecutedAt = o.ExecutedAt;
         }
 
-        /// <summary>
-        /// Transforms the operation against another operation updating its referenced positions.
-        /// </summary>
-        /// <param name="o">the operation to transform against</param>
-        public abstract void TransformAgainst(Operation o);
-        public abstract int GetNewPosition(int position);
-
-        public bool IsPreceedingTo(Operation o)
-        {
-            if (this.OwnerId == o.OwnerId) return this.CreatedAt < o.CreatedAt;
-
-            else return this.ExecutedAt < o.CreatedAt;
-        }
-
-        public bool IsIndependentFrom(Operation o)
-        {
-            return !(this.IsPreceedingTo(o) || o.IsPreceedingTo(this));
-        }
-
         public abstract object Clone();
 
         protected void Initialize(Operation o)

@@ -68,8 +68,8 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
     <None Include="App.sample.config" />
+    <None Include="Properties\DataSources\Mandrake.Management.ClientMetaData.datasource" />
     <None Include="Properties\DataSources\Mandrake.Management.RegistrationMessage.datasource" />
     <None Include="Service References\OTServiceReference\Mandrake.Management.xsd">
       <SubType>Designer</SubType>

@@ -103,9 +103,11 @@ namespace Mandrake.Sample.Client.Management
             var move = o as CaretPositionOperation;
             var editor = context as MultiCaretTextEditor;
 
-            if (move == null) return false;
+            if (move == null || editor == null) return false;
 
-            editor.MoveCaret(move.OwnerId, move.Offset);
+            editor.IsUpdatedByUser = false;
+            editor.MoveCaret(move.OwnerId, move.Position);
+            editor.IsUpdatedByUser = true;
 
             return true;
         }
@@ -132,13 +134,9 @@ namespace Mandrake.Sample.Client.Management
 
             editor.Dispatcher.BeginInvoke(new Action(() =>
             {
-                using (editor.Editor.DeclareChangeBlock())
-                {
                     editor.IsUpdatedByUser = false;
                     editor.InsertText(insert.Literal, insert.Position);
                     editor.IsUpdatedByUser = true;
-                }
-
             }));
 
             return true;
@@ -166,12 +164,9 @@ namespace Mandrake.Sample.Client.Management
 
             editor.Dispatcher.BeginInvoke(new Action(() =>
             {
-                using (editor.Editor.DeclareChangeBlock())
-                {
                     editor.IsUpdatedByUser = false;
                     editor.RemoveText(remove.StartPosition, remove.EndPosition - remove.StartPosition);
                     editor.IsUpdatedByUser = true;
-                }
 
             }));
 

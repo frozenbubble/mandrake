@@ -52,18 +52,6 @@ namespace Mandrake.Sample.Client.Operations
             this.Literal = literal;
         }
 
-        public override void TransformAgainst(Operation o)
-        {
-            this.Position = o.GetNewPosition(this.Position);
-        }
-
-        public override int GetNewPosition(int position)
-        {
-            if (position >= this.Position) return position + Literal.Length;
-
-            else return position;
-        }
-
         public override string ToString()
         {
             return String.Format("Insert[{0}, {1}]", this.Literal, this.Position);
@@ -93,21 +81,6 @@ namespace Mandrake.Sample.Client.Operations
             this.EndPosition = endPosition;
         }
 
-        public override void TransformAgainst(Operation o)
-        {
-            this.StartPosition = o.GetNewPosition(this.StartPosition);
-            this.EndPosition = o.GetNewPosition(this.EndPosition);
-        }
-
-        public override int GetNewPosition(int position)
-        {
-            if (position < this.StartPosition) return position;
-
-            else if (position > this.EndPosition) return position - (this.EndPosition - this.StartPosition);
-
-            else return this.StartPosition;
-        }
-
         public override string ToString()
         {
             return String.Format("Delete[{0}, {1}]", this.StartPosition, this.EndPosition);
@@ -122,100 +95,28 @@ namespace Mandrake.Sample.Client.Operations
         }
     }
 
+    [DataContract]
     public class CaretPositionOperation: SinglePositionOperation
     {
-        public int Offset { get; set; }
-
         public CaretPositionOperation(int offset)
         {
-            this.Offset = offset;
+            this.Position = offset;
         }
 
-        public override void TransformAgainst(Operation o)
-        {
-            throw new NotImplementedException();
-        }
+        [DataMember]
+        public int MyProperty { get; set; }
 
-        public override int GetNewPosition(int position)
+        public override string ToString()
         {
-            throw new NotImplementedException();
+            return String.Format("Move[{0}]", this.Position);
         }
 
         public override object Clone()
         {
-            throw new NotImplementedException();
+            var o = new CaretPositionOperation(this.Position);
+            Initialize(o);
+
+            return o;
         }
-    }
-
-    public abstract class ShapeOperation : Operation
-    {
-        public int ShapeId { get; set; }
-
-        public override void TransformAgainst(Operation o)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override int GetNewPosition(int position)
-        {
-            throw new NotImplementedException();
-        }
-
-        //public override object Clone()
-
-    }
-
-    public class CreateOperation : ShapeOperation
-    {
-        public int PositionX { get; set; }
-        public int PositionY { get; set; }
-        public ShapeKind Kind { get; set; }
-
-        public override object Clone()
-        {
-            throw new NotImplementedException();
-        }
-    }
-
-    public class DragOperation : ShapeOperation
-    {
-        public int DeltaX { get; set; }
-        public int DeltaY { get; set; }
-
-        public override object Clone()
-        {
-            throw new NotImplementedException();
-        }
-    }
-
-    public class RotateOperation : ShapeOperation
-    {
-        public double Angle { get; set; }
-
-        public override object Clone()
-        {
-            throw new NotImplementedException();
-        }
-    }
-
-    public class ScaleOperation : ShapeOperation
-    {
-        public double Amount { get; set; }
-        public Axis Axis { get; set; }
-
-        public override object Clone()
-        {
-            throw new NotImplementedException();
-        }
-    }
-
-    public enum Axis
-    {
-        X, Y
-    }
-
-    public enum ShapeKind
-    {
-        Rectangle, Triangle, Circle
     }
 }

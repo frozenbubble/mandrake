@@ -18,6 +18,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Mandrake.Host.View.Converters;
 using System.Collections.ObjectModel;
+using Mandrake.Sample.Client.Operations;
 
 namespace Mandrake.Host
 {
@@ -44,7 +45,8 @@ namespace Mandrake.Host
             }
 
             service = new OTAwareService();
-            //service.Context = editor;
+            var op = new InsertOperation(0, "");
+            service.Context = editor;
 
             //List<IOperationManager> chain = new List<IOperationManager>();
             //chain.Add(new EditorInsertOperationManager());
@@ -84,7 +86,8 @@ namespace Mandrake.Host
 
         void service_OperationPerformed(object sender, Mandrake.Model.Operation o)
         {
-            opLog.AppendText(String.Format("[{0}]: {1} from client with Id: {2}", DateTime.Now, o.ToString(), o.OwnerId) + Environment.NewLine);
+            opLog.Dispatcher.BeginInvoke(new Action(
+                () => opLog.AppendText(String.Format("[{0}]: {1} from client with Id: {2} ", DateTime.Now, o.ToString(), o.OwnerId) + Environment.NewLine)));
         }
     }
 }
