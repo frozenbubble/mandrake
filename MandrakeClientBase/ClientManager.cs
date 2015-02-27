@@ -60,8 +60,6 @@ namespace Mandrake.Client.Base
                     o.ServerMessages = serverMessages;
 
                     TrySend(o);
-
-                    //break;
                 }
             }
         }
@@ -72,9 +70,7 @@ namespace Mandrake.Client.Base
             {
                 acknowledged = false;
 
-                //Parallel.Invoke(() => Service.Send(new OTMessage(o)));
-                //Task.Factory.StartNew(() => Service.SendAsync(new OTMessage(o)));
-                Service.SendAsync(new OTMessage(o));
+                Task.Factory.StartNew(() => Service.SendAsync(new OTMessage(o)));
             }
 
             else outgoing.Add(o);
@@ -101,8 +97,8 @@ namespace Mandrake.Client.Base
 
         public void Forward(OTMessage message)
         {
-            //Task.Factory.StartNew(() => ProcessMessage(message));
-            ProcessMessage(message);
+            Task.Factory.StartNew(() => ProcessMessage(message));
+            //ProcessMessage(message);
         }
 
         private void ProcessMessage(OTMessage message)
@@ -124,6 +120,7 @@ namespace Mandrake.Client.Base
         {
             if (outgoing.Count != 0)
             {
+                //???????
                 var msg = new OTMessage(outgoing);
                 
                 Task.Factory.StartNew(() => Service.SendAsync(msg));

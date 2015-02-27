@@ -22,8 +22,13 @@ namespace Mandrake.Client.View
 
         public static Color GenerateColor(Guid id)
         {
+            return GenerateColor(id, 255);
+        }
+
+        public static Color GenerateColor(Guid id, byte alpha)
+        {
             var bytes = BitConverter.GetBytes(id.GetHashCode());
-            return Color.FromArgb(255, bytes[0], bytes[1], bytes[2]);
+            return Color.FromArgb(alpha, bytes[0], bytes[1], bytes[2]);
         }
     }
 
@@ -99,8 +104,8 @@ namespace Mandrake.Client.View
         public LineSelection(int width, Point position, Color color)
         {
             Box = new Rectangle();
-            Box.Height = 12;
-            Box.Width = width;
+            Box.Height = 16;
+            Box.Width = width + 1;
             Box.Fill = new SolidColorBrush(color);
 
             Position = position;
@@ -112,7 +117,7 @@ namespace Mandrake.Client.View
         public ColoredSelection(Guid id, Canvas canvas)
         {
             this.Id = id;
-            this.Color = GenerateColor(id);
+            this.Color = GenerateColor(id, 128);
             this.PaintingCanvas = canvas;
         }
 
@@ -130,11 +135,14 @@ namespace Mandrake.Client.View
                     }
                 }
 
-                foreach (var line in value)
+                if (value != null)
                 {
-                    Canvas.SetLeft(line.Box, line.Position.X);
-                    Canvas.SetTop(line.Box, line.Position.Y);
-                    PaintingCanvas.Children.Add(line.Box);
+                    foreach (var line in value)
+                    {
+                        Canvas.SetLeft(line.Box, line.Position.X);
+                        Canvas.SetTop(line.Box, line.Position.Y);
+                        PaintingCanvas.Children.Add(line.Box);
+                    }
                 }
 
                 lines = value;

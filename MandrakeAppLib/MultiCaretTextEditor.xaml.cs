@@ -29,7 +29,19 @@ namespace Mandrake.Client.View
     public partial class MultiCaretTextEditor : UserControl, IOTAwareContext //cannot create instance when it's otaware
     {
         public Dictionary<Guid, ColoredCaret> ColoredCursors { get; set; }
-        public Dictionary<Guid, ColoredSelection> Selections { get; set; }
+
+        private Dictionary<Guid, ColoredSelection> selections;
+        public Dictionary<Guid, ColoredSelection> Selections 
+        {
+            get
+            { 
+                return selections; 
+            }
+            set 
+            {
+                selections = value;
+            }
+        }
         public bool IsUpdatedByUser { get; set; }
 
         public event EventHandler<DocumentChangeEventArgs> DocumentChanged;
@@ -43,39 +55,43 @@ namespace Mandrake.Client.View
             Editor.Document.Changed += Document_Changed;
             Editor.TextArea.Caret.PositionChanged += Caret_PositionChanged;
             Editor.TextArea.SelectionChanged += TextArea_SelectionChanged;
+            Editor.SizeChanged += Editor_SizeChanged;
+            
 
             IsUpdatedByUser = true;
             ColoredCursors = new Dictionary<Guid, ColoredCaret>();
             Selections = new Dictionary<Guid, ColoredSelection>();
         }
 
+        void Editor_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            CursorCanvas.Height = e.NewSize.Height;
+        }
+
         void TextArea_SelectionChanged(object sender, EventArgs e)
         {
-            Editor.Dispatcher.BeginInvoke(new Action(() =>
+            if (SelectionChanged != null)
             {
-                if (SelectionChanged != null)
+                var s = sender as TextArea;
+                var startLocation = s.Selection.StartPosition.Location;
+                var endLocation = s.Selection.EndPosition.Location;
+                TextSelectionChangedEventArgs args = null;
+
+                if (startLocation.Line == 0 && startLocation.Column == 0
+                    && endLocation.Line == 0 && endLocation.Column == 0)
                 {
-                    var s = sender as TextArea;
-                    var startLocation = s.Selection.StartPosition.Location;
-                    var endLocation = s.Selection.EndPosition.Location;
-                    TextSelectionChangedEventArgs args = null;
-
-                    if (startLocation.Line == 0 && startLocation.Column == 0 
-                        && endLocation.Line == 0 && endLocation.Column == 0) 
-                    {
-                        args = new TextSelectionChangedEventArgs(0, 0);
-                    }
-                    else
-                    {
-                        int start = Editor.Document.GetOffset(s.Selection.StartPosition.Location);
-                        int end = Editor.Document.GetOffset(s.Selection.EndPosition.Location);
-
-                        args = new TextSelectionChangedEventArgs(start, end);
-                    }
-
-                    SelectionChanged(sender, args);
+                    args = new TextSelectionChangedEventArgs(0, 0);
                 }
-            }));
+                else
+                {
+                    int start = Editor.Document.GetOffset(s.Selection.StartPosition.Location);
+                    int end = Editor.Document.GetOffset(s.Selection.EndPosition.Location);
+
+                    args = new TextSelectionChangedEventArgs(start, end);
+                }
+
+                SelectionChanged(sender, args);
+            }
         }
 
         void Caret_PositionChanged(object sender, EventArgs e)
@@ -121,14 +137,20 @@ namespace Mandrake.Client.View
         private Point GetVisualPosition(int offset)
         {
             var location = Editor.Document.GetLocation(offset);
-            var visualPosition = Editor.TextArea.TextView.GetVisualPosition(new TextViewPosition(location), VisualYPosition.LineTop);
-            return visualPosition;
+            return GetVisualPosition(location);
+        }
+
+        private Point GetVisualPosition(TextLocation location)
+        {
+            return Editor.TextArea.TextView.GetVisualPosition(new TextViewPosition(location), VisualYPosition.LineTop);
         }
 
         public void RegisterClient(Guid id, string name)
         {
             ColoredCursors.Add(id, new ColoredCaret(CursorCanvas, new Point(0, 0), id, name, 16));
-            Selections[id] = new ColoredSelection(id, CursorCanvas);
+            var sel = new ColoredSelection(id, CursorCanvas);
+            Selections.Add(id, sel);
+            //Selections[id] = new ColoredSelection(id, CursorCanvas);
         }
 
 
@@ -149,28 +171,67 @@ namespace Mandrake.Client.View
             Editor.Document.Changed += Document_Changed;
         }
 
-        public void Select(Guid id, int start, int end)
+        public void Select(Guid id, int selectionStartOffset, int selectionEndOffset)
         {
-            if (start == 0 && end == 0)
+            if (Selections.Count == 0) return;
+
+            if (selectionStartOffset == 0 && selectionEndOffset == 0)
             {
                 Selections[id].Lines = null;
                 return;
             }
 
-            var startLocation = Editor.Document.GetLocation(start);
-            var endLocation = Editor.Document.GetLocation(end);
+            TextLocation start, end;
+
+            if (selectionStartOffset < selectionEndOffset)
+            {
+                start = Editor.Document.GetLocation(selectionStartOffset);
+                end = Editor.Document.GetLocation(selectionEndOffset);
+            }
+            else
+            {
+                start = Editor.Document.GetLocation(selectionEndOffset);
+                end = Editor.Document.GetLocation(selectionStartOffset);
+            }
+
             var lines = new List<LineSelection>();
 
-            for (int i = startLocation.Line; i < endLocation.Line; i++)
+            if (start.Line == end.Line)
             {
-                int offset = Editor.TextArea.Document.Lines[i].Offset;
-                int endOffset = Editor.TextArea.Document.Lines[i].EndOffset;
-                var lineStart = GetVisualPosition(offset);
-                var lineEnd = GetVisualPosition(endOffset);
-                int width = (int)(lineEnd.X - lineStart.X);
+                //just get that one rectangle
+                var startPos = GetVisualPosition(start);
+                var endPos = GetVisualPosition(end);
+                int width = (int)(endPos.X - startPos.X);
+
+                lines.Add(new LineSelection(width, startPos, Selections[id].Color));
+            }
+            else
+            {
+                //first line
+                var topStartPos = GetVisualPosition(start);
+                var topEndPos = GetVisualPosition(Editor.Document.Lines[start.Line - 1].EndOffset);
+                int topWidth = (int)(topEndPos.X - topStartPos.X);
+
+                lines.Add(new LineSelection(topWidth, topStartPos, Selections[id].Color));
+
+                //last line
+                var bottomStartPos = GetVisualPosition(Editor.Document.Lines[end.Line - 1].Offset);
+                var bottomEndPos = GetVisualPosition(end);
+                int bottomWidth = (int)(bottomEndPos.X - bottomStartPos.X);
+
+                lines.Add(new LineSelection(bottomWidth, bottomStartPos, Selections[id].Color));
                 
-                var lineSelection = new LineSelection(width, lineStart, Selections[id].Color);
-                lines.Add(lineSelection);
+                for (int i = start.Line; i < end.Line - 1; i++)
+                {
+                    int offset = Editor.TextArea.Document.Lines[i].Offset;
+                    int endOffset = Editor.TextArea.Document.Lines[i].EndOffset;
+                    var lineStart = GetVisualPosition(offset);
+                    var lineEnd = GetVisualPosition(endOffset);
+                    int width = (int)(lineEnd.X - lineStart.X);
+
+                    var lineSelection = new LineSelection(width, lineStart, Selections[id].Color);
+                    lines.Add(lineSelection);
+                }
             }
 
             Selections[id].Lines = lines;
