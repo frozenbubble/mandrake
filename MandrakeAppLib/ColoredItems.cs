@@ -30,6 +30,8 @@ namespace Mandrake.Client.View
             var bytes = BitConverter.GetBytes(id.GetHashCode());
             return Color.FromArgb(alpha, bytes[0], bytes[1], bytes[2]);
         }
+
+        public abstract void Translate(Vector offset);
     }
 
     public class ColoredCaret: ColoredItem
@@ -93,6 +95,11 @@ namespace Mandrake.Client.View
         {
             if (Hover != null) Hover(sender, e);
         }
+
+        public override void Translate(Vector offset)
+        {
+            this.Position = Point.Subtract(Position, offset);
+        }
     }
 
 
@@ -139,13 +146,29 @@ namespace Mandrake.Client.View
                 {
                     foreach (var line in value)
                     {
-                        Canvas.SetLeft(line.Box, line.Position.X);
-                        Canvas.SetTop(line.Box, line.Position.Y);
+                        AdjustLine(line);
                         PaintingCanvas.Children.Add(line.Box);
                     }
                 }
 
                 lines = value;
+            }
+        }
+
+        private static void AdjustLine(LineSelection line)
+        {
+            Canvas.SetLeft(line.Box, line.Position.X);
+            Canvas.SetTop(line.Box, line.Position.Y);
+        }
+
+        public override void Translate(Vector offset)
+        {
+            if (Lines == null) return;
+
+            foreach (var line in Lines)
+            {
+                line.Position = Point.Subtract(line.Position, offset);
+                AdjustLine(line);
             }
         }
     }

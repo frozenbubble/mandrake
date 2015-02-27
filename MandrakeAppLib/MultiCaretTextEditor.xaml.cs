@@ -26,22 +26,13 @@ namespace Mandrake.Client.View
     /// Interaction logic for MultiCursorTextEditor.xaml
     /// </summary>
     [Export(typeof(IOTAwareContext))]
-    public partial class MultiCaretTextEditor : UserControl, IOTAwareContext //cannot create instance when it's otaware
+    public partial class MultiCaretTextEditor : UserControl, IOTAwareContext
     {
+        private Vector scrollOfset;
+
         public Dictionary<Guid, ColoredCaret> ColoredCursors { get; set; }
 
-        private Dictionary<Guid, ColoredSelection> selections;
-        public Dictionary<Guid, ColoredSelection> Selections 
-        {
-            get
-            { 
-                return selections; 
-            }
-            set 
-            {
-                selections = value;
-            }
-        }
+        public Dictionary<Guid, ColoredSelection> Selections { get; set; }
         public bool IsUpdatedByUser { get; set; }
 
         public event EventHandler<DocumentChangeEventArgs> DocumentChanged;
@@ -55,17 +46,31 @@ namespace Mandrake.Client.View
             Editor.Document.Changed += Document_Changed;
             Editor.TextArea.Caret.PositionChanged += Caret_PositionChanged;
             Editor.TextArea.SelectionChanged += TextArea_SelectionChanged;
-            Editor.SizeChanged += Editor_SizeChanged;
+            Editor.TextArea.TextView.ScrollOffsetChanged += TextView_ScrollOffsetChanged;
             
 
             IsUpdatedByUser = true;
             ColoredCursors = new Dictionary<Guid, ColoredCaret>();
             Selections = new Dictionary<Guid, ColoredSelection>();
+            scrollOfset = Editor.TextArea.TextView.ScrollOffset;
         }
 
-        void Editor_SizeChanged(object sender, SizeChangedEventArgs e)
+        void TextView_ScrollOffsetChanged(object sender, EventArgs e)
         {
-            CursorCanvas.Height = e.NewSize.Height;
+            var offset = ((TextView)sender).ScrollOffset;
+            var v = Vector.Subtract(offset, scrollOfset);
+
+            TranslateVisuals(v);
+            scrollOfset = offset;
+        }
+
+        private void TranslateVisuals(Vector offset)
+        {
+            foreach (var id in ColoredCursors.Keys)
+            {
+                ColoredCursors[id].Translate(offset);
+                Selections[id].Translate(offset);
+            }
         }
 
         void TextArea_SelectionChanged(object sender, EventArgs e)
@@ -148,9 +153,7 @@ namespace Mandrake.Client.View
         public void RegisterClient(Guid id, string name)
         {
             ColoredCursors.Add(id, new ColoredCaret(CursorCanvas, new Point(0, 0), id, name, 16));
-            var sel = new ColoredSelection(id, CursorCanvas);
-            Selections.Add(id, sel);
-            //Selections[id] = new ColoredSelection(id, CursorCanvas);
+            Selections.Add(id, new ColoredSelection(id, CursorCanvas));
         }
 
 
