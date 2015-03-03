@@ -13,6 +13,7 @@ using ServiceModelEx;
 using System.ComponentModel.Composition.Hosting;
 using System.ComponentModel.Composition;
 using System.Reflection;
+using System.Collections.ObjectModel;
 
 namespace Mandrake.Client.Base
 {
@@ -31,12 +32,19 @@ namespace Mandrake.Client.Base
 
         public Guid Id { get; set; }
         public Mandrake.Client.Base.OTServiceReference.IOTAwareService Service { get; set; }
+        public string Name { get; set; }
+        public List<ClientMetaData> Clients { get; set; }
 
-        public ClientManager(IOTAwareContext context): base()
+
+        public ClientManager(IOTAwareContext context, string name)
         {
             Context = context;
+            Name = name;
             Id = Guid.NewGuid();
+            Clients = new List<ClientMetaData>();
         }
+
+        public ClientManager(IOTAwareContext context): this(context, "") { }
 
         public void Synchronize(object content)
         {
@@ -98,7 +106,6 @@ namespace Mandrake.Client.Base
         public void Forward(OTMessage message)
         {
             Task.Factory.StartNew(() => ProcessMessage(message));
-            //ProcessMessage(message);
         }
 
         private void ProcessMessage(OTMessage message)
@@ -120,11 +127,11 @@ namespace Mandrake.Client.Base
         {
             if (outgoing.Count != 0)
             {
-                //???????
-                var msg = new OTMessage(outgoing);
-                
-                Task.Factory.StartNew(() => Service.SendAsync(msg));
-                outgoing.Clear();
+                Task.Factory.StartNew(() =>
+                {
+                    Service.SendAsync(new OTMessage(outgoing));
+                    outgoing.Clear();
+                });
             }
 
             else acknowledged = true;
@@ -141,9 +148,10 @@ namespace Mandrake.Client.Base
             var proxy = new OTAwareServiceClient(ic);
             proxy.AddGenericResolver();
             Service = proxy;
+            Name = name;
 
-            var others = proxy.Register(new ClientMetaData() { Id = this.Id, Name = name});
-            Array.ForEach(others, c => RegisterClient(c));
+            Clients.AddRange(proxy.Register(new ClientMetaData() { Id = this.Id, Name = name }).ToList());
+            Clients.ForEach(c => RegisterClient(c));
 
             proxy.Hello("Hello Server!");
         }
@@ -151,7 +159,19 @@ namespace Mandrake.Client.Base
 
         public void ForwardChatMessage(ChatMessage msg)
         {
+            Messages.Add(msg);
+
             if (MessageArrived != null) MessageArrived(this, msg);
+        }
+
+        public ChatMessage SendChatMessage(string content)
+        {
+            var message = new ChatMessage(content, Name, Id);
+
+            Messages.Add(message);
+            Service.SendChatMessageAsync(message);
+
+            return message;
         }
 
 

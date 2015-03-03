@@ -4,6 +4,7 @@ using Mandrake.Model.Document;
 using ServiceModelEx;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
 using System.Reflection;
@@ -19,7 +20,6 @@ namespace Mandrake.Management
     public abstract class OTManager
     {
         protected int serverMessages;
-        protected List<ChatMessage> chatMessages;
 
         //[Import(typeof(ISynchronize))]
         protected ISynchronize syncManager;
@@ -32,13 +32,13 @@ namespace Mandrake.Management
         
         [ImportMany]
         public IEnumerable<IOperationManager> ManagerChain { get; set; }
-        
-        
         public List<Operation> Log { get; protected set; }
+        public List<ChatMessage> Messages { get; set; }
 
         public OTManager()
         {
             Log = new List<Operation>();
+            Messages = new List<ChatMessage>();
             var catalog = new AggregateCatalog();
 
             Array.ForEach(AppDomain.CurrentDomain.GetAssemblies(), x => catalog.Catalogs.Add(new AssemblyCatalog(x)));
@@ -83,6 +83,11 @@ namespace Mandrake.Management
             TimeStamp = DateTime.Now;
         }
 
+        public override string ToString()
+        {
+            return String.Format("[{0}] {1}: {2}", TimeStamp, SenderName, Message);
+        }
+
     }
 
     [DataContract]
@@ -92,6 +97,11 @@ namespace Mandrake.Management
         public Guid Id { get; set; }
         [DataMember]
         public string Name { get; set; }
+
+        public override string ToString()
+        {
+            return Name;
+        }
     }
 
 

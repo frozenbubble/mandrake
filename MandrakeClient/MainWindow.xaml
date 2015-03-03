@@ -5,9 +5,51 @@
         xmlns:app="clr-namespace:Mandrake.Client.View;assembly=MandrakeAppLib"
         Title="MainWindow" Height="350" Width="525">
     <Grid>
-        <!--<mandrake:OTAwareEditor x:Name="editor" Background="Wheat" />-->
-        <!--<mandrake:OTAwareEditor x:Name="editor2" Background="Transparent" />-->
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="70*" />
+            <ColumnDefinition Width="30*"/>
+        </Grid.ColumnDefinitions>
         
+        <Menu IsMainMenu="True">
+            <MenuItem Header="_File" />
+            <MenuItem Header="_Edit" />
+            <MenuItem Header="_View" />
+            <MenuItem Header="_Window" />
+            <MenuItem Header="_Help" />
+        </Menu>
+                
         <app:MultiCaretTextEditor x:Name="editor" />
+        
+        <Grid Grid.Column="1" >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="130"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            
+            <ListView x:Name="ClientsList" ItemsSource="{Binding Clients}" >
+                
+            </ListView>
+            
+            <Grid Grid.Row="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                
+                <ListView x:Name="MessageBox" DockPanel.Dock="Top" ItemsSource="{Binding Messages}"/>
+                
+                <Grid DockPanel.Dock="Bottom" Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    
+                    <TextBox x:Name="Message" HorizontalAlignment="Stretch" Margin="0, 2, 5, 2" BorderBrush="Transparent"
+                             KeyDown="Message_KeyDown" />
+                    <Button  x:Name="SendButton" Content="Send" Height="20" Margin="0, 2, 5, 2" Grid.Column="1"
+                             Click="SendButton_Click"/>
+                </Grid>
+            </Grid>
+        </Grid>
     </Grid>
 </Window>

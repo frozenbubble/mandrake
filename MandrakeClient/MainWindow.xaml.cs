@@ -16,13 +16,13 @@ using Mandrake.Service;
 using Mandrake.Management;
 using Mandrake.Model.Document;
 using System.ServiceModel;
-using Mandrake.Management.Client;
 using Mandrake.Model;
 using Mandrake.Client.Base;
 using Mandrake.Client.Base.OTServiceReference;
 using System.Reflection;
 using System.ComponentModel.Composition.Hosting;
 using System.ComponentModel.Composition;
+using Mandrake.Samples.Client.ViewModel;
 
 namespace Mandrake.Client
 {
@@ -32,17 +32,21 @@ namespace Mandrake.Client
     public partial class MainWindow : Window
     {
         private ClientManager callback;
+        private MainViewModel viewModel;
 
         public MainWindow()
         {
             InitializeComponent();
-
+            
             callback = new ClientManager(editor);
+            this.viewModel = new MainViewModel(callback);
+            this.DataContext = viewModel;
 
             editor.DocumentChanged += callback.OnChange;
             editor.CaretPositionChanged += callback.OnChange;
             editor.SelectionChanged += callback.OnChange;
             callback.ClientRegistered += callback_ClientRegistered;
+            callback.MessageArrived += viewModel.OnMessageArrived;
 
             new Task( () => callback.Connect("Test") ).Start();
         }
@@ -50,6 +54,26 @@ namespace Mandrake.Client
         void callback_ClientRegistered(object sender, ClientMetaData meta)
         {
             editor.Dispatcher.BeginInvoke(new Action(() => editor.RegisterClient(meta.Id, meta.Name)));
+            ClientsList.Dispatcher.BeginInvoke(new Action(() => InvalidateProperty(ListView.ItemsSourceProperty)));
+            viewModel.Register(meta);
+        }
+
+        private void SendButton_Click(object sender, RoutedEventArgs e)
+        {
+            SendMessage();
+        }
+
+        private void SendMessage()
+        {
+            viewModel.SendMessage(Message.Text);
+            MessageBox.Dispatcher.BeginInvoke(new Action(() => InvalidateProperty(ListView.ItemsSourceProperty)));
+
+            Message.Clear();
+        }
+
+        private void Message_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter) SendMessage();
         }
     }
 }

@@ -28,6 +28,7 @@ namespace Mandrake.Client.View
         public static Color GenerateColor(Guid id, byte alpha)
         {
             var bytes = BitConverter.GetBytes(id.GetHashCode());
+            
             return Color.FromArgb(alpha, bytes[0], bytes[1], bytes[2]);
         }
 

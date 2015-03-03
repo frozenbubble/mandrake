@@ -55,16 +55,13 @@ namespace Mandrake.Service
 
         public void Send(OTMessage message)
         {
-            //Task.Factory.StartNew(() => ProcessMessage(message));
-            ProcessMessage(message);
+            Task.Factory.StartNew(() => ProcessMessage(message));
         }
 
         private void ProcessMessage(OTMessage message)
         {
             if (message.Content.Count == 0) return;
 
-            //lock (syncroot)
-            //{
             if (MessageArrived != null) MessageArrived(this, message);
 
             var ops = message.Content;
@@ -108,7 +105,7 @@ namespace Mandrake.Service
         public IEnumerable<ClientMetaData> Register(ClientMetaData msg)
         {
             var callback = OperationContext.Current.GetCallbackChannel<IOTCallback>();
-            Clients.Add(msg.Id, new SynchronizingConnection(callback));
+            Clients.Add(msg.Id, new SynchronizingConnection(callback, msg.Name));
             
             var others = Clients.Where(c => c.Key != msg.Id).ToList();
             others.ForEach(c => c.Value.Client.RegisterClient(msg));
@@ -149,7 +146,7 @@ namespace Mandrake.Service
 
         public void SendChatMessage(ChatMessage msg)
         {
-            chatMessages.Add(msg);
+            Messages.Add(msg);
 
             if (ChatMessageArrived != null) ChatMessageArrived(this, msg);
 
@@ -166,9 +163,10 @@ namespace Mandrake.Service
         public IOTCallback Client { get; set; }
         public string Name { get; set; }
 
-        public SynchronizingConnection(IOTCallback cb)
+        public SynchronizingConnection(IOTCallback cb, string name)
         {
             Client = cb;
+            Name = name;
         }
     }
 }
