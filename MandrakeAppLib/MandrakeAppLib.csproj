@@ -49,6 +49,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GuidToColorConverter.cs" />
     <Compile Include="ColoredItems.cs" />
     <Compile Include="Events.cs" />
     <Compile Include="MultiCaretTextEditor.xaml.cs">

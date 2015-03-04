@@ -23,13 +23,15 @@ using System.Reflection;
 using System.ComponentModel.Composition.Hosting;
 using System.ComponentModel.Composition;
 using Mandrake.Samples.Client.ViewModel;
+using MahApps.Metro.Controls;
+using MahApps.Metro.Controls.Dialogs;
 
 namespace Mandrake.Client
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : MetroWindow
     {
         private ClientManager callback;
         private MainViewModel viewModel;
@@ -47,8 +49,6 @@ namespace Mandrake.Client
             editor.SelectionChanged += callback.OnChange;
             callback.ClientRegistered += callback_ClientRegistered;
             callback.MessageArrived += viewModel.OnMessageArrived;
-
-            new Task( () => callback.Connect("Test") ).Start();
         }
 
         void callback_ClientRegistered(object sender, ClientMetaData meta)
@@ -74,6 +74,13 @@ namespace Mandrake.Client
         private void Message_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter) SendMessage();
+        }
+
+        private async void MetroWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            string name = await this.ShowInputAsync("Alias", "What's your name?");
+
+            new Task(() => callback.Connect(name)).Start();
         }
     }
 }

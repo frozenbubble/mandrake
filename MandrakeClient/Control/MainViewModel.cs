@@ -16,15 +16,19 @@ namespace Mandrake.Samples.Client.ViewModel
 {
     internal class MainViewModel
     {
+        private static MainViewModel instance;
+
         public ClientManager ClientManager { get; set; }
         public ObservableCollection<ClientMetaData> Clients { get; set; }
         public ObservableCollection<ChatMessage> Messages { get; set; }
+        public MainViewModel Current { get; set; }
 
         public MainViewModel(ClientManager callback)
         {
             ClientManager = callback;
             Messages = new ObservableCollection<ChatMessage>();
             Clients = new ObservableCollection<ClientMetaData>();
+            instance = this;
         }
 
         public void SendMessage(string message)
