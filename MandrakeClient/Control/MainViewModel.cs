@@ -16,24 +16,44 @@ namespace Mandrake.Samples.Client.ViewModel
 {
     internal class MainViewModel
     {
-        private static MainViewModel instance;
 
-        public ClientManager ClientManager { get; set; }
+        private ClientManager clientManager;
+
+        public ClientManager ClientManager
+        {
+            get { return clientManager; }
+            set 
+            { 
+                clientManager = value;
+                Id = ClientManager.Id;
+            }
+        }
+
         public ObservableCollection<ClientMetaData> Clients { get; set; }
         public ObservableCollection<ChatMessage> Messages { get; set; }
-        public MainViewModel Current { get; set; }
+        public Guid Id { get; private set; }
+        
+        private static MainViewModel current;
 
-        public MainViewModel(ClientManager callback)
+        public static MainViewModel Current
         {
-            ClientManager = callback;
+            get 
+            {
+                if (current == null) current = new MainViewModel();
+                return current; 
+            }
+        }
+
+
+        private MainViewModel()
+        {
             Messages = new ObservableCollection<ChatMessage>();
             Clients = new ObservableCollection<ClientMetaData>();
-            instance = this;
         }
 
         public void SendMessage(string message)
         {
-            Messages.Add(ClientManager.SendChatMessage(message));
+            Messages.Add(clientManager.SendChatMessage(message));
         }
 
         public void OnMessageArrived(object sender, ChatMessage msg)

@@ -26,7 +26,7 @@ using Mandrake.Samples.Client.ViewModel;
 using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
 
-namespace Mandrake.Client
+namespace Mandrake.Samples.Client
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -41,7 +41,8 @@ namespace Mandrake.Client
             InitializeComponent();
             
             callback = new ClientManager(editor);
-            this.viewModel = new MainViewModel(callback);
+            this.viewModel = MainViewModel.Current;
+            this.viewModel.ClientManager = callback;
             this.DataContext = viewModel;
 
             editor.DocumentChanged += callback.OnChange;
