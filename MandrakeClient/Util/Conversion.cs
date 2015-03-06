@@ -50,7 +50,7 @@ namespace Mandrake.Samples.Client.Util
         {
             double percentage = Format(parameter.ToString());
 
-            return double.Parse(value.ToString()) * percentage;
+            return 10d + (double.Parse(value.ToString()) * percentage);
         }
 
         private double Format(string param)

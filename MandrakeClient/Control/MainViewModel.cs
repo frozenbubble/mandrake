@@ -14,7 +14,7 @@ using System.Windows;
 
 namespace Mandrake.Samples.Client.ViewModel
 {
-    internal class MainViewModel
+    internal class MainViewModel: DependencyObject
     {
 
         private ClientManager clientManager;
@@ -27,6 +27,14 @@ namespace Mandrake.Samples.Client.ViewModel
                 clientManager = value;
                 Id = ClientManager.Id;
             }
+        }
+
+        public static readonly DependencyProperty UsernameProperty;
+
+        public string Username
+        {
+            set { SetValue(UsernameProperty, value); }
+            get { return (string)GetValue(UsernameProperty); }
         }
 
         public ObservableCollection<ClientMetaData> Clients { get; set; }
@@ -44,6 +52,14 @@ namespace Mandrake.Samples.Client.ViewModel
             }
         }
 
+        static MainViewModel()
+        {
+            FrameworkPropertyMetadata metadata = new FrameworkPropertyMetadata(
+                "", FrameworkPropertyMetadataOptions.None);
+            
+            UsernameProperty = DependencyProperty.Register("Username",
+                typeof(string), typeof(MainViewModel));
+        }
 
         private MainViewModel()
         {

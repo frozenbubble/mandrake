@@ -79,9 +79,27 @@ namespace Mandrake.Samples.Client
 
         private async void MetroWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            string name = await this.ShowInputAsync("Alias", "What's your name?");
+            string username = viewModel.Username = await this.ShowInputAsync("Alias", "What's your name?");
 
-            new Task(() => callback.Connect(name)).Start();
+            new Task(() => callback.Connect(username)).Start();
+        }
+
+        private void ChatButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (SideBar.Visibility == Visibility.Visible) SideBar.Visibility = System.Windows.Visibility.Collapsed;
+
+            else SideBar.Visibility = System.Windows.Visibility.Visible;
+        }
+
+        private void CopyButton_Click(object sender, RoutedEventArgs e)
+        {
+            Clipboard.SetData(DataFormats.Text, editor.SelectedText);
+        }
+
+        private void PasteButton_Click(object sender, RoutedEventArgs e)
+        {
+            var text = Clipboard.GetData(DataFormats.Text) as string;
+            editor.Paste(text);
         }
     }
 }

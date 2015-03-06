@@ -7,112 +7,219 @@
         xmlns:util="clr-namespace:Mandrake.Samples.Client.Util"
         Title="Mandrake Editor" Height="600" Width="800"
         Loaded="MetroWindow_Loaded">
-    <Controls:MetroWindow.Resources>
-        <util:GuidToAlignmentConverter x:Key="AlignmentConverter" />
-        <util:GuidToColorConverter x:Key="ColorConverter" />
-        <util:WidthConverter x:Key="WidthConverter" />
-        <util:GuidToVisibilityConverter x:Key="VisibilityConverter" />
-    </Controls:MetroWindow.Resources>
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Resources/Icons.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <util:GuidToAlignmentConverter x:Key="AlignmentConverter" />
+            <util:GuidToColorConverter x:Key="ColorConverter" />
+            <util:WidthConverter x:Key="WidthConverter" />
+            <util:GuidToVisibilityConverter x:Key="VisibilityConverter" />
+        </ResourceDictionary>
+    </Window.Resources>
 
     <Controls:MetroWindow.RightWindowCommands>
         <Controls:WindowCommands>
-            <Button Content="settings" />
             <Button>
                 <StackPanel Orientation="Horizontal">
                     <Rectangle Width="20" Height="20"
                    Fill="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}">
                         <Rectangle.OpacityMask>
-                            <VisualBrush Stretch="Fill"
-                         />
+                            <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_clock}"/>
                         </Rectangle.OpacityMask>
                     </Rectangle>
                     <TextBlock Margin="4 0 0 0"
                    VerticalAlignment="Center"
-                   Text="deploy cupcakes" />
+                   Text="History" />
                 </StackPanel>
             </Button>
+            
+            <Button Content="About" />
         </Controls:WindowCommands>
     </Controls:MetroWindow.RightWindowCommands>
 
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="70*" />
-            <ColumnDefinition Width="30*"/>
-        </Grid.ColumnDefinitions>
-      
-        <app:MultiCaretTextEditor x:Name="editor" />
-        
-        <Grid Grid.Column="1" >
-            <Grid.RowDefinitions>
-                <RowDefinition Height="130"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            
-            <StackPanel >
-                <TextBlock Text="USERS" />
-                
-                <ListView x:Name="ClientsList" ItemsSource="{Binding Clients}" BorderBrush="White" >
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                                <Rectangle Width="12" Height="12" 
-                                           Fill="{Binding Id, Converter={StaticResource ColorConverter}}"/>
-                                
-                                <TextBlock Text="{Binding Name}" />
-                            </StackPanel>
-                        
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <DockPanel Background="LightGray">
+            <StackPanel x:Name="Panel" Orientation="Horizontal" DockPanel.Dock="Left">
+                <Button x:Name="NewButton" Style="{DynamicResource MetroCircleButtonStyle}" Height="36" Width="36">
+                    <Rectangle Height="14" Width="14">
+                        <Rectangle.Fill>
+                            <VisualBrush Visual="{StaticResource appbar_add}" />
+                        </Rectangle.Fill>
+                    </Rectangle>
+                </Button>
+
+                <Button x:Name="SaveButton" Style="{DynamicResource MetroCircleButtonStyle}" Height="36" Width="36">
+                    <Rectangle Height="14" Width="14">
+                        <Rectangle.Fill>
+                            <VisualBrush Visual="{StaticResource appbar_disk}" />
+                        </Rectangle.Fill>
+                    </Rectangle>
+                </Button>
+
+                <Button x:Name="UploadButton" Style="{DynamicResource MetroCircleButtonStyle}" Height="36" Width="36">
+                    <Rectangle Height="10" Width="16">
+                        <Rectangle.Fill>
+                            <VisualBrush Visual="{StaticResource appbar_cloud_download}" />
+                        </Rectangle.Fill>
+                    </Rectangle>
+                </Button>
+
+                <Button x:Name="DownloadButton" Style="{DynamicResource MetroCircleButtonStyle}" Height="36" Width="36">
+                    <Rectangle Height="10" Width="16">
+                        <Rectangle.Fill>
+                            <VisualBrush Visual="{StaticResource appbar_cloud_upload}" />
+                        </Rectangle.Fill>
+                    </Rectangle>
+                </Button>
+
+                <Button x:Name="SyncdButton" Style="{DynamicResource MetroCircleButtonStyle}" Height="36" Width="36">
+                    <Rectangle Height="12" Width="14">
+                        <Rectangle.Fill>
+                            <VisualBrush Visual="{StaticResource appbar_arrow_down_up}" />
+                        </Rectangle.Fill>
+                    </Rectangle>
+                </Button>
+
+                <Rectangle Height="36" Width="36" />
+
+                <Button x:Name="CopyButton" Style="{DynamicResource MetroCircleButtonStyle}" Height="36" Width="36"
+                        Click="CopyButton_Click">
+                    <Rectangle Height="14" Width="14">
+                        <Rectangle.Fill>
+                            <VisualBrush Visual="{StaticResource appbar_clipboard_paper}" />
+                        </Rectangle.Fill>
+                    </Rectangle>
+                </Button>
+
+                <Button x:Name="PasteButton" Style="{DynamicResource MetroCircleButtonStyle}" Height="36" Width="36">
+                    <Rectangle Height="14" Width="14">
+                        <Rectangle.Fill>
+                            <VisualBrush Visual="{StaticResource appbar_clipboard_paste}" />
+                        </Rectangle.Fill>
+                    </Rectangle>
+                </Button>
+
+                <Button x:Name="FindButton" Style="{DynamicResource MetroCircleButtonStyle}" Height="36" Width="36">
+                    <Rectangle Height="14" Width="14">
+                        <Rectangle.Fill>
+                            <VisualBrush Visual="{StaticResource appbar_magnify}" />
+                        </Rectangle.Fill>
+                    </Rectangle>
+                </Button>
             </StackPanel>
-            
-            <Grid Grid.Row="1" x:Name="SideBar">
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0, 0, 5, 0">
+                <Button x:Name="ChatButton" Style="{DynamicResource MetroCircleButtonStyle}" Height="36" Width="36"
+                        HorizontalAlignment="Left" Click="ChatButton_Click">
+                    <Rectangle Height="16" Width="16">
+                        <Rectangle.Fill>
+                            <VisualBrush Visual="{StaticResource appbar_chat}" />
+                        </Rectangle.Fill>
+                    </Rectangle>
+                </Button>
+
+                <TextBlock x:Name="UsernameLabel" VerticalAlignment="Center" Text="{Binding Username}"/>
+            </StackPanel>
+        </DockPanel>
+        
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <app:MultiCaretTextEditor x:Name="editor" />
+
+
+            <Grid x:Name="SideBar" Grid.Column="1" Width="240" >
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="180"/>
+                    <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
-                
-                <ListView x:Name="MessageBox" DockPanel.Dock="Top" ItemsSource="{Binding Messages}"
-                          BorderBrush="LightGray" BorderThickness="1">
-                    <ListView.ItemTemplate>
-                        <DataTemplate>                           
-                            <StackPanel Orientation="Horizontal"
+
+                <Border BorderBrush="LightGray" BorderThickness="1, 0, 0, 0">
+                    <StackPanel>
+                        <ListView x:Name="ClientsList" ItemsSource="{Binding Clients}" BorderBrush="White" >
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="5, 5, 5, 5">
+                                        <Rectangle Width="16" Height="16" 
+                                           Fill="{Binding Id, Converter={StaticResource ColorConverter}}"/>
+
+                                        <TextBlock Text="{Binding Name}" />
+                                    </StackPanel>
+
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </StackPanel>
+                </Border>
+
+                <Grid Grid.Row="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <ListView x:Name="MessageBox" DockPanel.Dock="Top" ItemsSource="{Binding Messages}"
+                          BorderBrush="LightGray" BorderThickness="1, 1, 0, 0">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal"
                                         HorizontalAlignment="{Binding SenderId, Converter={StaticResource AlignmentConverter}}">
-                                <Canvas Width="10" Height="10" 
+                                    <Canvas Width="10" Height="10" 
                                         Visibility="{Binding SenderId, Converter={StaticResource VisibilityConverter}, ConverterParameter=Left}">
-                                    <Polygon Points="0,5 10,0 10,10" Fill="{Binding SenderId, Converter={StaticResource ColorConverter}}" />
-                                </Canvas>
-                                
-                                <Border CornerRadius="5" Background="{Binding SenderId, Converter={StaticResource ColorConverter}}"
+                                        <Polygon Points="0,5 10,0 10,10" Fill="{Binding SenderId, Converter={StaticResource ColorConverter}}" />
+                                    </Canvas>
+
+                                    <Border CornerRadius="5" Background="{Binding SenderId, Converter={StaticResource ColorConverter}}"
                                         MaxWidth="{Binding ActualWidth, ElementName=SideBar, Converter={StaticResource WidthConverter}, ConverterParameter=0.7}"
                                         Margin="0, 5, 0, 5">
 
-                                    <TextBlock Text="{Binding Message}" TextWrapping="Wrap" />
-                                </Border>
+                                        <TextBlock Text="{Binding Message}" TextWrapping="Wrap" />
+                                    </Border>
 
-                                <Canvas Width="10" Height="10" 
+                                    <Canvas Width="10" Height="10" 
                                         Visibility="{Binding SenderId, Converter={StaticResource VisibilityConverter}, ConverterParameter=Right}">
-                                    <Polygon Points="0,0 0,10 10,5" Fill="{Binding SenderId, Converter={StaticResource ColorConverter}}" />
-                                </Canvas>
-                            </StackPanel>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
+                                        <Polygon Points="0,0 0,10 10,5" Fill="{Binding SenderId, Converter={StaticResource ColorConverter}}" />
+                                    </Canvas>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
 
-                <Border BorderThickness="1" Grid.Row="1" BorderBrush="LightGray">
-                    <Grid DockPanel.Dock="Bottom" >
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
+                    <Border BorderThickness="1" Grid.Row="1" BorderBrush="LightGray">
+                        <Grid DockPanel.Dock="Bottom" >
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
 
-                        <TextBox x:Name="Message" HorizontalAlignment="Stretch" Margin="0, 2, 5, 2" BorderBrush="Transparent"
-                             KeyDown="Message_KeyDown" TextWrapping="Wrap" MaxHeight="180" />
-                        <Button  x:Name="SendButton" Content="Send" Height="20" Margin="0, 2, 5, 2" Grid.Column="1"
-                             Click="SendButton_Click"/>
-                    </Grid>
-                </Border>
-                
+                            <TextBox x:Name="Message" HorizontalAlignment="Stretch" 
+                                     Margin="0, 2, 5, 2" BorderBrush="Transparent"
+                                     KeyDown="Message_KeyDown" TextWrapping="Wrap" MaxHeight="180" />
+
+                            <Button x:Name="SendButton" Style="{DynamicResource MetroCircleButtonStyle}" Height="36" Width="36"
+                                    HorizontalAlignment="Left" Click="SendButton_Click" Margin="0, 2, 5, 2" Grid.Column="1">
+                                <Rectangle Height="16" Width="16">
+                                    <Rectangle.Fill>
+                                        <VisualBrush Visual="{StaticResource appbar_message}" />
+                                    </Rectangle.Fill>
+                                </Rectangle>
+                            </Button>
+                        </Grid>
+                    </Border>
+
+                </Grid>
             </Grid>
         </Grid>
     </Grid>

@@ -33,6 +33,7 @@ namespace Mandrake.Client.View
         public Dictionary<Guid, ColoredCaret> ColoredCursors { get; set; }
 
         public Dictionary<Guid, ColoredSelection> Selections { get; set; }
+        public string SelectedText { get { return Editor.SelectedText; } }
         public bool IsUpdatedByUser { get; set; }
 
         public event EventHandler<DocumentChangeEventArgs> DocumentChanged;
@@ -238,6 +239,11 @@ namespace Mandrake.Client.View
             }
 
             Selections[id].Lines = lines;
+        }
+
+        public void Paste(string text)
+        {
+            InsertText(text, Editor.CaretOffset);
         }
     }
 }
