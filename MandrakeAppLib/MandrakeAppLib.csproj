@@ -54,6 +54,7 @@
     <Compile Include="MultiCaretTextEditor.xaml.cs">
       <DependentUpon>MultiCaretTextEditor.xaml</DependentUpon>
     </Compile>
+    <Compile Include="OperationCompressor.cs" />
     <Compile Include="Transform.cs" />
     <Compile Include="Document.cs" />
     <Compile Include="ClientManagement.cs" />
