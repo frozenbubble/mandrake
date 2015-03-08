@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MandrakeAppLib
+namespace Mandrake.Sample.Client.Util
 {
     public static class OperationCompressor
     {
@@ -54,7 +54,7 @@ namespace MandrakeAppLib
             if (o1 == null) return o2;
 
             var o = (InsertOperation)o1.Clone();
-            o1.Literal = o1.Literal + o2.Literal;
+            o.Literal = o1.Literal + o2.Literal;
 
             return o;
         }
@@ -80,14 +80,14 @@ namespace MandrakeAppLib
                 var o1 = prev as InsertOperation;
                 var o2 = current as InsertOperation;
 
-                return (o1.Position + o1.Length == o2.Position || o2.Position + o2.Length == o1.Position);
+                return (o1.Position + o1.Length == o2.Position);
             }
             else
             {
                 var o1 = prev as DeleteOperation;
                 var o2 = current as DeleteOperation;
 
-                return (o1.EndPosition == o2.EndPosition || o2.EndPosition == o1.StartPosition);
+                return (o1.StartPosition == o2.EndPosition);
             }
         }
     }

@@ -179,5 +179,12 @@ namespace Mandrake.Client.Base
         {
             if (ClientRegistered != null) ClientRegistered(this, meta);
         }
+
+        public async Task<IEnumerable<Operation>> GetHistory()
+        {
+            var ops = await Service.GetLogAsync();
+
+            return ops;
+        }
     }
 }

@@ -69,10 +69,10 @@
     <Compile Include="Service.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.sample.config" />
     <None Include="Web.sample.config">
       <SubType>Designer</SubType>
     </None>
-    <None Include="App.sample.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

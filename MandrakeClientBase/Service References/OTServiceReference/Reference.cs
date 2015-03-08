@@ -38,6 +38,12 @@ namespace Mandrake.Client.Base.OTServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IOTAwareService/SendChatMessage", ReplyAction="http://tempuri.org/IOTAwareService/SendChatMessageResponse")]
         System.Threading.Tasks.Task SendChatMessageAsync(Mandrake.Management.ChatMessage msg);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IOTAwareService/GetLog", ReplyAction="http://tempuri.org/IOTAwareService/GetLogResponse")]
+        Mandrake.Model.Operation[] GetLog();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IOTAwareService/GetLog", ReplyAction="http://tempuri.org/IOTAwareService/GetLogResponse")]
+        System.Threading.Tasks.Task<Mandrake.Model.Operation[]> GetLogAsync();
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -127,6 +133,14 @@ namespace Mandrake.Client.Base.OTServiceReference {
         
         public System.Threading.Tasks.Task SendChatMessageAsync(Mandrake.Management.ChatMessage msg) {
             return base.Channel.SendChatMessageAsync(msg);
+        }
+        
+        public Mandrake.Model.Operation[] GetLog() {
+            return base.Channel.GetLog();
+        }
+        
+        public System.Threading.Tasks.Task<Mandrake.Model.Operation[]> GetLogAsync() {
+            return base.Channel.GetLogAsync();
         }
     }
 }

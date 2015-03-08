@@ -63,6 +63,8 @@ namespace Mandrake.Service
         void Hello(string msg);
         [OperationContract]
         void SendChatMessage(ChatMessage msg);
+        [OperationContract]
+        IEnumerable<Operation> GetLog();
     }
 
     public interface IOTCallback

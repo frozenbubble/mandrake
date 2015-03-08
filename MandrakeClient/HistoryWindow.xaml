@@ -14,12 +14,12 @@
 
         <app:MultiCaretTextEditor x:Name="Context" />
 
-        <ListView x:Name="Log">
-            <ListView.ItemTemplate>
+        <ListView x:Name="Log" Grid.Column="1" SelectionChanged="Log_SelectionChanged">
+            <!--<ListView.ItemTemplate>
                 <DataTemplate>
-                    
+                    <TextBlock Text="{Binding }"
                 </DataTemplate>
-            </ListView.ItemTemplate>
+            </ListView.ItemTemplate>-->
         </ListView>
     </Grid>
 </Controls:MetroWindow>

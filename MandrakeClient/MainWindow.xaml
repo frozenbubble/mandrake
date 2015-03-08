@@ -22,7 +22,7 @@
 
     <Controls:MetroWindow.RightWindowCommands>
         <Controls:WindowCommands>
-            <Button>
+            <Button x:Name="HistoryButton" Click="HistoryButton_Click">
                 <StackPanel Orientation="Horizontal">
                     <Rectangle Width="20" Height="20"
                    Fill="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}">

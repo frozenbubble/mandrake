@@ -22,9 +22,7 @@ namespace Mandrake.Service
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
-                //throw;
             }
-            Console.WriteLine("OTServiceHost CREATED");
         }
 
         public OTServiceHost(object singletonInstance, params Uri[] baseAddresses): base(singletonInstance, baseAddresses)
@@ -38,7 +36,6 @@ namespace Mandrake.Service
     {
         protected override ServiceHost CreateServiceHost(Type serviceType, Uri[] baseAddresses)
         {
-            Console.WriteLine("OTServiceHostFactory CALLED");
             return new OTServiceHost(serviceType, baseAddresses);
         }
     }

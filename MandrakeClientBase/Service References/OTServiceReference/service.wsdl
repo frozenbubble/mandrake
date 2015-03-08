@@ -66,6 +66,12 @@
   <wsdl:message name="IOTAwareService_SendChatMessage_OutputMessage">
     <wsdl:part name="parameters" element="tns:SendChatMessageResponse" />
   </wsdl:message>
+  <wsdl:message name="IOTAwareService_GetLog_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetLog" />
+  </wsdl:message>
+  <wsdl:message name="IOTAwareService_GetLog_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetLogResponse" />
+  </wsdl:message>
   <wsdl:message name="IOTAwareService_Forward_OutputCallbackMessage">
     <wsdl:part name="parameters" element="tns:Forward" />
   </wsdl:message>
@@ -118,6 +124,10 @@
     <wsdl:operation name="SendChatMessage">
       <wsdl:input wsaw:Action="http://tempuri.org/IOTAwareService/SendChatMessage" message="tns:IOTAwareService_SendChatMessage_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IOTAwareService/SendChatMessageResponse" message="tns:IOTAwareService_SendChatMessage_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetLog">
+      <wsdl:input wsaw:Action="http://tempuri.org/IOTAwareService/GetLog" message="tns:IOTAwareService_GetLog_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IOTAwareService/GetLogResponse" message="tns:IOTAwareService_GetLog_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="Forward">
       <wsdl:output wsaw:Action="http://tempuri.org/IOTAwareService/Forward" message="tns:IOTAwareService_Forward_OutputCallbackMessage" />
@@ -177,6 +187,15 @@
     </wsdl:operation>
     <wsdl:operation name="SendChatMessage">
       <soap12:operation soapAction="http://tempuri.org/IOTAwareService/SendChatMessage" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetLog">
+      <soap12:operation soapAction="http://tempuri.org/IOTAwareService/GetLog" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

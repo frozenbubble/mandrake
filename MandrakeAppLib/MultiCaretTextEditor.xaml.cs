@@ -245,5 +245,10 @@ namespace Mandrake.Client.View
         {
             InsertText(text, Editor.CaretOffset);
         }
+
+        public void Clear()
+        {
+            Editor.Clear();
+        }
     }
 }

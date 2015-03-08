@@ -25,6 +25,7 @@ using System.ComponentModel.Composition;
 using Mandrake.Samples.Client.ViewModel;
 using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
+using Mandrake.Client;
 
 namespace Mandrake.Samples.Client
 {
@@ -100,6 +101,12 @@ namespace Mandrake.Samples.Client
         {
             var text = Clipboard.GetData(DataFormats.Text) as string;
             editor.Paste(text);
+        }
+
+        private void HistoryButton_Click(object sender, RoutedEventArgs e)
+        {
+            var historyWindow = new HistoryWindow(callback);
+            historyWindow.Show();
         }
     }
 }

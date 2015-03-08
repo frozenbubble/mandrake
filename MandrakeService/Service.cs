@@ -155,6 +155,11 @@ namespace Mandrake.Service
             foreach (var client in to) client.Value.Client.ForwardChatMessage(msg);
 
         }
+
+        public IEnumerable<Operation> GetLog()
+        {
+            return Log;
+        }
     }
 
     public class SynchronizingConnection
