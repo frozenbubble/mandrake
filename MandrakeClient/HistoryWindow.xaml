@@ -5,7 +5,8 @@
         xmlns:app="clr-namespace:Mandrake.Client.View;assembly=MandrakeAppLib"
         xmlns:util="clr-namespace:Mandrake.Samples.Client.Util"
         xmlns:mandrake="clr-namespace:Mandrake.Sample.Client.Document;assembly=MandrakeAppLib"
-        Title="HistoryWindow" Height="300" Width="300">
+        Title="HistoryWindow" Height="450" Width="600"
+        ResizeMode="CanResizeWithGrip" EnableDWMDropShadow="True">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="70*" />
@@ -14,7 +15,8 @@
 
         <app:MultiCaretTextEditor x:Name="Context" />
 
-        <ListView x:Name="Log" Grid.Column="1" SelectionChanged="Log_SelectionChanged">
+        <ListView x:Name="Log" Grid.Column="1" SelectionChanged="Log_SelectionChanged"
+                  BorderThickness="1,0,0,0">
             <!--<ListView.ItemTemplate>
                 <DataTemplate>
                     <TextBlock Text="{Binding }"

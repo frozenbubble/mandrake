@@ -10,6 +10,7 @@
         <Canvas x:Name="CursorCanvas" Background="White" ></Canvas>
         
         <avalon:TextEditor x:Name="Editor" Background="Transparent" SyntaxHighlighting="C#" 
-                           ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" />
+                           ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto"
+                           FontFamily="Consolas"/>
     </Grid>
 </UserControl>

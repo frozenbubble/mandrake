@@ -1,11 +1,9 @@
 ﻿using Mandrake.Model;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.Serialization;
 using System.ServiceModel;
-using System.Text;
 using Mandrake.Management;
+using Mandrake.Model.Document;
 
 
 namespace Mandrake.Service
@@ -25,10 +23,7 @@ namespace Mandrake.Service
 
         public OTMessage(List<Operation> content): this()
         {
-            foreach (var item in content)
-            {
-                Content.Add(item);
-            }
+            Content.AddRange(content);
         }
 
         public OTMessage(Operation operation): this()
@@ -65,6 +60,14 @@ namespace Mandrake.Service
         void SendChatMessage(ChatMessage msg);
         [OperationContract]
         IEnumerable<Operation> GetLog();
+        [OperationContract]
+        IEnumerable<IOTAwareContext> GetDocuments();
+        [OperationContract]
+        void CreateDocument();
+        [OperationContract]
+        IOTAwareContext OpenDocument(string name);
+        [OperationContract]
+        void SynchronizeDocument(Operation syncOperation);
     }
 
     public interface IOTCallback

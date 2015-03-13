@@ -41,6 +41,7 @@ namespace Mandrake.Client
         {
             var log = await ClientManager.GetHistory();
             opsList = new List<Operation>(OperationCompressor.Compress(log));
+            //opsList = new List<Operation>(log);
             Log.ItemsSource = opsList;
         }
 

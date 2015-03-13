@@ -1,16 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Serialization;
 using System.ServiceModel;
-using System.Text;
 using Mandrake.Management;
-using System.Runtime.CompilerServices;
 using Mandrake.Model;
 using Mandrake.Model.Document;
-using System.Threading;
-using ICSharpCode.AvalonEdit.Document;
-using System.Windows.Threading;
 using System.Configuration;
 using Mandrake.Service.Configuration;
 using System.Reflection;
@@ -24,6 +18,7 @@ namespace Mandrake.Service
         private readonly object syncroot = new object();
 
         public Dictionary<Guid, SynchronizingConnection> Clients { get; set; }
+        public Dictionary<string, IOTAwareContext> Documents { get; set; }
 
         public event OTMessageEventHandler MessageSent;
         public event OTMessageEventHandler MessageArrived;
@@ -65,11 +60,13 @@ namespace Mandrake.Service
             if (MessageArrived != null) MessageArrived(this, message);
 
             var ops = message.Content;
-            var cached = Log.Where(item => item.ServerMessages > ops.FirstOrDefault().ServerMessages);
+            var messageOwnerId = ops.FirstOrDefault().OwnerId;
+            var cached = Log.Where(item => item.ServerMessages > ops.FirstOrDefault().ServerMessages && !item.OwnerId.Equals(messageOwnerId));
 
             foreach (var op in ops)
             {
-                foreach (var cachedOp in cached) transformer.Transform(cachedOp, op);
+                Operation transformed = null;
+                foreach (var cachedOp in cached) transformed = transformer.Transform(cachedOp, op);
 
                 Execute(op);
 
@@ -159,6 +156,30 @@ namespace Mandrake.Service
         public IEnumerable<Operation> GetLog()
         {
             return Log;
+        }
+
+
+        public IEnumerable<IOTAwareContext> GetDocuments()
+        {
+            return Documents.Values;
+        }
+
+        public void CreateDocument()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IOTAwareContext OpenDocument(string name)
+        {
+            Context = Documents[name];
+            Log.Clear();
+
+            return Context;
+        }
+
+        public void SynchronizeDocument(Operation syncOperation)
+        {
+            throw new NotImplementedException();
         }
     }
 

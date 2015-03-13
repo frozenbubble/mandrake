@@ -5,8 +5,10 @@
         xmlns:app="clr-namespace:Mandrake.Client.View;assembly=MandrakeAppLib"
         xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         xmlns:util="clr-namespace:Mandrake.Samples.Client.Util"
+        Loaded="MetroWindow_Loaded"
         Title="Mandrake Editor" Height="600" Width="800"
-        Loaded="MetroWindow_Loaded">
+        ShowIconOnTitleBar="True" ResizeMode="CanResizeWithGrip" EnableDWMDropShadow="True"
+        Icon="">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>

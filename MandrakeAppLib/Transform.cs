@@ -16,13 +16,13 @@ namespace Mandrake.Sample.Client.Transform
         {
             Operation transformed = o2.Clone() as Operation;
 
-            if (o1 is InsertOperation && o2 is InsertOperation) Transform((InsertOperation)o1, (InsertOperation)transformed);
+            if (o1 is InsertOperation && o2 is InsertOperation) Transform((InsertOperation)o1, (InsertOperation)o2);
 
-            else if (o1 is InsertOperation && o2 is DeleteOperation) Transform((InsertOperation)o1, (DeleteOperation)transformed);
+            else if (o1 is InsertOperation && o2 is DeleteOperation) Transform((InsertOperation)o1, (DeleteOperation)o2);
 
-            else if (o1 is DeleteOperation && o2 is InsertOperation) Transform((DeleteOperation)o1, (InsertOperation)transformed);
+            else if (o1 is DeleteOperation && o2 is InsertOperation) Transform((DeleteOperation)o1, (InsertOperation)o2);
 
-            else if (o1 is DeleteOperation && o2 is DeleteOperation) Transform((DeleteOperation)o1, (DeleteOperation)transformed);
+            else if (o1 is DeleteOperation && o2 is DeleteOperation) Transform((DeleteOperation)o1, (DeleteOperation)o2);
 
             return transformed;
         }

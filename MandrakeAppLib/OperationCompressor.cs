@@ -20,12 +20,13 @@ namespace Mandrake.Sample.Client.Util
 
             foreach (var current in relevant)
             {
-                if (Neighbours(prev, current)) buffer.Add(current);
+                if (Neighbours(prev, current) || buffer.Count == 0) buffer.Add(current);
 
                 else
                 {
                     compressed.Add(buffer.Compress());
                     buffer.Clear();
+                    buffer.Add(current);
                 }
 
                 prev = current;
@@ -42,7 +43,10 @@ namespace Mandrake.Sample.Client.Util
             {
                 if (o is InsertOperation) prev = Compress((InsertOperation)prev, (InsertOperation)o);
 
-                if (o is DeleteOperation) prev = Compress((DeleteOperation)prev, (DeleteOperation)o);
+                if (o is DeleteOperation)
+                {
+                    prev = Compress((DeleteOperation)prev, (DeleteOperation)o);
+                }
             }
 
             return prev;
@@ -54,7 +58,7 @@ namespace Mandrake.Sample.Client.Util
             if (o1 == null) return o2;
 
             var o = (InsertOperation)o1.Clone();
-            o.Literal = o1.Literal + o2.Literal;
+            o.Literal += o2.Literal;
 
             return o;
         }
@@ -64,7 +68,7 @@ namespace Mandrake.Sample.Client.Util
             if (o1 == null) return o2;
 
             var o = (DeleteOperation)o1.Clone();
-            o.EndPosition = o2.EndPosition;
+            o.StartPosition = o2.StartPosition;
 
             return o;
         }
@@ -80,7 +84,7 @@ namespace Mandrake.Sample.Client.Util
                 var o1 = prev as InsertOperation;
                 var o2 = current as InsertOperation;
 
-                return (o1.Position + o1.Length == o2.Position);
+                return (o1.Position + o1.Length == o2.Position && prev.CreatedAt < current.CreatedAt);
             }
             else
             {
