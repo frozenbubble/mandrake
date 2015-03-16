@@ -29,6 +29,7 @@ namespace Mandrake.Client.Base
         public event OperationActionEventHandler OperationPerformed;
         public event ChatMessageEventHandler MessageArrived;
         public event ClientRegisteredEventHandler ClientRegistered;
+        public event DocumentCreatedEventHandler DocumentCreated;
 
         public Guid Id { get; set; }
         public Mandrake.Client.Base.OTServiceReference.IOTAwareService Service { get; set; }
@@ -66,6 +67,7 @@ namespace Mandrake.Client.Base
                     o.OwnerId = Id;
                     o.ClientMessages = clientMessages;
                     o.ServerMessages = serverMessages;
+                    o.DocumentName = ((IOTAwareContext)sender).Name;
 
                     TrySend(o);
                 }
@@ -156,7 +158,6 @@ namespace Mandrake.Client.Base
             proxy.Hello("Hello Server!");
         }
 
-
         public void ForwardChatMessage(ChatMessage msg)
         {
             Messages.Add(msg);
@@ -185,6 +186,26 @@ namespace Mandrake.Client.Base
             var ops = await Service.GetLogAsync();
 
             return ops;
+        }
+
+        public async Task<IOTAwareContext> CreateDocument(string name)
+        {
+            if ((await Service.CreateDocumentAsync(name))) Documents[name] = Activator.CreateInstance(Context.GetType()) as IOTAwareContext;
+
+            return Documents[name];
+        }
+
+
+        public void NotifyDocumentCreated(string name)
+        {
+            Documents[name] = Activator.CreateInstance(Context.GetType()) as IOTAwareContext;
+
+            if (DocumentCreated != null) DocumentCreated(this, Documents[name]);
+        }
+
+        public void NotifyDocumentOpened(string name)
+        {
+            throw new NotImplementedException();
         }
     }
 }

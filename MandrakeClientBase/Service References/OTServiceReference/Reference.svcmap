@@ -28,6 +28,7 @@
     <MetadataFile FileName="Mandrake.Management.xsd" MetadataType="Schema" ID="27f22296-aa5e-4587-8bae-74329ec27cae" SourceId="1" SourceUrl="net.tcp://localhost:8062/OTService/mex" />
     <MetadataFile FileName="Mandrake.Service.xsd" MetadataType="Schema" ID="29fa03aa-438f-4d2f-bda8-613772421e2c" SourceId="1" SourceUrl="net.tcp://localhost:8062/OTService/mex" />
     <MetadataFile FileName="Mandrake.Model.xsd" MetadataType="Schema" ID="fb811435-d399-4fc3-b260-551fd8a8e185" SourceId="1" SourceUrl="net.tcp://localhost:8062/OTService/mex" />
+    <MetadataFile FileName="Arrays.xsd" MetadataType="Schema" ID="a5348617-270f-4aa3-9dcd-ec09c948dc43" SourceId="1" SourceUrl="net.tcp://localhost:8062/OTService/mex" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />

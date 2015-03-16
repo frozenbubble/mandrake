@@ -25,7 +25,7 @@ namespace Mandrake.Client
     public partial class HistoryWindow : MetroWindow
     {
         ClientManager ClientManager;
-        IEnumerable<IOperationManager> ManagerChain;
+        List<IOperationManager> ManagerChain;
         List<Operation> opsList;
 
         public HistoryWindow(ClientManager callback)
@@ -33,7 +33,8 @@ namespace Mandrake.Client
             InitializeComponent();
 
             ClientManager = callback;
-            ManagerChain = ClientManager.ManagerChain;
+            ManagerChain = new List<IOperationManager>(ClientManager.ManagerChain);
+            ManagerChain.Add(new AggregateOperationManager());
             GetHistory();
         }
 
@@ -41,7 +42,6 @@ namespace Mandrake.Client
         {
             var log = await ClientManager.GetHistory();
             opsList = new List<Operation>(OperationCompressor.Compress(log));
-            //opsList = new List<Operation>(log);
             Log.ItemsSource = opsList;
         }
 

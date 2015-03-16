@@ -15,6 +15,8 @@ namespace Mandrake.Model
         [DataMember]
         public Guid OwnerId { get; set; }
         [DataMember]
+        public string DocumentName { get; set; }
+        [DataMember]
         public DateTime CreatedAt { get; set; }
         [DataMember]
         public DateTime ExecutedAt { get; set; }
@@ -58,5 +60,37 @@ namespace Mandrake.Model
             return o;
         }
 
+    }
+
+    [DataContract]
+    public class AggregateOperation : Operation
+    {
+        public List<Operation> Operations { get; set; }
+
+        public AggregateOperation()
+        {
+            Operations = new List<Operation>();
+        }
+
+        public AggregateOperation(IEnumerable<Operation> operations)
+        {
+            Operations = new List<Operation>(operations);
+        }
+
+        public override object Clone()
+        {
+            var o = new AggregateOperation(this.Operations);
+            Initialize(o);
+
+            return o;
+        }
+
+        public override string ToString()
+        {
+            if (Operations.Count != 0) return String.Format("{0} : {1} : {2}",
+                Operations.Last().ExecutedAt.Hour, Operations.Last().ExecutedAt.Minute, Operations.Last().ExecutedAt.Second);
+
+            else return "No operation";
+        }
     }
 }

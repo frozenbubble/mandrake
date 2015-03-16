@@ -3,6 +3,7 @@
   <xs:import namespace="http://schemas.datacontract.org/2004/07/Mandrake.Management" />
   <xs:import namespace="http://schemas.datacontract.org/2004/07/Mandrake.Service" />
   <xs:import namespace="http://schemas.datacontract.org/2004/07/Mandrake.Model" />
+  <xs:import namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
   <xs:element name="Register">
     <xs:complexType>
       <xs:sequence>
@@ -65,10 +66,60 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:element name="GetDocuments">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetDocumentsResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q6="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="GetDocumentsResult" nillable="true" type="q6:ArrayOfanyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CreateDocument">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="name" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CreateDocumentResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="CreateDocumentResult" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="OpenDocument">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="name" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="OpenDocumentResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SynchronizeDocument">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/Mandrake.Model" minOccurs="0" name="syncOperation" nillable="true" type="q7:Operation" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SynchronizeDocumentResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
   <xs:element name="Forward">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/Mandrake.Service" minOccurs="0" name="message" nillable="true" type="q6:OTMessage" />
+        <xs:element xmlns:q8="http://schemas.datacontract.org/2004/07/Mandrake.Service" minOccurs="0" name="message" nillable="true" type="q8:OTMessage" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -80,7 +131,7 @@
   <xs:element name="SendAck">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/Mandrake.Service" minOccurs="0" name="ack" nillable="true" type="q7:OTAck" />
+        <xs:element xmlns:q9="http://schemas.datacontract.org/2004/07/Mandrake.Service" minOccurs="0" name="ack" nillable="true" type="q9:OTAck" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -116,7 +167,7 @@
   <xs:element name="ForwardChatMessage">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q8="http://schemas.datacontract.org/2004/07/Mandrake.Management" minOccurs="0" name="msg" nillable="true" type="q8:ChatMessage" />
+        <xs:element xmlns:q10="http://schemas.datacontract.org/2004/07/Mandrake.Management" minOccurs="0" name="msg" nillable="true" type="q10:ChatMessage" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -128,11 +179,35 @@
   <xs:element name="RegisterClient">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q9="http://schemas.datacontract.org/2004/07/Mandrake.Management" minOccurs="0" name="meta" nillable="true" type="q9:ClientMetaData" />
+        <xs:element xmlns:q11="http://schemas.datacontract.org/2004/07/Mandrake.Management" minOccurs="0" name="meta" nillable="true" type="q11:ClientMetaData" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="RegisterClientResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="NotifyDocumentCreated">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="name" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="NotifyDocumentCreatedResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="NotifyDocumentOpened">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="name" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="NotifyDocumentOpenedResponse">
     <xs:complexType>
       <xs:sequence />
     </xs:complexType>

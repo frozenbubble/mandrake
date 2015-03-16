@@ -45,7 +45,6 @@ namespace Mandrake.Host
             }
 
             service = new OTAwareService();
-            var op = new InsertOperation(0, "");
             service.Context = editor;
 
             //List<IOperationManager> chain = new List<IOperationManager>();

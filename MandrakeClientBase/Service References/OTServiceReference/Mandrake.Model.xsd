@@ -11,6 +11,7 @@
     <xs:sequence>
       <xs:element minOccurs="0" name="ClientMessages" type="xs:long" />
       <xs:element minOccurs="0" name="CreatedAt" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="DocumentName" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="ExecutedAt" type="xs:dateTime" />
       <xs:element minOccurs="0" name="OwnerId" type="ser:guid" />
       <xs:element minOccurs="0" name="ServerMessages" type="xs:long" />

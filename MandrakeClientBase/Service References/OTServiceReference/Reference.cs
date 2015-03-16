@@ -44,6 +44,38 @@ namespace Mandrake.Client.Base.OTServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IOTAwareService/GetLog", ReplyAction="http://tempuri.org/IOTAwareService/GetLogResponse")]
         System.Threading.Tasks.Task<Mandrake.Model.Operation[]> GetLogAsync();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IOTAwareService/GetDocuments", ReplyAction="http://tempuri.org/IOTAwareService/GetDocumentsResponse")]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(Mandrake.Management.ClientMetaData))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(Mandrake.Management.ClientMetaData[]))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(Mandrake.Management.ChatMessage))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(Mandrake.Service.OTMessage))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(Mandrake.Service.OTAck))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(Mandrake.Model.Operation[]))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(Mandrake.Model.Operation))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(object[]))]
+        object[] GetDocuments();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IOTAwareService/GetDocuments", ReplyAction="http://tempuri.org/IOTAwareService/GetDocumentsResponse")]
+        System.Threading.Tasks.Task<object[]> GetDocumentsAsync();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IOTAwareService/CreateDocument", ReplyAction="http://tempuri.org/IOTAwareService/CreateDocumentResponse")]
+        bool CreateDocument(string name);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IOTAwareService/CreateDocument", ReplyAction="http://tempuri.org/IOTAwareService/CreateDocumentResponse")]
+        System.Threading.Tasks.Task<bool> CreateDocumentAsync(string name);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IOTAwareService/OpenDocument", ReplyAction="http://tempuri.org/IOTAwareService/OpenDocumentResponse")]
+        void OpenDocument(string name);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IOTAwareService/OpenDocument", ReplyAction="http://tempuri.org/IOTAwareService/OpenDocumentResponse")]
+        System.Threading.Tasks.Task OpenDocumentAsync(string name);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IOTAwareService/SynchronizeDocument", ReplyAction="http://tempuri.org/IOTAwareService/SynchronizeDocumentResponse")]
+        void SynchronizeDocument(Mandrake.Model.Operation syncOperation);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IOTAwareService/SynchronizeDocument", ReplyAction="http://tempuri.org/IOTAwareService/SynchronizeDocumentResponse")]
+        System.Threading.Tasks.Task SynchronizeDocumentAsync(Mandrake.Model.Operation syncOperation);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -63,6 +95,7 @@ namespace Mandrake.Client.Base.OTServiceReference {
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(Mandrake.Service.OTAck))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(Mandrake.Model.Operation[]))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(Mandrake.Model.Operation))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(object[]))]
         void Synchronize(object content);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IOTAwareService/Echo", ReplyAction="http://tempuri.org/IOTAwareService/EchoResponse")]
@@ -73,6 +106,12 @@ namespace Mandrake.Client.Base.OTServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IOTAwareService/RegisterClient", ReplyAction="http://tempuri.org/IOTAwareService/RegisterClientResponse")]
         void RegisterClient(Mandrake.Management.ClientMetaData meta);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IOTAwareService/NotifyDocumentCreated", ReplyAction="http://tempuri.org/IOTAwareService/NotifyDocumentCreatedResponse")]
+        void NotifyDocumentCreated(string name);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IOTAwareService/NotifyDocumentOpened", ReplyAction="http://tempuri.org/IOTAwareService/NotifyDocumentOpenedResponse")]
+        void NotifyDocumentOpened(string name);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -141,6 +180,38 @@ namespace Mandrake.Client.Base.OTServiceReference {
         
         public System.Threading.Tasks.Task<Mandrake.Model.Operation[]> GetLogAsync() {
             return base.Channel.GetLogAsync();
+        }
+        
+        public object[] GetDocuments() {
+            return base.Channel.GetDocuments();
+        }
+        
+        public System.Threading.Tasks.Task<object[]> GetDocumentsAsync() {
+            return base.Channel.GetDocumentsAsync();
+        }
+        
+        public bool CreateDocument(string name) {
+            return base.Channel.CreateDocument(name);
+        }
+        
+        public System.Threading.Tasks.Task<bool> CreateDocumentAsync(string name) {
+            return base.Channel.CreateDocumentAsync(name);
+        }
+        
+        public void OpenDocument(string name) {
+            base.Channel.OpenDocument(name);
+        }
+        
+        public System.Threading.Tasks.Task OpenDocumentAsync(string name) {
+            return base.Channel.OpenDocumentAsync(name);
+        }
+        
+        public void SynchronizeDocument(Mandrake.Model.Operation syncOperation) {
+            base.Channel.SynchronizeDocument(syncOperation);
+        }
+        
+        public System.Threading.Tasks.Task SynchronizeDocumentAsync(Mandrake.Model.Operation syncOperation) {
+            return base.Channel.SynchronizeDocumentAsync(syncOperation);
         }
     }
 }

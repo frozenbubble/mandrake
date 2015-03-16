@@ -7,8 +7,7 @@
         xmlns:util="clr-namespace:Mandrake.Samples.Client.Util"
         Loaded="MetroWindow_Loaded"
         Title="Mandrake Editor" Height="600" Width="800"
-        ShowIconOnTitleBar="True" ResizeMode="CanResizeWithGrip" EnableDWMDropShadow="True"
-        Icon="">
+        ShowIconOnTitleBar="True" ResizeMode="CanResizeWithGrip" EnableDWMDropShadow="True">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -50,7 +49,8 @@
 
         <DockPanel Background="LightGray">
             <StackPanel x:Name="Panel" Orientation="Horizontal" DockPanel.Dock="Left">
-                <Button x:Name="NewButton" Style="{DynamicResource MetroCircleButtonStyle}" Height="36" Width="36">
+                <Button x:Name="NewButton" Style="{DynamicResource MetroCircleButtonStyle}" Height="36" Width="36"
+                        Click="NewButton_Click">
                     <Rectangle Height="14" Width="14">
                         <Rectangle.Fill>
                             <VisualBrush Visual="{StaticResource appbar_add}" />

@@ -10,7 +10,8 @@ namespace Mandrake.Model.Document
 {
     public interface IOTAwareContext
     {
-        public string Name { get; set; }
+        //string ContextId { get; set; }
+        string Name { get; set; }
         bool IsUpdatedByUser { get; set; }
         void InsertText(string text, int position);
         void RemoveText(int position, int length);

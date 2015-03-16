@@ -18,7 +18,6 @@ namespace Mandrake.Service
         private readonly object syncroot = new object();
 
         public Dictionary<Guid, SynchronizingConnection> Clients { get; set; }
-        public Dictionary<string, IOTAwareContext> Documents { get; set; }
 
         public event OTMessageEventHandler MessageSent;
         public event OTMessageEventHandler MessageArrived;
@@ -164,17 +163,30 @@ namespace Mandrake.Service
             return Documents.Values;
         }
 
-        public void CreateDocument()
+        public bool CreateDocument(DocumentMetaData document)
         {
-            throw new NotImplementedException();
+            if (!Documents.ContainsKey(document.Name))
+            {
+                var newInstance = Activator.CreateInstance(Context.GetType()) as IOTAwareContext;
+                newInstance.Name = document.Name;
+                Documents[document.Name] = newInstance;
+                Context = newInstance;
+
+                var to = Clients.Where(c => c.Key != document.ClientId);
+                Parallel.ForEach(to, c => c.Value.Client.NotifyDocumentCreated(document.Name));
+                
+                return true;
+            }
+
+            else return false;
         }
 
-        public IOTAwareContext OpenDocument(string name)
+        public void OpenDocument(DocumentMetaData document)
         {
-            Context = Documents[name];
+            Context = Documents[document.Name];
             Log.Clear();
 
-            return Context;
+            // sync with everyone
         }
 
         public void SynchronizeDocument(Operation syncOperation)

@@ -40,6 +40,7 @@
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Mandrake.Management" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Mandrake.Service" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Mandrake.Model" />
+      <xsd:import namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
     </xsd:schema>
   </wsdl:types>
   <wsdl:message name="IOTAwareService_Register_InputMessage">
@@ -71,6 +72,30 @@
   </wsdl:message>
   <wsdl:message name="IOTAwareService_GetLog_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetLogResponse" />
+  </wsdl:message>
+  <wsdl:message name="IOTAwareService_GetDocuments_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetDocuments" />
+  </wsdl:message>
+  <wsdl:message name="IOTAwareService_GetDocuments_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetDocumentsResponse" />
+  </wsdl:message>
+  <wsdl:message name="IOTAwareService_CreateDocument_InputMessage">
+    <wsdl:part name="parameters" element="tns:CreateDocument" />
+  </wsdl:message>
+  <wsdl:message name="IOTAwareService_CreateDocument_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CreateDocumentResponse" />
+  </wsdl:message>
+  <wsdl:message name="IOTAwareService_OpenDocument_InputMessage">
+    <wsdl:part name="parameters" element="tns:OpenDocument" />
+  </wsdl:message>
+  <wsdl:message name="IOTAwareService_OpenDocument_OutputMessage">
+    <wsdl:part name="parameters" element="tns:OpenDocumentResponse" />
+  </wsdl:message>
+  <wsdl:message name="IOTAwareService_SynchronizeDocument_InputMessage">
+    <wsdl:part name="parameters" element="tns:SynchronizeDocument" />
+  </wsdl:message>
+  <wsdl:message name="IOTAwareService_SynchronizeDocument_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SynchronizeDocumentResponse" />
   </wsdl:message>
   <wsdl:message name="IOTAwareService_Forward_OutputCallbackMessage">
     <wsdl:part name="parameters" element="tns:Forward" />
@@ -108,6 +133,18 @@
   <wsdl:message name="IOTAwareService_RegisterClient_InputCallbackMessage">
     <wsdl:part name="parameters" element="tns:RegisterClientResponse" />
   </wsdl:message>
+  <wsdl:message name="IOTAwareService_NotifyDocumentCreated_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:NotifyDocumentCreated" />
+  </wsdl:message>
+  <wsdl:message name="IOTAwareService_NotifyDocumentCreated_InputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:NotifyDocumentCreatedResponse" />
+  </wsdl:message>
+  <wsdl:message name="IOTAwareService_NotifyDocumentOpened_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:NotifyDocumentOpened" />
+  </wsdl:message>
+  <wsdl:message name="IOTAwareService_NotifyDocumentOpened_InputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:NotifyDocumentOpenedResponse" />
+  </wsdl:message>
   <wsdl:portType name="IOTAwareService">
     <wsdl:operation name="Register">
       <wsdl:input wsaw:Action="http://tempuri.org/IOTAwareService/Register" message="tns:IOTAwareService_Register_InputMessage" />
@@ -128,6 +165,22 @@
     <wsdl:operation name="GetLog">
       <wsdl:input wsaw:Action="http://tempuri.org/IOTAwareService/GetLog" message="tns:IOTAwareService_GetLog_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IOTAwareService/GetLogResponse" message="tns:IOTAwareService_GetLog_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetDocuments">
+      <wsdl:input wsaw:Action="http://tempuri.org/IOTAwareService/GetDocuments" message="tns:IOTAwareService_GetDocuments_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IOTAwareService/GetDocumentsResponse" message="tns:IOTAwareService_GetDocuments_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CreateDocument">
+      <wsdl:input wsaw:Action="http://tempuri.org/IOTAwareService/CreateDocument" message="tns:IOTAwareService_CreateDocument_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IOTAwareService/CreateDocumentResponse" message="tns:IOTAwareService_CreateDocument_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="OpenDocument">
+      <wsdl:input wsaw:Action="http://tempuri.org/IOTAwareService/OpenDocument" message="tns:IOTAwareService_OpenDocument_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IOTAwareService/OpenDocumentResponse" message="tns:IOTAwareService_OpenDocument_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SynchronizeDocument">
+      <wsdl:input wsaw:Action="http://tempuri.org/IOTAwareService/SynchronizeDocument" message="tns:IOTAwareService_SynchronizeDocument_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IOTAwareService/SynchronizeDocumentResponse" message="tns:IOTAwareService_SynchronizeDocument_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="Forward">
       <wsdl:output wsaw:Action="http://tempuri.org/IOTAwareService/Forward" message="tns:IOTAwareService_Forward_OutputCallbackMessage" />
@@ -152,6 +205,14 @@
     <wsdl:operation name="RegisterClient">
       <wsdl:output wsaw:Action="http://tempuri.org/IOTAwareService/RegisterClient" message="tns:IOTAwareService_RegisterClient_OutputCallbackMessage" />
       <wsdl:input wsaw:Action="http://tempuri.org/IOTAwareService/RegisterClientResponse" message="tns:IOTAwareService_RegisterClient_InputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="NotifyDocumentCreated">
+      <wsdl:output wsaw:Action="http://tempuri.org/IOTAwareService/NotifyDocumentCreated" message="tns:IOTAwareService_NotifyDocumentCreated_OutputCallbackMessage" />
+      <wsdl:input wsaw:Action="http://tempuri.org/IOTAwareService/NotifyDocumentCreatedResponse" message="tns:IOTAwareService_NotifyDocumentCreated_InputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="NotifyDocumentOpened">
+      <wsdl:output wsaw:Action="http://tempuri.org/IOTAwareService/NotifyDocumentOpened" message="tns:IOTAwareService_NotifyDocumentOpened_OutputCallbackMessage" />
+      <wsdl:input wsaw:Action="http://tempuri.org/IOTAwareService/NotifyDocumentOpenedResponse" message="tns:IOTAwareService_NotifyDocumentOpened_InputCallbackMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="TcpEndpoint" type="tns:IOTAwareService">
@@ -196,6 +257,42 @@
     </wsdl:operation>
     <wsdl:operation name="GetLog">
       <soap12:operation soapAction="http://tempuri.org/IOTAwareService/GetLog" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDocuments">
+      <soap12:operation soapAction="http://tempuri.org/IOTAwareService/GetDocuments" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreateDocument">
+      <soap12:operation soapAction="http://tempuri.org/IOTAwareService/CreateDocument" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="OpenDocument">
+      <soap12:operation soapAction="http://tempuri.org/IOTAwareService/OpenDocument" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SynchronizeDocument">
+      <soap12:operation soapAction="http://tempuri.org/IOTAwareService/SynchronizeDocument" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -250,6 +347,24 @@
     </wsdl:operation>
     <wsdl:operation name="RegisterClient">
       <soap12:operation soapAction="http://tempuri.org/IOTAwareService/RegisterClient" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="NotifyDocumentCreated">
+      <soap12:operation soapAction="http://tempuri.org/IOTAwareService/NotifyDocumentCreated" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="NotifyDocumentOpened">
+      <soap12:operation soapAction="http://tempuri.org/IOTAwareService/NotifyDocumentOpened" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

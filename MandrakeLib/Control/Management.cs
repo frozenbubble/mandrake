@@ -16,6 +16,7 @@ namespace Mandrake.Management
     public delegate void OperationActionEventHandler(object sender, Operation o);
     public delegate void ChatMessageEventHandler(object sender, ChatMessage msg);
     public delegate void ClientRegisteredEventHandler(object sender, ClientMetaData meta);
+    public delegate void DocumentCreatedEventHandler(object sender, IOTAwareContext document);
 
     public abstract class OTManager
     {
@@ -23,40 +24,22 @@ namespace Mandrake.Management
 
         //[Import(typeof(ISynchronize))]
         protected ISynchronize syncManager;
-
         [Import(typeof(ITransform))]
         public ITransform transformer { get; set; }
-
         //[Import(typeof(IOTAwareContext))]
         public IOTAwareContext Context { get; set; }
-        
         [ImportMany]
         public IEnumerable<IOperationManager> ManagerChain { get; set; }
         public List<Operation> Log { get; protected set; }
         public List<ChatMessage> Messages { get; set; }
+        public Dictionary<string, IOTAwareContext> Documents { get; set; }
 
         public OTManager()
         {
             Log = new List<Operation>();
             Messages = new List<ChatMessage>();
-            var catalog = new AggregateCatalog();
-
-            Array.ForEach(AppDomain.CurrentDomain.GetAssemblies(), x => catalog.Catalogs.Add(new AssemblyCatalog(x)));
-            if (Assembly.GetEntryAssembly() == null)
-            {
-                Array.ForEach(GenericResolverInstaller.GetWebAssemblies(), x => catalog.Catalogs.Add(new AssemblyCatalog(x)));
-            }
-
-            var container = new CompositionContainer(catalog);
-
-            try
-            {
-                container.ComposeParts(this);
-            }
-            catch (CompositionException compositionException)
-            {
-                Console.WriteLine(compositionException.ToString());
-            }
+            Documents = new Dictionary<string, IOTAwareContext>();
+            MandrakeBuilder.Compose(this);
         }
 
         protected abstract void Transform(Operation o);
@@ -104,6 +87,20 @@ namespace Mandrake.Management
         }
     }
 
+    [DataContract]
+    public class DocumentMetaData
+    {
+        [DataMember]
+        public Guid ClientId { get; set; }
+        [DataMember]
+        public string Name { get; set; }
+
+        public override string ToString()
+        {
+            return Name;
+        }
+    }
+
 
     public interface IOperationManager
     {
@@ -111,8 +108,68 @@ namespace Mandrake.Management
         bool TryExecute(object context, Operation o);
     }
 
+    public class AggregateOperationManager : IOperationManager
+    {
+        [ImportMany]
+        public IEnumerable<IOperationManager> ManagerChain { get; set; }
+
+        public AggregateOperationManager()
+        {
+            MandrakeBuilder.Compose(this);
+        }
+
+        public Operation TryRecognize(object sender, EventArgs e)
+        {
+            return null;
+        }
+
+        public bool TryExecute(object context, Operation o)
+        {
+            var composite = o as AggregateOperation;
+
+            if (composite == null) return false;
+
+            return composite.Operations.TrueForAll(op =>
+            {
+                foreach (var manager in ManagerChain)
+                {
+                    if (manager.TryExecute(context, op)) return true;
+                }
+
+                return false;
+            });
+        }
+    }
+
+
     public interface ISynchronize
     {
         void Synchronize(object content);
+    }
+
+    internal static class MandrakeBuilder
+    {
+
+        internal static void Compose(object instance)
+        {
+            var catalog = new AggregateCatalog();
+
+            Array.ForEach(AppDomain.CurrentDomain.GetAssemblies(), x => catalog.Catalogs.Add(new AssemblyCatalog(x)));
+            if (Assembly.GetEntryAssembly() == null)
+            {
+                Array.ForEach(GenericResolverInstaller.GetWebAssemblies(), x => catalog.Catalogs.Add(new AssemblyCatalog(x)));
+            }
+
+            var container = new CompositionContainer(catalog);
+
+            try
+            {
+                container.ComposeParts(instance);
+            }
+            catch (CompositionException compositionException)
+            {
+                Console.WriteLine(compositionException.ToString());
+            }
+        }
     }
 }

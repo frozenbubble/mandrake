@@ -63,9 +63,9 @@ namespace Mandrake.Service
         [OperationContract]
         IEnumerable<IOTAwareContext> GetDocuments();
         [OperationContract]
-        void CreateDocument();
+        bool CreateDocument(DocumentMetaData document);
         [OperationContract]
-        IOTAwareContext OpenDocument(string name);
+        void OpenDocument(DocumentMetaData document);
         [OperationContract]
         void SynchronizeDocument(Operation syncOperation);
     }
@@ -84,5 +84,9 @@ namespace Mandrake.Service
         void ForwardChatMessage(ChatMessage msg);
         [OperationContract]
         void RegisterClient(ClientMetaData meta);
+        [OperationContract]
+        void NotifyDocumentCreated(string name);
+        [OperationContract]
+        void NotifyDocumentOpened(string name);
     }
 }

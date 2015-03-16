@@ -72,6 +72,9 @@
     <None Include="Properties\DataSources\Mandrake.Management.ClientMetaData.datasource" />
     <None Include="Properties\DataSources\Mandrake.Management.RegistrationMessage.datasource" />
     <None Include="Properties\DataSources\Mandrake.Model.Operation.datasource" />
+    <None Include="Service References\OTServiceReference\Arrays.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Service References\OTServiceReference\Mandrake.Management.xsd">
       <SubType>Designer</SubType>
     </None>

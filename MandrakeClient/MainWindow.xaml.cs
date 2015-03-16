@@ -26,6 +26,7 @@ using Mandrake.Samples.Client.ViewModel;
 using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
 using Mandrake.Client;
+using Mandrake.Client.View;
 
 namespace Mandrake.Samples.Client
 {
@@ -107,6 +108,13 @@ namespace Mandrake.Samples.Client
         {
             var historyWindow = new HistoryWindow(callback);
             historyWindow.Show();
+        }
+
+        private async void NewButton_Click(object sender, RoutedEventArgs e)
+        {
+            string documentName = viewModel.Username = await this.ShowInputAsync("Document name", "What's the name of the document you would like to create?");
+
+            editor = (MultiCaretTextEditor)await callback.CreateDocument(documentName);
         }
     }
 }
