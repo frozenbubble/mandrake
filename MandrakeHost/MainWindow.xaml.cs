@@ -35,6 +35,7 @@ namespace Mandrake.Host
         public MainWindow()
         {
             InitializeComponent();
+            editor.DocumentName = "New Session";
 
             Connections = new ObservableCollection<SynchronizingConnection>();
 
@@ -45,7 +46,7 @@ namespace Mandrake.Host
             }
 
             service = new OTAwareService();
-            service.Context = editor;
+            service.AddDocument(editor);
 
             //List<IOperationManager> chain = new List<IOperationManager>();
             //chain.Add(new EditorInsertOperationManager());

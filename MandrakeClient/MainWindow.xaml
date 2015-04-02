@@ -58,7 +58,8 @@
                     </Rectangle>
                 </Button>
 
-                <Button x:Name="SaveButton" Style="{DynamicResource MetroCircleButtonStyle}" Height="36" Width="36">
+                <Button x:Name="SaveButton" Style="{DynamicResource MetroCircleButtonStyle}" Height="36" Width="36"
+                        Click="SaveButton_Click">
                     <Rectangle Height="14" Width="14">
                         <Rectangle.Fill>
                             <VisualBrush Visual="{StaticResource appbar_disk}" />
@@ -66,18 +67,20 @@
                     </Rectangle>
                 </Button>
 
-                <Button x:Name="UploadButton" Style="{DynamicResource MetroCircleButtonStyle}" Height="36" Width="36">
+                <Button x:Name="UploadButton" Style="{DynamicResource MetroCircleButtonStyle}" Height="36" Width="36"
+                        Click="UploadButton_Click">
                     <Rectangle Height="10" Width="16">
                         <Rectangle.Fill>
-                            <VisualBrush Visual="{StaticResource appbar_cloud_download}" />
+                            <VisualBrush Visual="{StaticResource appbar_cloud_upload}" />
                         </Rectangle.Fill>
                     </Rectangle>
                 </Button>
 
-                <Button x:Name="DownloadButton" Style="{DynamicResource MetroCircleButtonStyle}" Height="36" Width="36">
+                <Button x:Name="DownloadButton" Style="{DynamicResource MetroCircleButtonStyle}" Height="36" Width="36"
+                        Click="DownloadButton_Click">
                     <Rectangle Height="10" Width="16">
                         <Rectangle.Fill>
-                            <VisualBrush Visual="{StaticResource appbar_cloud_upload}" />
+                            <VisualBrush Visual="{StaticResource appbar_cloud_download}" />
                         </Rectangle.Fill>
                     </Rectangle>
                 </Button>
@@ -133,13 +136,13 @@
         </DockPanel>
         
 
-        <Grid Grid.Row="1">
+        <Grid Grid.Row="1" x:Name="ContentGrid">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
-            <app:MultiCaretTextEditor x:Name="editor" />
+            <app:MultiCaretTextEditor x:Name="editor"  Grid.Column="0"/>
 
 
             <Grid x:Name="SideBar" Grid.Column="1" Width="240" >

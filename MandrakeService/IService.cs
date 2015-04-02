@@ -59,15 +59,17 @@ namespace Mandrake.Service
         [OperationContract]
         void SendChatMessage(ChatMessage msg);
         [OperationContract]
-        IEnumerable<Operation> GetLog();
+        IEnumerable<Operation> GetLog(DocumentMetaData document);
         [OperationContract]
-        IEnumerable<IOTAwareContext> GetDocuments();
+        IEnumerable<string> GetDocuments();
         [OperationContract]
         bool CreateDocument(DocumentMetaData document);
         [OperationContract]
-        void OpenDocument(DocumentMetaData document);
+        bool OpenDocument(DocumentMetaData document);
         [OperationContract]
-        void SynchronizeDocument(Operation syncOperation);
+        object SynchronizeDocument(DocumentMetaData document);
+        [OperationContract]
+        bool UploadDocument(DocumentMetaData meta, object content);
     }
 
     public interface IOTCallback
@@ -76,8 +78,6 @@ namespace Mandrake.Service
         void Forward(OTMessage message);
         [OperationContract]
         void SendAck(OTAck ack);
-        [OperationContract]
-        void Synchronize(object content);
         [OperationContract]
         void Echo(string msg);
         [OperationContract]

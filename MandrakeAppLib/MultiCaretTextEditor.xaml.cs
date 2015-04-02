@@ -2,6 +2,7 @@
 using ICSharpCode.AvalonEdit.Document;
 using ICSharpCode.AvalonEdit.Editing;
 using ICSharpCode.AvalonEdit.Rendering;
+using Mandrake.Management;
 using Mandrake.Model.Document;
 using Mandrake.Sample.Client.Event;
 using System;
@@ -9,6 +10,7 @@ using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Windows;
 using System.Windows.Controls;
+using Mandrake.Model;
 
 namespace Mandrake.Client.View
 {
@@ -20,14 +22,22 @@ namespace Mandrake.Client.View
     {
         private Vector scrollOfset;
 
+        #region IOTAwareContext
+        public string DocumentName { get; set; }
+        public List<Operation> Log { get; set; }
+        public int ServerMessages { get; set; }
+        public int ClientMessages { get; set; }
+        #endregion
+
         public Dictionary<Guid, ColoredCaret> ColoredCursors { get; set; }
         public Dictionary<Guid, ColoredSelection> Selections { get; set; }
         public string SelectedText { get { return Editor.SelectedText; } }
         public bool IsUpdatedByUser { get; set; }
+        public string Text { get { return Editor.Text; } }
 
-        public event EventHandler<DocumentChangeEventArgs> DocumentChanged;
-        public event EventHandler<CaretPositionChangedEventArgs> CaretPositionChanged;
-        public event EventHandler<TextSelectionChangedEventArgs> SelectionChanged;
+        public event EventHandler<DocumentEventArgs> DocumentChanged;
+        public event EventHandler<DocumentEventArgs> CaretPositionChanged;
+        public event EventHandler<DocumentEventArgs> SelectionChanged;
 
         public MultiCaretTextEditor()
         {
@@ -43,6 +53,7 @@ namespace Mandrake.Client.View
             ColoredCursors = new Dictionary<Guid, ColoredCaret>();
             Selections = new Dictionary<Guid, ColoredSelection>();
             scrollOfset = Editor.TextArea.TextView.ScrollOffset;
+            Log = new List<Operation>();
         }
 
         void TextView_ScrollOffsetChanged(object sender, EventArgs e)
@@ -85,7 +96,7 @@ namespace Mandrake.Client.View
                     args = new TextSelectionChangedEventArgs(start, end);
                 }
 
-                SelectionChanged(sender, args);
+                SelectionChanged(sender, new DocumentEventArgs { DocumentName = this.DocumentName, Args = args });
             }
         }
 
@@ -94,7 +105,7 @@ namespace Mandrake.Client.View
             var s = sender as Caret;
             var args = new CaretPositionChangedEventArgs(s.Offset);
 
-            if (CaretPositionChanged != null) CaretPositionChanged(sender, args);
+            if (CaretPositionChanged != null) CaretPositionChanged(sender, new DocumentEventArgs { DocumentName = this.DocumentName, Args = args });
         }
 
         void Document_Changed(object sender, DocumentChangeEventArgs e)
@@ -108,11 +119,11 @@ namespace Mandrake.Client.View
                     var e1 = new DocumentChangeEventArgs(e.Offset, e.RemovedText.Text, null);
                     var e2 = new DocumentChangeEventArgs(e.Offset, null, e.InsertedText.Text);
 
-                    DocumentChanged(sender, e1);
-                    DocumentChanged(sender, e2);
+                    DocumentChanged(sender, new DocumentEventArgs { DocumentName = this.DocumentName, Args = e1 });
+                    DocumentChanged(sender, new DocumentEventArgs { DocumentName = this.DocumentName, Args = e2 });
                 }
 
-                else DocumentChanged(sender, e);
+                else DocumentChanged(sender, new DocumentEventArgs { DocumentName = this.DocumentName, Args = e });
             }
 
         }
@@ -137,7 +148,7 @@ namespace Mandrake.Client.View
 
         private Point GetVisualPosition(TextLocation location)
         {
-            return Editor.TextArea.TextView.GetVisualPosition(new TextViewPosition(location), VisualYPosition.LineTop);
+            return Editor.TextArea.TextView.GetVisualPosition(new TextViewPosition(location), VisualYPosition.LineTop) - Editor.TextArea.TextView.ScrollOffset;
         }
 
         public void RegisterClient(Guid id, string name)
@@ -237,7 +248,9 @@ namespace Mandrake.Client.View
 
         public void Clear()
         {
+            Editor.Document.Changed -= Document_Changed;
             Editor.Clear();
+            Editor.Document.Changed += Document_Changed;
         }
     }
 }

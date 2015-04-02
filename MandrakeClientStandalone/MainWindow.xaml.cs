@@ -31,7 +31,7 @@ namespace Mandrake.Client
     /// </summary>
     public partial class MainWindow : Window
     {
-        private ClientManager callback;
+        //private ClientManager callback;
 
         public MainWindow()
         {

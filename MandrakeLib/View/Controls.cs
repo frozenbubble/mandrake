@@ -10,10 +10,15 @@ namespace Mandrake.Model.Document
 {
     public interface IOTAwareContext
     {
-        //string ContextId { get; set; }
-        string Name { get; set; }
+        string DocumentName { get; set; }
         bool IsUpdatedByUser { get; set; }
-        void InsertText(string text, int position);
-        void RemoveText(int position, int length);
+        List<Operation> Log { get; set; }
+        int ServerMessages { get; set; }
+        int ClientMessages { get; set; }
+    }
+
+    public interface IDocumentFactory
+    {
+        IOTAwareContext CreateDocument(string name);
     }
 }

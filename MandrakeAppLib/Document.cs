@@ -1,4 +1,6 @@
 ﻿using ICSharpCode.AvalonEdit;
+using Mandrake.Client.View;
+using Mandrake.Management;
 using Mandrake.Model.Document;
 using System;
 using System.Collections.Generic;
@@ -6,35 +8,41 @@ using System.ComponentModel.Composition;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace Mandrake.Sample.Client.Document
 {
-    //[Export(typeof(IOTAwareContext))]
-    public class OTAwareEditor : TextEditor, IOTAwareContext
+    [Export(typeof(IDocumentFactory))]
+    public class MultiCaretEditorFactory: IDocumentFactory
     {
-        public bool IsUpdatedByUser { get; set; }
-
-        public OTAwareEditor()
+        public IOTAwareContext CreateDocument(string name)
         {
-            IsUpdatedByUser = true;
+            MultiCaretTextEditor doc = null;
+
+            Application.Current.Dispatcher.Invoke(() => doc = new MultiCaretTextEditor() { DocumentName = name });
+
+            return doc;
+        }
+    }
+
+    [Export(typeof(ISynchronize))]
+    public class MultiCaretTextEditorSynchronizer: ISynchronize
+    {
+        public object GetContent(IOTAwareContext ctx)
+        {
+            var context = ctx as MultiCaretTextEditor;
+
+            return context.Editor.Text;
         }
 
-
-        public void InsertText(string text, int position)
+        public void SetContent(IOTAwareContext ctx, object value)
         {
-            using (this.DeclareChangeBlock())
-            {
-                Document.Insert(position, text);
-            }
-        }
+            var context = ctx as MultiCaretTextEditor;
+            var content = value as string;
 
-        public void RemoveText(int position, int length)
-        {
-            using (this.DeclareChangeBlock())
-            {
-                Document.Remove(position, length);
-            }
+            context.Clear();
+            context.InsertText(content, 0);
         }
     }
 }

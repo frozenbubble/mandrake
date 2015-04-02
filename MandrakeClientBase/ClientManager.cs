@@ -39,35 +39,28 @@ namespace Mandrake.Client.Base
 
         public ClientManager(IOTAwareContext context, string name)
         {
-            Context = context;
             Name = name;
             Id = Guid.NewGuid();
             Clients = new List<ClientMetaData>();
+            AddDocument(context);
         }
 
         public ClientManager(IOTAwareContext context): this(context, "") { }
 
-        public void Synchronize(object content)
+        public void OnChange(object sender, DocumentEventArgs e)
         {
-            syncManager.Synchronize(content);
-        }
-
-        public void OnChange(object sender, EventArgs e)
-        {
-            if (!Context.IsUpdatedByUser) return;
-
             Operation o = null;
 
             foreach (var manager in ManagerChain)
             {
-                if ((o = manager.TryRecognize(sender, e)) != null)
+                if ((o = manager.TryRecognize(sender, e.Args)) != null)
                 {
                     this.clientMessages++;
 
                     o.OwnerId = Id;
                     o.ClientMessages = clientMessages;
                     o.ServerMessages = serverMessages;
-                    o.DocumentName = ((IOTAwareContext)sender).Name;
+                    o.DocumentName = e.DocumentName;
 
                     TrySend(o);
                 }
@@ -86,15 +79,15 @@ namespace Mandrake.Client.Base
             else outgoing.Add(o);
         }
 
-        protected override void Execute(Operation o)
+        protected override void Execute(Operation o, IOTAwareContext operationContext)
         {
             foreach (var manager in ManagerChain)
             {
-                if (manager.TryExecute(Context, o)) return;
+                if (manager.TryExecute(operationContext, o)) return;
             }
         }
 
-        protected override void Transform(Operation o)
+        protected override void Transform(Operation o, IOTAwareContext operationContext)
         {
             Operation copy = (Operation)o.Clone();
 
@@ -114,14 +107,19 @@ namespace Mandrake.Client.Base
         {
             foreach (var o in message.Content)
             {
-                Transform(o);
-                Execute(o);
+                if (!Documents.ContainsKey(o.DocumentName)) continue;
 
-                this.serverMessages++;
+                var operationContext = Documents[o.DocumentName];
+                Transform(o, operationContext);
+                Execute(o, operationContext);
+
+                operationContext.ServerMessages++;
+
                 o.ExecutedAt = DateTime.Now;
                 o.ClientMessages = this.clientMessages;
                 o.ServerMessages = this.serverMessages;
-                Log.Add(o);
+
+                operationContext.Log.Add(o);
             }
         }
 
@@ -153,7 +151,10 @@ namespace Mandrake.Client.Base
             Name = name;
 
             Clients.AddRange(proxy.Register(new ClientMetaData() { Id = this.Id, Name = name }).ToList());
-            Clients.ForEach(c => RegisterClient(c));
+            Clients.ForEach(c =>
+            {
+                if (ClientRegistered != null) ClientRegistered(this, c);
+            });
 
             proxy.Hello("Hello Server!");
         }
@@ -178,34 +179,74 @@ namespace Mandrake.Client.Base
 
         public void RegisterClient(ClientMetaData meta)
         {
+            Clients.Add(meta);
+            
             if (ClientRegistered != null) ClientRegistered(this, meta);
         }
 
-        public async Task<IEnumerable<Operation>> GetHistory()
+        public async Task<IEnumerable<Operation>> GetHistory(string documentName)
         {
-            var ops = await Service.GetLogAsync();
-
-            return ops;
+            return await Service.GetLogAsync(new DocumentMetaData { Name = documentName, ClientId = this.Id });
         }
 
         public async Task<IOTAwareContext> CreateDocument(string name)
         {
-            if ((await Service.CreateDocumentAsync(name))) Documents[name] = Activator.CreateInstance(Context.GetType()) as IOTAwareContext;
+            if ((await Service.CreateDocumentAsync(new DocumentMetaData { Name = name, ClientId = this.Id })))
+            {
+                return DocumentFactory.CreateDocument(name);
+            }
 
-            return Documents[name];
+            return null;
         }
 
 
         public void NotifyDocumentCreated(string name)
         {
-            Documents[name] = Activator.CreateInstance(Context.GetType()) as IOTAwareContext;
+            //Documents[name] = Context = DocumentFactory.CreateDocument(name);
+            //Log.Clear();
 
             if (DocumentCreated != null) DocumentCreated(this, Documents[name]);
         }
 
         public void NotifyDocumentOpened(string name)
         {
-            throw new NotImplementedException();
+            //Log.Clear();
+            //syncManager.SetContent(Context, Service.SynchronizeDocumentAsync(new DocumentMetaData { Name = name, ClientId = this.Id }));
+        }
+
+        public async Task<IEnumerable<string>> GetAvailableDocuments()
+        {
+            return  await Service.GetDocumentsAsync();
+        }
+
+        public async Task<IOTAwareContext> OpenDocument(string name)
+        {
+            var meta = new DocumentMetaData { Name = name, ClientId = this.Id };
+
+            if ((await Service.OpenDocumentAsync(meta)))
+            {
+                var openedDocument = DocumentFactory.CreateDocument(name);
+                Documents[name] = openedDocument;
+                syncManager.SetContent(openedDocument, await Service.SynchronizeDocumentAsync(meta));
+
+                return openedDocument;
+            }
+
+            return null;
+        }
+
+        public async Task<IOTAwareContext> UploadDocument(string name, object content)
+        {
+            if (await Service.UploadDocumentAsync(new DocumentMetaData { Name = name, ClientId = this.Id }, content))
+            {
+                var newDocument = DocumentFactory.CreateDocument(name);
+                syncManager.SetContent(newDocument, content);
+                Documents[name] = newDocument;
+
+                return newDocument;
+            }
+
+            return null;
         }
     }
 }

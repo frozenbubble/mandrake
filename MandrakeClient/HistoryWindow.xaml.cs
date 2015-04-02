@@ -28,19 +28,19 @@ namespace Mandrake.Client
         List<IOperationManager> ManagerChain;
         List<Operation> opsList;
 
-        public HistoryWindow(ClientManager callback)
+        public HistoryWindow(ClientManager callback, string documentName)
         {
             InitializeComponent();
 
             ClientManager = callback;
             ManagerChain = new List<IOperationManager>(ClientManager.ManagerChain);
             ManagerChain.Add(new AggregateOperationManager());
-            GetHistory();
+            GetHistory(documentName);
         }
 
-        private async void GetHistory()
+        private async void GetHistory(string documentName)
         {
-            var log = await ClientManager.GetHistory();
+            var log = await ClientManager.GetHistory(documentName);
             opsList = new List<Operation>(OperationCompressor.Compress(log));
             Log.ItemsSource = opsList;
         }

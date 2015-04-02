@@ -29,22 +29,6 @@ namespace Mandrake.Service
         public OTAwareService(): base() 
         {
             Clients = new Dictionary<Guid, SynchronizingConnection>();
-
-            var contextInfo = ConfigurationManager.GetSection("Mandrake/ContextMetaData") as ServiceContextConfiguration;
-            if (contextInfo != null && contextInfo.Context.Assembly != string.Empty && contextInfo.Context.Type != string.Empty)
-            {
-                try
-                {
-                    var contextElement = contextInfo.Context;
-                    Type contextType = Assembly.Load(contextElement.Assembly).GetType(contextElement.Type);
-
-                    Context = (IOTAwareContext)Activator.CreateInstance(contextType);
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine("Could not instantiate context object" + Environment.NewLine + ex.Message);
-                }
-            }
         }
 
         public void Send(OTMessage message)
@@ -58,18 +42,17 @@ namespace Mandrake.Service
 
             if (MessageArrived != null) MessageArrived(this, message);
 
-            var ops = message.Content;
-            var messageOwnerId = ops.FirstOrDefault().OwnerId;
-            var cached = Log.Where(item => item.ServerMessages > ops.FirstOrDefault().ServerMessages && !item.OwnerId.Equals(messageOwnerId));
-
-            foreach (var op in ops)
+            foreach (var op in message.Content)
             {
+                var operationContext = Documents[op.DocumentName];
+                var cachedOps = operationContext.Log.Where(item => item.ServerMessages > op.ServerMessages && !item.OwnerId.Equals(op.OwnerId));
+
                 Operation transformed = null;
-                foreach (var cachedOp in cached) transformed = transformer.Transform(cachedOp, op);
+                
+                foreach (var cachedOp in cachedOps) transformed = transformer.Transform(cachedOp, op);
 
-                Execute(op);
-
-                this.serverMessages++;
+                Execute(op, operationContext);
+                operationContext.ServerMessages++;
             }
 
             Broadcast(message);
@@ -111,20 +94,20 @@ namespace Mandrake.Service
             return others.Select(c => new ClientMetaData() { Id = c.Key, Name = c.Value.Name });
         }
 
-        protected override void Transform(Operation o)
+        protected override void Transform(Operation o, IOTAwareContext operationContext)
         {
             throw new NotImplementedException();
         }
 
-        protected override void Execute(Operation o)
+        protected override void Execute(Operation o, IOTAwareContext operationContext)
         {
             foreach (var manager in ManagerChain)
             {
-                if (manager.TryExecute(Context, o))
+                if (manager.TryExecute(operationContext, o))
                 {
                     o.ExecutedAt = DateTime.Now;
                     o.ServerMessages = this.serverMessages;
-                    Log.Add(o);
+                    operationContext.Log.Add(o);
 
                     if (OperationPerformed != null) OperationPerformed(this, o);
                 }
@@ -152,25 +135,23 @@ namespace Mandrake.Service
 
         }
 
-        public IEnumerable<Operation> GetLog()
+        public IEnumerable<Operation> GetLog(DocumentMetaData document)
         {
-            return Log;
+            return Documents[document.Name].Log;
         }
 
 
-        public IEnumerable<IOTAwareContext> GetDocuments()
+        public IEnumerable<string> GetDocuments()
         {
-            return Documents.Values;
+            return Documents.Keys;
         }
 
         public bool CreateDocument(DocumentMetaData document)
         {
             if (!Documents.ContainsKey(document.Name))
             {
-                var newInstance = Activator.CreateInstance(Context.GetType()) as IOTAwareContext;
-                newInstance.Name = document.Name;
+                var newInstance = DocumentFactory.CreateDocument(document.Name);
                 Documents[document.Name] = newInstance;
-                Context = newInstance;
 
                 var to = Clients.Where(c => c.Key != document.ClientId);
                 Parallel.ForEach(to, c => c.Value.Client.NotifyDocumentCreated(document.Name));
@@ -181,17 +162,29 @@ namespace Mandrake.Service
             else return false;
         }
 
-        public void OpenDocument(DocumentMetaData document)
+        public bool OpenDocument(DocumentMetaData document)
         {
-            Context = Documents[document.Name];
-            Log.Clear();
-
-            // sync with everyone
+            return Documents.ContainsKey(document.Name);
         }
 
-        public void SynchronizeDocument(Operation syncOperation)
+        public object SynchronizeDocument(DocumentMetaData document)
         {
-            throw new NotImplementedException();
+            return syncManager.GetContent(Documents[document.Name]);
+        }
+
+
+        public bool UploadDocument(DocumentMetaData meta, object content)
+        {
+            if (!Documents.ContainsKey(meta.Name))
+            {
+                var newDocument = DocumentFactory.CreateDocument(meta.Name);
+                syncManager.SetContent(newDocument, content);
+                Documents[meta.Name] = newDocument;
+
+                return true;
+            }
+
+            return false;
         }
     }
 

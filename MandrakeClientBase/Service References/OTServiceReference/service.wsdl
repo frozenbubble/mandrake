@@ -97,6 +97,12 @@
   <wsdl:message name="IOTAwareService_SynchronizeDocument_OutputMessage">
     <wsdl:part name="parameters" element="tns:SynchronizeDocumentResponse" />
   </wsdl:message>
+  <wsdl:message name="IOTAwareService_UploadDocument_InputMessage">
+    <wsdl:part name="parameters" element="tns:UploadDocument" />
+  </wsdl:message>
+  <wsdl:message name="IOTAwareService_UploadDocument_OutputMessage">
+    <wsdl:part name="parameters" element="tns:UploadDocumentResponse" />
+  </wsdl:message>
   <wsdl:message name="IOTAwareService_Forward_OutputCallbackMessage">
     <wsdl:part name="parameters" element="tns:Forward" />
   </wsdl:message>
@@ -108,12 +114,6 @@
   </wsdl:message>
   <wsdl:message name="IOTAwareService_SendAck_InputCallbackMessage">
     <wsdl:part name="parameters" element="tns:SendAckResponse" />
-  </wsdl:message>
-  <wsdl:message name="IOTAwareService_Synchronize_OutputCallbackMessage">
-    <wsdl:part name="parameters" element="tns:Synchronize" />
-  </wsdl:message>
-  <wsdl:message name="IOTAwareService_Synchronize_InputCallbackMessage">
-    <wsdl:part name="parameters" element="tns:SynchronizeResponse" />
   </wsdl:message>
   <wsdl:message name="IOTAwareService_Echo_OutputCallbackMessage">
     <wsdl:part name="parameters" element="tns:Echo" />
@@ -182,6 +182,10 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IOTAwareService/SynchronizeDocument" message="tns:IOTAwareService_SynchronizeDocument_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IOTAwareService/SynchronizeDocumentResponse" message="tns:IOTAwareService_SynchronizeDocument_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="UploadDocument">
+      <wsdl:input wsaw:Action="http://tempuri.org/IOTAwareService/UploadDocument" message="tns:IOTAwareService_UploadDocument_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IOTAwareService/UploadDocumentResponse" message="tns:IOTAwareService_UploadDocument_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="Forward">
       <wsdl:output wsaw:Action="http://tempuri.org/IOTAwareService/Forward" message="tns:IOTAwareService_Forward_OutputCallbackMessage" />
       <wsdl:input wsaw:Action="http://tempuri.org/IOTAwareService/ForwardResponse" message="tns:IOTAwareService_Forward_InputCallbackMessage" />
@@ -189,10 +193,6 @@
     <wsdl:operation name="SendAck">
       <wsdl:output wsaw:Action="http://tempuri.org/IOTAwareService/SendAck" message="tns:IOTAwareService_SendAck_OutputCallbackMessage" />
       <wsdl:input wsaw:Action="http://tempuri.org/IOTAwareService/SendAckResponse" message="tns:IOTAwareService_SendAck_InputCallbackMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="Synchronize">
-      <wsdl:output wsaw:Action="http://tempuri.org/IOTAwareService/Synchronize" message="tns:IOTAwareService_Synchronize_OutputCallbackMessage" />
-      <wsdl:input wsaw:Action="http://tempuri.org/IOTAwareService/SynchronizeResponse" message="tns:IOTAwareService_Synchronize_InputCallbackMessage" />
     </wsdl:operation>
     <wsdl:operation name="Echo">
       <wsdl:output wsaw:Action="http://tempuri.org/IOTAwareService/Echo" message="tns:IOTAwareService_Echo_OutputCallbackMessage" />
@@ -300,6 +300,15 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="UploadDocument">
+      <soap12:operation soapAction="http://tempuri.org/IOTAwareService/UploadDocument" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="Forward">
       <soap12:operation soapAction="http://tempuri.org/IOTAwareService/Forward" style="document" />
       <wsdl:input>
@@ -311,15 +320,6 @@
     </wsdl:operation>
     <wsdl:operation name="SendAck">
       <soap12:operation soapAction="http://tempuri.org/IOTAwareService/SendAck" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="Synchronize">
-      <soap12:operation soapAction="http://tempuri.org/IOTAwareService/Synchronize" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

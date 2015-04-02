@@ -1,31 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using Mandrake.Service;
 using Mandrake.Management;
 using Mandrake.Model.Document;
-using System.ServiceModel;
-using Mandrake.Model;
 using Mandrake.Client.Base;
-using Mandrake.Client.Base.OTServiceReference;
-using System.Reflection;
-using System.ComponentModel.Composition.Hosting;
-using System.ComponentModel.Composition;
 using Mandrake.Samples.Client.ViewModel;
 using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
 using Mandrake.Client;
+using Microsoft.Win32;
+using System.IO;
 using Mandrake.Client.View;
 
 namespace Mandrake.Samples.Client
@@ -41,6 +27,7 @@ namespace Mandrake.Samples.Client
         public MainWindow()
         {
             InitializeComponent();
+            editor.DocumentName = "New Session";
             
             callback = new ClientManager(editor);
             this.viewModel = MainViewModel.Current;
@@ -106,15 +93,86 @@ namespace Mandrake.Samples.Client
 
         private void HistoryButton_Click(object sender, RoutedEventArgs e)
         {
-            var historyWindow = new HistoryWindow(callback);
+            var historyWindow = new HistoryWindow(callback, editor.DocumentName);
             historyWindow.Show();
         }
 
         private async void NewButton_Click(object sender, RoutedEventArgs e)
         {
-            string documentName = viewModel.Username = await this.ShowInputAsync("Document name", "What's the name of the document you would like to create?");
+            string documentName = await this.ShowInputAsync("Document name", "What's the name of the document you would like to create?");
+            var newDocument = (await callback.CreateDocument(documentName)) as MultiCaretTextEditor;
 
-            editor = (MultiCaretTextEditor)await callback.CreateDocument(documentName);
+            if (newDocument != null) ChangeEditor(newDocument);
+        }
+
+        private void ChangeEditor(MultiCaretTextEditor newDocument)
+        {
+            ContentGrid.Children.Remove(editor);
+            UnRegister(editor);
+            
+            editor = newDocument;
+            foreach (var client in callback.Clients) editor.RegisterClient(client.Id, client.Name);
+            
+            Register(editor);
+            ContentGrid.Children.Add(editor);
+            Grid.SetRow(editor, 0);
+        }
+
+        private void Register(MultiCaretTextEditor document)
+        {
+            document.DocumentChanged += callback.OnChange;
+            document.CaretPositionChanged += callback.OnChange;
+            document.SelectionChanged += callback.OnChange; ;
+        }
+
+        private void UnRegister(MultiCaretTextEditor document)
+        {
+            document.DocumentChanged -= callback.OnChange;
+            document.CaretPositionChanged -= callback.OnChange;
+            document.SelectionChanged -= callback.OnChange;
+        }
+
+        private async void UploadButton_Click(object sender, RoutedEventArgs e)
+        {
+            var dialog = new OpenFileDialog();
+
+            if (dialog.ShowDialog() == true)
+            {
+                var content = File.ReadAllText(dialog.FileName);
+                var upLoadedDocument = await callback.UploadDocument(dialog.SafeFileName, content) as MultiCaretTextEditor;
+
+                if (upLoadedDocument != null) ChangeEditor(upLoadedDocument);
+            }
+        }
+
+        private async void DownloadButton_Click(object sender, RoutedEventArgs e)
+        {
+            var docs = await callback.GetAvailableDocuments();
+            var documentsWindow = new DocumentsWindow(docs);
+            documentsWindow.Closed += documentsWindow_Closed;
+
+            documentsWindow.Show();
+        }
+
+        private async void documentsWindow_Closed(object sender, EventArgs e)
+        {
+            var documentsWindow = sender as DocumentsWindow;
+            var docName = documentsWindow.SelectedDocument;
+
+            if (docName != null) 
+            {
+                var downloadedDocument = (await callback.OpenDocument(docName)) as MultiCaretTextEditor;
+                if (downloadedDocument != null) ChangeEditor(downloadedDocument);
+            } 
+
+        }
+
+        private void SaveButton_Click(object sender, RoutedEventArgs e)
+        {
+            var dialog = new SaveFileDialog();
+            dialog.ShowDialog();
+
+            if (dialog.FileName != null || dialog.FileName != "") File.WriteAllText(dialog.FileName, editor.Text);
         }
     }
 }

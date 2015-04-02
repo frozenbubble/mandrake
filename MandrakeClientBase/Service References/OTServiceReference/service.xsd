@@ -56,13 +56,15 @@
   </xs:element>
   <xs:element name="GetLog">
     <xs:complexType>
-      <xs:sequence />
+      <xs:sequence>
+        <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/Mandrake.Management" minOccurs="0" name="document" nillable="true" type="q5:DocumentMetaData" />
+      </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="GetLogResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/Mandrake.Model" minOccurs="0" name="GetLogResult" nillable="true" type="q5:ArrayOfOperation" />
+        <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/Mandrake.Model" minOccurs="0" name="GetLogResult" nillable="true" type="q6:ArrayOfOperation" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -74,14 +76,14 @@
   <xs:element name="GetDocumentsResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q6="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="GetDocumentsResult" nillable="true" type="q6:ArrayOfanyType" />
+        <xs:element xmlns:q7="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="GetDocumentsResult" nillable="true" type="q7:ArrayOfstring" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="CreateDocument">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="name" nillable="true" type="xs:string" />
+        <xs:element xmlns:q8="http://schemas.datacontract.org/2004/07/Mandrake.Management" minOccurs="0" name="document" nillable="true" type="q8:DocumentMetaData" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -95,31 +97,50 @@
   <xs:element name="OpenDocument">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="name" nillable="true" type="xs:string" />
+        <xs:element xmlns:q9="http://schemas.datacontract.org/2004/07/Mandrake.Management" minOccurs="0" name="document" nillable="true" type="q9:DocumentMetaData" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="OpenDocumentResponse">
     <xs:complexType>
-      <xs:sequence />
+      <xs:sequence>
+        <xs:element minOccurs="0" name="OpenDocumentResult" type="xs:boolean" />
+      </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="SynchronizeDocument">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/Mandrake.Model" minOccurs="0" name="syncOperation" nillable="true" type="q7:Operation" />
+        <xs:element xmlns:q10="http://schemas.datacontract.org/2004/07/Mandrake.Management" minOccurs="0" name="document" nillable="true" type="q10:DocumentMetaData" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="SynchronizeDocumentResponse">
     <xs:complexType>
-      <xs:sequence />
+      <xs:sequence>
+        <xs:element minOccurs="0" name="SynchronizeDocumentResult" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="UploadDocument">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q11="http://schemas.datacontract.org/2004/07/Mandrake.Management" minOccurs="0" name="meta" nillable="true" type="q11:DocumentMetaData" />
+        <xs:element minOccurs="0" name="content" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="UploadDocumentResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UploadDocumentResult" type="xs:boolean" />
+      </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="Forward">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q8="http://schemas.datacontract.org/2004/07/Mandrake.Service" minOccurs="0" name="message" nillable="true" type="q8:OTMessage" />
+        <xs:element xmlns:q12="http://schemas.datacontract.org/2004/07/Mandrake.Service" minOccurs="0" name="message" nillable="true" type="q12:OTMessage" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -131,23 +152,11 @@
   <xs:element name="SendAck">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q9="http://schemas.datacontract.org/2004/07/Mandrake.Service" minOccurs="0" name="ack" nillable="true" type="q9:OTAck" />
+        <xs:element xmlns:q13="http://schemas.datacontract.org/2004/07/Mandrake.Service" minOccurs="0" name="ack" nillable="true" type="q13:OTAck" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="SendAckResponse">
-    <xs:complexType>
-      <xs:sequence />
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="Synchronize">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="content" nillable="true" type="xs:anyType" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="SynchronizeResponse">
     <xs:complexType>
       <xs:sequence />
     </xs:complexType>
@@ -167,7 +176,7 @@
   <xs:element name="ForwardChatMessage">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q10="http://schemas.datacontract.org/2004/07/Mandrake.Management" minOccurs="0" name="msg" nillable="true" type="q10:ChatMessage" />
+        <xs:element xmlns:q14="http://schemas.datacontract.org/2004/07/Mandrake.Management" minOccurs="0" name="msg" nillable="true" type="q14:ChatMessage" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -179,7 +188,7 @@
   <xs:element name="RegisterClient">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q11="http://schemas.datacontract.org/2004/07/Mandrake.Management" minOccurs="0" name="meta" nillable="true" type="q11:ClientMetaData" />
+        <xs:element xmlns:q15="http://schemas.datacontract.org/2004/07/Mandrake.Management" minOccurs="0" name="meta" nillable="true" type="q15:ClientMetaData" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

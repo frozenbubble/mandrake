@@ -23,4 +23,11 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="ChatMessage" nillable="true" type="tns:ChatMessage" />
+  <xs:complexType name="DocumentMetaData">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ClientId" type="ser:guid" />
+      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="DocumentMetaData" nillable="true" type="tns:DocumentMetaData" />
 </xs:schema>

@@ -71,10 +71,17 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Control\MainViewModel.cs" />
+    <Compile Include="DocumentsWindow.xaml.cs">
+      <DependentUpon>DocumentsWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="HistoryWindow.xaml.cs">
       <DependentUpon>HistoryWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Util\Conversion.cs" />
+    <Page Include="DocumentsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="HistoryWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

@@ -22,28 +22,38 @@ namespace Mandrake.Management
     {
         protected int serverMessages;
 
-        //[Import(typeof(ISynchronize))]
+        [Import(typeof(ISynchronize))]
         protected ISynchronize syncManager;
+        [Import(typeof(IDocumentFactory))]
+        public IDocumentFactory DocumentFactory { get; set; }
         [Import(typeof(ITransform))]
         public ITransform transformer { get; set; }
-        //[Import(typeof(IOTAwareContext))]
-        public IOTAwareContext Context { get; set; }
         [ImportMany]
         public IEnumerable<IOperationManager> ManagerChain { get; set; }
-        public List<Operation> Log { get; protected set; }
+
         public List<ChatMessage> Messages { get; set; }
         public Dictionary<string, IOTAwareContext> Documents { get; set; }
 
         public OTManager()
         {
-            Log = new List<Operation>();
             Messages = new List<ChatMessage>();
             Documents = new Dictionary<string, IOTAwareContext>();
             MandrakeBuilder.Compose(this);
         }
 
-        protected abstract void Transform(Operation o);
-        protected abstract void Execute(Operation o);
+        public void AddDocument(IOTAwareContext document)
+        {
+            Documents[document.DocumentName] = document;
+        }
+
+        protected abstract void Transform(Operation o, IOTAwareContext operationContext);
+        protected abstract void Execute(Operation o, IOTAwareContext operationContext);
+    }
+
+    public class DocumentEventArgs : EventArgs
+    {
+        public string DocumentName { get; set; }
+        public EventArgs Args { get; set; }
     }
 
     [DataContract]
@@ -144,7 +154,8 @@ namespace Mandrake.Management
 
     public interface ISynchronize
     {
-        void Synchronize(object content);
+        object GetContent(IOTAwareContext ctx);
+        void SetContent(IOTAwareContext ctx, object value);
     }
 
     internal static class MandrakeBuilder
