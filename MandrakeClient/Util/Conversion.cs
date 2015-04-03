@@ -17,8 +17,9 @@ namespace Mandrake.Samples.Client.Util
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             var id = (Guid)value;
+            double percentage = (parameter == null)? 1 : DoubleParameterFormatter.Format(parameter.ToString());
 
-            return new SolidColorBrush(ColoredItem.GenerateColor(id));
+            return new SolidColorBrush(ColoredItem.GenerateColor(id, (byte)(255 * percentage)));
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
@@ -48,23 +49,22 @@ namespace Mandrake.Samples.Client.Util
     {
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            double percentage = Format(parameter.ToString());
+            double percentage = DoubleParameterFormatter.Format(parameter.ToString());
 
-            return 10d + (double.Parse(value.ToString()) * percentage);
+            return (double.Parse(value.ToString()) * percentage);
         }
 
-        private double Format(string param)
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            var splitted = param.Split('.');
-            var formattedParameter = 0d;
+            throw new NotSupportedException("This operation is not suppored.");
+        }
+    }
 
-            if (splitted.Length == 1) formattedParameter = double.Parse(param);
-
-            else if (splitted.Length == 2) formattedParameter = double.Parse(splitted[0] + "," + splitted[1]);
-
-            else throw new FormatException("The given number is not recognizable");
-
-            return formattedParameter;
+    public class AdditiveWidthConverter: IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            return Int32.Parse(value.ToString()) + Int32.Parse(parameter.ToString());
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
@@ -91,6 +91,23 @@ namespace Mandrake.Samples.Client.Util
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             throw new NotSupportedException("This operation is not suppored.");
+        }
+    }
+
+    public static class DoubleParameterFormatter
+    {
+        public static double Format(string param)
+        {
+            var splitted = param.Split('.');
+            var formattedParameter = 0d;
+
+            if (splitted.Length == 1) formattedParameter = double.Parse(param);
+
+            else if (splitted.Length == 2) formattedParameter = double.Parse(splitted[0] + "," + splitted[1]);
+
+            else throw new FormatException("The given number is not recognizable");
+
+            return formattedParameter;
         }
     }
 }

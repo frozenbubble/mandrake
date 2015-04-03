@@ -74,11 +74,18 @@
     <Compile Include="DocumentsWindow.xaml.cs">
       <DependentUpon>DocumentsWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="FindAndReplaceWindow.xaml.cs">
+      <DependentUpon>FindAndReplaceWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="HistoryWindow.xaml.cs">
       <DependentUpon>HistoryWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Util\Conversion.cs" />
     <Page Include="DocumentsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="FindAndReplaceWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

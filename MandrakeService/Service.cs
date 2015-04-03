@@ -9,6 +9,7 @@ using System.Configuration;
 using Mandrake.Service.Configuration;
 using System.Reflection;
 using System.Threading.Tasks;
+using System.Runtime.CompilerServices;
 
 namespace Mandrake.Service
 {
@@ -33,13 +34,14 @@ namespace Mandrake.Service
 
         public void Send(OTMessage message)
         {
-            Task.Factory.StartNew(() => ProcessMessage(message));
+            //Task.Factory.StartNew(() => ProcessMessage(message));
+            ProcessMessage(message);
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         private void ProcessMessage(OTMessage message)
         {
             if (message.Content.Count == 0) return;
-
             if (MessageArrived != null) MessageArrived(this, message);
 
             foreach (var op in message.Content)
@@ -48,7 +50,7 @@ namespace Mandrake.Service
                 var cachedOps = operationContext.Log.Where(item => item.ServerMessages > op.ServerMessages && !item.OwnerId.Equals(op.OwnerId));
 
                 Operation transformed = null;
-                
+
                 foreach (var cachedOp in cachedOps) transformed = transformer.Transform(cachedOp, op);
 
                 Execute(op, operationContext);

@@ -18,6 +18,7 @@
             <util:GuidToColorConverter x:Key="ColorConverter" />
             <util:WidthConverter x:Key="WidthConverter" />
             <util:GuidToVisibilityConverter x:Key="VisibilityConverter" />
+            <util:AdditiveWidthConverter x:Key="AdditiveWidthConverter" />
         </ResourceDictionary>
     </Window.Resources>
 
@@ -85,14 +86,6 @@
                     </Rectangle>
                 </Button>
 
-                <Button x:Name="SyncdButton" Style="{DynamicResource MetroCircleButtonStyle}" Height="36" Width="36">
-                    <Rectangle Height="12" Width="14">
-                        <Rectangle.Fill>
-                            <VisualBrush Visual="{StaticResource appbar_arrow_down_up}" />
-                        </Rectangle.Fill>
-                    </Rectangle>
-                </Button>
-
                 <Rectangle Height="36" Width="36" />
 
                 <Button x:Name="CopyButton" Style="{DynamicResource MetroCircleButtonStyle}" Height="36" Width="36"
@@ -104,7 +97,8 @@
                     </Rectangle>
                 </Button>
 
-                <Button x:Name="PasteButton" Style="{DynamicResource MetroCircleButtonStyle}" Height="36" Width="36">
+                <Button x:Name="PasteButton" Style="{DynamicResource MetroCircleButtonStyle}" Height="36" Width="36"
+                        Click="PasteButton_Click">
                     <Rectangle Height="14" Width="14">
                         <Rectangle.Fill>
                             <VisualBrush Visual="{StaticResource appbar_clipboard_paste}" />
@@ -112,7 +106,8 @@
                     </Rectangle>
                 </Button>
 
-                <Button x:Name="FindButton" Style="{DynamicResource MetroCircleButtonStyle}" Height="36" Width="36">
+                <Button x:Name="FindButton" Style="{DynamicResource MetroCircleButtonStyle}" Height="36" Width="36"
+                        Click="FindButton_Click">
                     <Rectangle Height="14" Width="14">
                         <Rectangle.Fill>
                             <VisualBrush Visual="{StaticResource appbar_magnify}" />
@@ -181,21 +176,22 @@
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal"
                                         HorizontalAlignment="{Binding SenderId, Converter={StaticResource AlignmentConverter}}">
-                                    <Canvas Width="10" Height="10" 
+                                    <Canvas Width="8" Height="8" 
                                         Visibility="{Binding SenderId, Converter={StaticResource VisibilityConverter}, ConverterParameter=Left}">
-                                        <Polygon Points="0,5 10,0 10,10" Fill="{Binding SenderId, Converter={StaticResource ColorConverter}}" />
+                                        <Polygon Points="2,4 8,0 8,8" Fill="{Binding SenderId, Converter={StaticResource ColorConverter}, ConverterParameter=0.5}" />
                                     </Canvas>
 
-                                    <Border CornerRadius="5" Background="{Binding SenderId, Converter={StaticResource ColorConverter}}"
+                                    <Border CornerRadius="5" Background="{Binding SenderId, Converter={StaticResource ColorConverter}, ConverterParameter=0.5}"
                                         MaxWidth="{Binding ActualWidth, ElementName=SideBar, Converter={StaticResource WidthConverter}, ConverterParameter=0.7}"
-                                        Margin="0, 5, 0, 5">
+                                        MinWidth="{Binding ActualWidth, ElementName=SideBar, Converter={StaticResource WidthConverter}, ConverterParameter=0.15}"
+                                        Margin="0, 5, 0, 5" Padding="5, 2, 5, 2">
 
-                                        <TextBlock Text="{Binding Message}" TextWrapping="Wrap" />
+                                        <TextBlock x:Name="MessageContent" Text="{Binding Message}" TextWrapping="Wrap" />
                                     </Border>
 
-                                    <Canvas Width="10" Height="10" 
+                                    <Canvas Width="8" Height="8" 
                                         Visibility="{Binding SenderId, Converter={StaticResource VisibilityConverter}, ConverterParameter=Right}">
-                                        <Polygon Points="0,0 0,10 10,5" Fill="{Binding SenderId, Converter={StaticResource ColorConverter}}" />
+                                        <Polygon Points="0,0 0,8 6,4" Fill="{Binding SenderId, Converter={StaticResource ColorConverter}, ConverterParameter=0.5}" />
                                     </Canvas>
                                 </StackPanel>
                             </DataTemplate>

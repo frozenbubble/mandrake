@@ -34,9 +34,6 @@ namespace Mandrake.Samples.Client
             this.viewModel.ClientManager = callback;
             this.DataContext = viewModel;
 
-            editor.DocumentChanged += callback.OnChange;
-            editor.CaretPositionChanged += callback.OnChange;
-            editor.SelectionChanged += callback.OnChange;
             callback.ClientRegistered += callback_ClientRegistered;
             callback.MessageArrived += viewModel.OnMessageArrived;
         }
@@ -70,7 +67,18 @@ namespace Mandrake.Samples.Client
         {
             string username = viewModel.Username = await this.ShowInputAsync("Alias", "What's your name?");
 
-            new Task(() => callback.Connect(username)).Start();
+            if (username != null) Connect(username); 
+        }
+
+        private async void Connect(string username)
+        {
+            var controller = await this.ShowProgressAsync("Please wait...", "Connecting");
+            await callback.Connect(username);
+            await controller.CloseAsync();
+
+            editor.DocumentChanged += callback.OnChange;
+            editor.CaretPositionChanged += callback.OnChange;
+            editor.SelectionChanged += callback.OnChange;
         }
 
         private void ChatButton_Click(object sender, RoutedEventArgs e)
@@ -173,6 +181,12 @@ namespace Mandrake.Samples.Client
             dialog.ShowDialog();
 
             if (dialog.FileName != null || dialog.FileName != "") File.WriteAllText(dialog.FileName, editor.Text);
+        }
+
+        private void FindButton_Click(object sender, RoutedEventArgs e)
+        {
+            var dialog = new FindAndReplaceWindow(editor.TextArea);
+            dialog.Show();
         }
     }
 }

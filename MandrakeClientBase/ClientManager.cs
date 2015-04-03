@@ -17,7 +17,7 @@ using System.Collections.ObjectModel;
 
 namespace Mandrake.Client.Base
 {
-    [CallbackBehavior(ConcurrencyMode = ConcurrencyMode.Reentrant,
+    [CallbackBehavior(ConcurrencyMode = ConcurrencyMode.Single,
         UseSynchronizationContext = false)]
     public class ClientManager : OTManager, IOTAwareServiceCallback
     {
@@ -73,7 +73,8 @@ namespace Mandrake.Client.Base
             {
                 acknowledged = false;
 
-                Task.Factory.StartNew(() => Service.SendAsync(new OTMessage(o)));
+                //Task.Factory.StartNew(() => Service.SendAsync(new OTMessage(o)));
+                Service.SendAsync(new OTMessage(o));
             }
 
             else outgoing.Add(o);
@@ -100,7 +101,8 @@ namespace Mandrake.Client.Base
 
         public void Forward(OTMessage message)
         {
-            Task.Factory.StartNew(() => ProcessMessage(message));
+            //Task.Factory.StartNew(() => ProcessMessage(message));
+            ProcessMessage(message);
         }
 
         private void ProcessMessage(OTMessage message)
@@ -142,7 +144,7 @@ namespace Mandrake.Client.Base
             Console.WriteLine(this.Id + " got: " + msg);
         }
 
-        public void Connect(string name)
+        public async Task Connect(string name)
         {
             var ic = new InstanceContext(this);
             var proxy = new OTAwareServiceClient(ic);
@@ -150,13 +152,15 @@ namespace Mandrake.Client.Base
             Service = proxy;
             Name = name;
 
-            Clients.AddRange(proxy.Register(new ClientMetaData() { Id = this.Id, Name = name }).ToList());
+            var serviceClients = await proxy.RegisterAsync(new ClientMetaData() { Id = this.Id, Name = name });
+
+            Clients.AddRange(serviceClients);
             Clients.ForEach(c =>
             {
                 if (ClientRegistered != null) ClientRegistered(this, c);
             });
 
-            proxy.Hello("Hello Server!");
+            await proxy.HelloAsync("Hello Server!");
         }
 
         public void ForwardChatMessage(ChatMessage msg)

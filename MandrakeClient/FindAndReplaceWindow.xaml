@@ -1,0 +1,29 @@
+﻿<Controls:MetroWindow x:Class="Mandrake.Client.FindAndReplaceWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Find" Height="130" Width="220"
+        xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
+        EnableDWMDropShadow="True" Closing="MetroWindow_Closing">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        
+        <TextBlock x:Name="label" Text="Find text: " VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        <TextBox x:Name="Pattern" Grid.Column="1" TextChanged="Pattern_TextChanged"
+                 VerticalAlignment="Center" HorizontalAlignment="Stretch"
+                 Margin="5"/>
+
+        <Button x:Name="PrevButton" Content="Find previous" Grid.Row="1" Click="PrevButton_Click"
+                VerticalAlignment="Center" HorizontalAlignment="Center"
+                Style="{DynamicResource SquareButtonStyle}"/>
+        <Button x:Name="NextButton" Content="Find next" Grid.Row="1" Grid.Column="1" Click="NextButton_Click"
+                VerticalAlignment="Center" HorizontalAlignment="Center"
+                Style="{DynamicResource SquareButtonStyle}"/>
+    </Grid>
+</Controls:MetroWindow>

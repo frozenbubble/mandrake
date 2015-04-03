@@ -11,6 +11,7 @@ using System.ComponentModel.Composition;
 using System.Windows;
 using System.Windows.Controls;
 using Mandrake.Model;
+using ICSharpCode.AvalonEdit.Search;
 
 namespace Mandrake.Client.View
 {
@@ -32,6 +33,7 @@ namespace Mandrake.Client.View
         public Dictionary<Guid, ColoredCaret> ColoredCursors { get; set; }
         public Dictionary<Guid, ColoredSelection> Selections { get; set; }
         public string SelectedText { get { return Editor.SelectedText; } }
+        public TextArea TextArea { get { return Editor.TextArea; } }
         public bool IsUpdatedByUser { get; set; }
         public string Text { get { return Editor.Text; } }
 
@@ -243,7 +245,7 @@ namespace Mandrake.Client.View
 
         public void Paste(string text)
         {
-            InsertText(text, Editor.CaretOffset);
+            using (Editor.DeclareChangeBlock()) Editor.Document.Insert(Editor.CaretOffset, text);
         }
 
         public void Clear()
