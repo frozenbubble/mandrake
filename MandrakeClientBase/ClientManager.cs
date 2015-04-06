@@ -72,12 +72,26 @@ namespace Mandrake.Client.Base
             if (acknowledged)
             {
                 acknowledged = false;
-
-                //Task.Factory.StartNew(() => Service.SendAsync(new OTMessage(o)));
                 Service.SendAsync(new OTMessage(o));
             }
 
-            else outgoing.Add(o);
+            else lock (syncRoot) outgoing.Add(o);
+        }
+
+        public void SendAck(OTAck ack)
+        {
+            if (outgoing.Count != 0)
+            {
+                Task.Factory.StartNew(() => {
+                    lock (syncRoot)
+                    {
+                        Service.SendAsync(new OTMessage(outgoing));
+                        outgoing.Clear();
+                    }
+                });
+            }
+
+            else acknowledged = true;
         }
 
         protected override void Execute(Operation o, IOTAwareContext operationContext)
@@ -92,11 +106,14 @@ namespace Mandrake.Client.Base
         {
             Operation copy = (Operation)o.Clone();
 
-            outgoing.Select(x =>
+            lock (syncRoot)
             {
-                o = transformer.Transform(x, o);
-                return transformer.Transform(copy, x);
-            });
+                outgoing.Select(x =>
+                {
+                    o = transformer.Transform(x, o);
+                    return transformer.Transform(copy, x);
+                });
+            }
         }
 
         public void Forward(OTMessage message)
@@ -123,20 +140,6 @@ namespace Mandrake.Client.Base
 
                 operationContext.Log.Add(o);
             }
-        }
-
-        public void SendAck(OTAck ack)
-        {
-            if (outgoing.Count != 0)
-            {
-                Task.Factory.StartNew(() =>
-                {
-                    Service.SendAsync(new OTMessage(outgoing));
-                    outgoing.Clear();
-                });
-            }
-
-            else acknowledged = true;
         }
 
         public void Echo(string msg)
@@ -188,12 +191,12 @@ namespace Mandrake.Client.Base
             if (ClientRegistered != null) ClientRegistered(this, meta);
         }
 
-        public async Task<IEnumerable<Operation>> GetHistory(string documentName)
+        public async Task<IEnumerable<Operation>> GetHistoryAsync(string documentName)
         {
             return await Service.GetLogAsync(new DocumentMetaData { Name = documentName, ClientId = this.Id });
         }
 
-        public async Task<IOTAwareContext> CreateDocument(string name)
+        public async Task<IOTAwareContext> CreateDocumentAsync(string name)
         {
             if ((await Service.CreateDocumentAsync(new DocumentMetaData { Name = name, ClientId = this.Id })))
             {
@@ -206,9 +209,6 @@ namespace Mandrake.Client.Base
 
         public void NotifyDocumentCreated(string name)
         {
-            //Documents[name] = Context = DocumentFactory.CreateDocument(name);
-            //Log.Clear();
-
             if (DocumentCreated != null) DocumentCreated(this, Documents[name]);
         }
 
@@ -218,12 +218,12 @@ namespace Mandrake.Client.Base
             //syncManager.SetContent(Context, Service.SynchronizeDocumentAsync(new DocumentMetaData { Name = name, ClientId = this.Id }));
         }
 
-        public async Task<IEnumerable<string>> GetAvailableDocuments()
+        public async Task<IEnumerable<string>> GetAvailableDocumentsAsync()
         {
             return  await Service.GetDocumentsAsync();
         }
 
-        public async Task<IOTAwareContext> OpenDocument(string name)
+        public async Task<IOTAwareContext> OpenDocumentAsync(string name)
         {
             var meta = new DocumentMetaData { Name = name, ClientId = this.Id };
 
@@ -239,7 +239,7 @@ namespace Mandrake.Client.Base
             return null;
         }
 
-        public async Task<IOTAwareContext> UploadDocument(string name, object content)
+        public async Task<IOTAwareContext> UploadDocumentAsync(string name, object content)
         {
             if (await Service.UploadDocumentAsync(new DocumentMetaData { Name = name, ClientId = this.Id }, content))
             {

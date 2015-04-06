@@ -34,8 +34,8 @@ namespace Mandrake.Service
 
         public void Send(OTMessage message)
         {
-            //Task.Factory.StartNew(() => ProcessMessage(message));
-            ProcessMessage(message);
+            Task.Factory.StartNew(() => ProcessMessage(message));
+            //ProcessMessage(message);
         }
 
         [MethodImpl(MethodImplOptions.Synchronized)]

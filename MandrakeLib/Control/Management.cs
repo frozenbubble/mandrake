@@ -21,7 +21,7 @@ namespace Mandrake.Management
     public abstract class OTManager
     {
         protected int serverMessages;
-        protected object syncRoot = new object();
+        protected readonly object syncRoot = new object();
 
         [Import(typeof(ISynchronize))]
         protected ISynchronize syncManager;

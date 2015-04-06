@@ -108,7 +108,7 @@ namespace Mandrake.Samples.Client
         private async void NewButton_Click(object sender, RoutedEventArgs e)
         {
             string documentName = await this.ShowInputAsync("Document name", "What's the name of the document you would like to create?");
-            var newDocument = (await callback.CreateDocument(documentName)) as MultiCaretTextEditor;
+            var newDocument = (await callback.CreateDocumentAsync(documentName)) as MultiCaretTextEditor;
 
             if (newDocument != null) ChangeEditor(newDocument);
         }
@@ -147,7 +147,7 @@ namespace Mandrake.Samples.Client
             if (dialog.ShowDialog() == true)
             {
                 var content = File.ReadAllText(dialog.FileName);
-                var upLoadedDocument = await callback.UploadDocument(dialog.SafeFileName, content) as MultiCaretTextEditor;
+                var upLoadedDocument = await callback.UploadDocumentAsync(dialog.SafeFileName, content) as MultiCaretTextEditor;
 
                 if (upLoadedDocument != null) ChangeEditor(upLoadedDocument);
             }
@@ -155,7 +155,7 @@ namespace Mandrake.Samples.Client
 
         private async void DownloadButton_Click(object sender, RoutedEventArgs e)
         {
-            var docs = await callback.GetAvailableDocuments();
+            var docs = await callback.GetAvailableDocumentsAsync();
             var documentsWindow = new DocumentsWindow(docs);
             documentsWindow.Closed += documentsWindow_Closed;
 
@@ -169,7 +169,7 @@ namespace Mandrake.Samples.Client
 
             if (docName != null) 
             {
-                var downloadedDocument = (await callback.OpenDocument(docName)) as MultiCaretTextEditor;
+                var downloadedDocument = (await callback.OpenDocumentAsync(docName)) as MultiCaretTextEditor;
                 if (downloadedDocument != null) ChangeEditor(downloadedDocument);
             } 
 

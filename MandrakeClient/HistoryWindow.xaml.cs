@@ -40,7 +40,7 @@ namespace Mandrake.Client
 
         private async void GetHistory(string documentName)
         {
-            var log = await ClientManager.GetHistory(documentName);
+            var log = await ClientManager.GetHistoryAsync(documentName);
             opsList = new List<Operation>(OperationCompressor.Compress(log));
             Log.ItemsSource = opsList;
         }
