@@ -24,10 +24,20 @@ namespace Mandrake.Samples.Client
         private ClientManager callback;
         private MainViewModel viewModel;
 
+        public static RoutedCommand DownloadCommand = new RoutedCommand();
+        public static RoutedCommand SendCommand = new RoutedCommand();
+
+        public MultiCaretTextEditor Editor 
+        { 
+            get { return editor; } 
+            private set { editor = value; } 
+        }
+
         public MainWindow()
         {
             InitializeComponent();
             editor.DocumentName = "New Session";
+            DownloadCommand.InputGestures.Add(new KeyGesture(Key.D, ModifierKeys.Control));
             
             callback = new ClientManager(editor);
             this.viewModel = MainViewModel.Current;
@@ -45,24 +55,6 @@ namespace Mandrake.Samples.Client
             viewModel.Register(meta);
         }
 
-        private void SendButton_Click(object sender, RoutedEventArgs e)
-        {
-            SendMessage();
-        }
-
-        private void SendMessage()
-        {
-            viewModel.SendMessage(Message.Text);
-            MessageBox.Dispatcher.BeginInvoke(new Action(() => InvalidateProperty(ListView.ItemsSourceProperty)));
-
-            Message.Clear();
-        }
-
-        private void Message_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Enter) SendMessage();
-        }
-
         private async void MetroWindow_Loaded(object sender, RoutedEventArgs e)
         {
             string username = viewModel.Username = await this.ShowInputAsync("Alias", "What's your name?");
@@ -72,13 +64,8 @@ namespace Mandrake.Samples.Client
 
         private async void Connect(string username)
         {
-            var controller = await this.ShowProgressAsync("Please wait...", "Connecting");
-            await callback.Connect(username);
-            await controller.CloseAsync();
-
-            editor.DocumentChanged += callback.OnChange;
-            editor.CaretPositionChanged += callback.OnChange;
-            editor.SelectionChanged += callback.OnChange;
+            await viewModel.Connect();
+            Register(editor);
         }
 
         private void ChatButton_Click(object sender, RoutedEventArgs e)
@@ -88,32 +75,13 @@ namespace Mandrake.Samples.Client
             else SideBar.Visibility = System.Windows.Visibility.Visible;
         }
 
-        private void CopyButton_Click(object sender, RoutedEventArgs e)
-        {
-            Clipboard.SetData(DataFormats.Text, editor.SelectedText);
-        }
-
-        private void PasteButton_Click(object sender, RoutedEventArgs e)
-        {
-            var text = Clipboard.GetData(DataFormats.Text) as string;
-            editor.Paste(text);
-        }
-
         private void HistoryButton_Click(object sender, RoutedEventArgs e)
         {
             var historyWindow = new HistoryWindow(callback, editor.DocumentName);
             historyWindow.Show();
         }
 
-        private async void NewButton_Click(object sender, RoutedEventArgs e)
-        {
-            string documentName = await this.ShowInputAsync("Document name", "What's the name of the document you would like to create?");
-            var newDocument = (await callback.CreateDocumentAsync(documentName)) as MultiCaretTextEditor;
-
-            if (newDocument != null) ChangeEditor(newDocument);
-        }
-
-        private void ChangeEditor(MultiCaretTextEditor newDocument)
+        internal void ChangeEditor(MultiCaretTextEditor newDocument)
         {
             ContentGrid.Children.Remove(editor);
             UnRegister(editor);
@@ -126,7 +94,7 @@ namespace Mandrake.Samples.Client
             Grid.SetRow(editor, 0);
         }
 
-        private void Register(MultiCaretTextEditor document)
+        internal void Register(MultiCaretTextEditor document)
         {
             document.DocumentChanged += callback.OnChange;
             document.CaretPositionChanged += callback.OnChange;
@@ -140,7 +108,30 @@ namespace Mandrake.Samples.Client
             document.SelectionChanged -= callback.OnChange;
         }
 
-        private async void UploadButton_Click(object sender, RoutedEventArgs e)
+        private async void NewCommand_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            string documentName = await this.ShowInputAsync("Document name", "What's the name of the document you would like to create?");
+            if (documentName != null && documentName != "")
+            {
+                var newDocument = (await callback.CreateDocumentAsync(documentName)) as MultiCaretTextEditor;
+                if (newDocument != null) ChangeEditor(newDocument);
+            }
+        }
+
+        private void Default_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = true;
+        }
+
+        private void SaveCommand_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            var dialog = new SaveFileDialog();
+            dialog.ShowDialog();
+
+            if (dialog.FileName != null && !dialog.FileName.Equals("")) File.WriteAllText(dialog.FileName, editor.Text);
+        }
+
+        private async void OpenCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             var dialog = new OpenFileDialog();
 
@@ -153,7 +144,24 @@ namespace Mandrake.Samples.Client
             }
         }
 
-        private async void DownloadButton_Click(object sender, RoutedEventArgs e)
+        private void FindCommand_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            var dialog = new FindAndReplaceWindow(editor.TextArea);
+            dialog.Show();
+        }
+
+        private void CopyCommand_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            Clipboard.SetData(DataFormats.Text, editor.SelectedText);
+        }
+
+        private void PasteCommand_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            var text = Clipboard.GetData(DataFormats.Text) as string;
+            editor.Paste(text);
+        }
+
+        private async void DownloadCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             var docs = await callback.GetAvailableDocumentsAsync();
             var documentsWindow = new DocumentsWindow(docs);
@@ -167,26 +175,22 @@ namespace Mandrake.Samples.Client
             var documentsWindow = sender as DocumentsWindow;
             var docName = documentsWindow.SelectedDocument;
 
-            if (docName != null) 
+            if (docName != null && docName != "")
             {
                 var downloadedDocument = (await callback.OpenDocumentAsync(docName)) as MultiCaretTextEditor;
                 if (downloadedDocument != null) ChangeEditor(downloadedDocument);
-            } 
+            }
 
         }
 
-        private void SaveButton_Click(object sender, RoutedEventArgs e)
+        private void SendCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            var dialog = new SaveFileDialog();
-            dialog.ShowDialog();
+            if (Message.Text.Length == 0) return;
 
-            if (dialog.FileName != null || dialog.FileName != "") File.WriteAllText(dialog.FileName, editor.Text);
-        }
+            viewModel.SendMessage(Message.Text);
+            MessageBox.Dispatcher.BeginInvoke(new Action(() => InvalidateProperty(ListView.ItemsSourceProperty)));
 
-        private void FindButton_Click(object sender, RoutedEventArgs e)
-        {
-            var dialog = new FindAndReplaceWindow(editor.TextArea);
-            dialog.Show();
+            Message.Clear();
         }
     }
 }

@@ -5,6 +5,7 @@
         xmlns:app="clr-namespace:Mandrake.Client.View;assembly=MandrakeAppLib"
         xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         xmlns:util="clr-namespace:Mandrake.Samples.Client.Util"
+        xmlns:local="clr-namespace:Mandrake.Samples.Client"
         Loaded="MetroWindow_Loaded"
         Title="Mandrake Editor" Height="600" Width="800"
         ShowIconOnTitleBar="True" ResizeMode="CanResizeWithGrip" EnableDWMDropShadow="True">
@@ -21,6 +22,17 @@
             <util:AdditiveWidthConverter x:Key="AdditiveWidthConverter" />
         </ResourceDictionary>
     </Window.Resources>
+    
+    <Window.CommandBindings>
+        <CommandBinding Command="ApplicationCommands.New" Executed="NewCommand_Executed" CanExecute="Default_CanExecute" />
+        <CommandBinding Command="ApplicationCommands.Save" Executed="SaveCommand_Executed" CanExecute="Default_CanExecute" />
+        <CommandBinding Command="ApplicationCommands.Open" Executed="OpenCommand_Executed" CanExecute="Default_CanExecute" />
+        <CommandBinding Command="ApplicationCommands.Find" Executed="FindCommand_Executed" CanExecute="Default_CanExecute" />
+        <CommandBinding Command="ApplicationCommands.Copy" Executed="CopyCommand_Executed" CanExecute="Default_CanExecute" />
+        <CommandBinding Command="ApplicationCommands.Paste" Executed="PasteCommand_Executed" CanExecute="Default_CanExecute" />
+        <CommandBinding Command="{x:Static local:MainWindow.DownloadCommand}" Executed="DownloadCommand_Executed" CanExecute="Default_CanExecute" />
+        <CommandBinding Command="{x:Static local:MainWindow.SendCommand}" Executed="SendCommand_Executed" CanExecute="Default_CanExecute" />
+    </Window.CommandBindings>
 
     <Controls:MetroWindow.RightWindowCommands>
         <Controls:WindowCommands>
@@ -51,7 +63,7 @@
         <DockPanel Background="LightGray">
             <StackPanel x:Name="Panel" Orientation="Horizontal" DockPanel.Dock="Left">
                 <Button x:Name="NewButton" Style="{DynamicResource MetroCircleButtonStyle}" Height="36" Width="36"
-                        Click="NewButton_Click">
+                        Command="ApplicationCommands.New">
                     <Rectangle Height="14" Width="14">
                         <Rectangle.Fill>
                             <VisualBrush Visual="{StaticResource appbar_add}" />
@@ -60,7 +72,7 @@
                 </Button>
 
                 <Button x:Name="SaveButton" Style="{DynamicResource MetroCircleButtonStyle}" Height="36" Width="36"
-                        Click="SaveButton_Click">
+                        Command="ApplicationCommands.Save">
                     <Rectangle Height="14" Width="14">
                         <Rectangle.Fill>
                             <VisualBrush Visual="{StaticResource appbar_disk}" />
@@ -69,7 +81,7 @@
                 </Button>
 
                 <Button x:Name="UploadButton" Style="{DynamicResource MetroCircleButtonStyle}" Height="36" Width="36"
-                        Click="UploadButton_Click">
+                        Command="ApplicationCommands.Open">
                     <Rectangle Height="10" Width="16">
                         <Rectangle.Fill>
                             <VisualBrush Visual="{StaticResource appbar_cloud_upload}" />
@@ -78,7 +90,7 @@
                 </Button>
 
                 <Button x:Name="DownloadButton" Style="{DynamicResource MetroCircleButtonStyle}" Height="36" Width="36"
-                        Click="DownloadButton_Click">
+                        Command="{x:Static local:MainWindow.DownloadCommand}">
                     <Rectangle Height="10" Width="16">
                         <Rectangle.Fill>
                             <VisualBrush Visual="{StaticResource appbar_cloud_download}" />
@@ -89,7 +101,7 @@
                 <Rectangle Height="36" Width="36" />
 
                 <Button x:Name="CopyButton" Style="{DynamicResource MetroCircleButtonStyle}" Height="36" Width="36"
-                        Click="CopyButton_Click">
+                        Command="ApplicationCommands.Copy">
                     <Rectangle Height="14" Width="14">
                         <Rectangle.Fill>
                             <VisualBrush Visual="{StaticResource appbar_clipboard_paper}" />
@@ -98,7 +110,7 @@
                 </Button>
 
                 <Button x:Name="PasteButton" Style="{DynamicResource MetroCircleButtonStyle}" Height="36" Width="36"
-                        Click="PasteButton_Click">
+                        Command="ApplicationCommands.Paste">
                     <Rectangle Height="14" Width="14">
                         <Rectangle.Fill>
                             <VisualBrush Visual="{StaticResource appbar_clipboard_paste}" />
@@ -107,7 +119,7 @@
                 </Button>
 
                 <Button x:Name="FindButton" Style="{DynamicResource MetroCircleButtonStyle}" Height="36" Width="36"
-                        Click="FindButton_Click">
+                        Command="ApplicationCommands.Find">
                     <Rectangle Height="14" Width="14">
                         <Rectangle.Fill>
                             <VisualBrush Visual="{StaticResource appbar_magnify}" />
@@ -182,8 +194,7 @@
                                     </Canvas>
 
                                     <Border CornerRadius="5" Background="{Binding SenderId, Converter={StaticResource ColorConverter}, ConverterParameter=0.5}"
-                                        MaxWidth="{Binding ActualWidth, ElementName=SideBar, Converter={StaticResource WidthConverter}, ConverterParameter=0.7}"
-                                        MinWidth="{Binding ActualWidth, ElementName=SideBar, Converter={StaticResource WidthConverter}, ConverterParameter=0.15}"
+                                        MaxWidth="{Binding ActualWidth, ElementName=SideBar, Converter={StaticResource WidthConverter}, ConverterParameter=0.8}"
                                         Margin="0, 5, 0, 5" Padding="5, 2, 5, 2">
 
                                         <TextBlock x:Name="MessageContent" Text="{Binding Message}" TextWrapping="Wrap" />
@@ -207,10 +218,15 @@
 
                             <TextBox x:Name="Message" HorizontalAlignment="Stretch" 
                                      Margin="0, 2, 5, 2" BorderBrush="Transparent"
-                                     KeyDown="Message_KeyDown" TextWrapping="Wrap" MaxHeight="180" />
+                                     TextWrapping="Wrap" MaxHeight="180" AcceptsReturn="True">
+                                <TextBox.InputBindings>
+                                    <KeyBinding Key="Enter" Command="{x:Static local:MainWindow.SendCommand}" />
+                                </TextBox.InputBindings>
+                            </TextBox>
 
                             <Button x:Name="SendButton" Style="{DynamicResource MetroCircleButtonStyle}" Height="36" Width="36"
-                                    HorizontalAlignment="Left" Click="SendButton_Click" Margin="0, 2, 5, 2" Grid.Column="1">
+                                    HorizontalAlignment="Left" Margin="0, 2, 5, 2" Grid.Column="1"
+                                    Command="{x:Static local:MainWindow.SendCommand}">
                                 <Rectangle Height="16" Width="16">
                                     <Rectangle.Fill>
                                         <VisualBrush Visual="{StaticResource appbar_message}" />
