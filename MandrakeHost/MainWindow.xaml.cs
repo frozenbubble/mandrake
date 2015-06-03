@@ -19,13 +19,14 @@ using System.Windows.Shapes;
 using Mandrake.Host.View.Converters;
 using System.Collections.ObjectModel;
 using Mandrake.Sample.Client.Operations;
+using MahApps.Metro.Controls;
 
 namespace Mandrake.Host
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : MetroWindow
     {
         internal static ServiceHost host = null;
         OTAwareService service;
@@ -47,17 +48,13 @@ namespace Mandrake.Host
 
             service = new OTAwareService();
             service.AddDocument(editor);
-
-            //List<IOperationManager> chain = new List<IOperationManager>();
-            //chain.Add(new EditorInsertOperationManager());
-            //chain.Add(new EditorDeleteOperationManager());
-            //service.ManagerChain = chain;
-
             
             service.OperationPerformed += service_OperationPerformed;
             service.MessageArrived += service_MessageArrived;
             service.MessageSent += service_MessageSent;
             service.RegistrationCompleted += service_RegistrationCompleted;
+
+            ClientsList.ItemsSource = Connections;
 
             host = new OTServiceHost(service);
             host.Open();
@@ -91,7 +88,7 @@ namespace Mandrake.Host
         void service_OperationPerformed(object sender, Mandrake.Model.Operation o)
         {
             opLog.Dispatcher.BeginInvoke(new Action(
-                () => opLog.AppendText(String.Format("[{0}]: {1} from client with Id: {2} ", DateTime.Now, o.ToString(), o.OwnerId) + Environment.NewLine)));
+                () => opLog.AppendText(String.Format("{2} ({3}) [{0}]:\t {1}", DateTime.Now, o.ToString(), service.Clients[o.OwnerId].Name, o.OwnerId) + Environment.NewLine)));
         }
     }
 }

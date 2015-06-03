@@ -7,13 +7,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
-using System.Text;
 using System.Threading.Tasks;
 using ServiceModelEx;
-using System.ComponentModel.Composition.Hosting;
-using System.ComponentModel.Composition;
-using System.Reflection;
-using System.Collections.ObjectModel;
 
 namespace Mandrake.Client.Base
 {

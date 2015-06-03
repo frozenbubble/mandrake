@@ -23,9 +23,9 @@ namespace Mandrake.Management
         protected int serverMessages;
         protected readonly object syncRoot = new object();
 
-        [Import(typeof(ISynchronize))]
+        [Import(typeof(ISynchronize), AllowDefault=true)]
         protected ISynchronize syncManager;
-        [Import(typeof(IDocumentFactory))]
+        [Import(typeof(IDocumentFactory), AllowDefault = true)]
         public IDocumentFactory DocumentFactory { get; set; }
         [Import(typeof(ITransform))]
         public ITransform transformer { get; set; }

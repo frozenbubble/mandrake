@@ -8,8 +8,6 @@ using System.Threading.Tasks;
 namespace Mandrake.Model
 {
     [DataContract]
-    //[KnownType(typeof(IntervalOperation))]
-    //[KnownType(typeof(SinglePositionOperation))]
     public abstract class Operation: ICloneable
     {
         [DataMember]

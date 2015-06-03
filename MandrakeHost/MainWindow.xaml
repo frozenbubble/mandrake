@@ -1,10 +1,11 @@
-﻿<Window x:Class="Mandrake.Host.MainWindow"
+﻿<Controls:MetroWindow x:Class="Mandrake.Host.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mandrake="clr-namespace:Mandrake.Sample.Client.Document;assembly=MandrakeAppLib"
         xmlns:app="clr-namespace:Mandrake.Client.View;assembly=MandrakeAppLib"
         xmlns:convert="clr-namespace:Mandrake.Host.View.Converters"
-        Title="MainWindow" Height="350" Width="525">
+        xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+        Title="Mandrake Host" Height="350" Width="525">
     <Window.Resources>
         <convert:ConnectionPresenter x:Key="connConverter"/>
     </Window.Resources>
@@ -14,18 +15,13 @@
             <ColumnDefinition Width="3*" />
         </Grid.ColumnDefinitions>
 
-        <ListBox x:Name="users" ItemsSource="{Binding Path=Connections, Converter={StaticResource connConverter}}">
-            <ListBoxItem>
-                <StackPanel>
-                    <TextBlock Text="Client 1" />
-                </StackPanel>
-            </ListBoxItem>
-            <ListBoxItem>
-                <StackPanel>
-                    <TextBlock Text="Client 2" />
-                </StackPanel>
-            </ListBoxItem>
-        </ListBox>
+        <ListView x:Name="ClientsList" ItemsSource="{Binding Clients}" BorderBrush="White" >
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Name}" />
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
 
         <Grid Grid.Column="1">
             <Grid.RowDefinitions>
@@ -34,9 +30,9 @@
             </Grid.RowDefinitions>
 
             <!--<mandrake:OTAwareRichTextBox x:Name="editor" Background="Beige" IsEnabled="False" />-->
-            <app:MultiCaretTextEditor x:Name="editor" />
+            <app:MultiCaretTextEditor x:Name="editor" BorderThickness="1 0 0 0" BorderBrush="LightGray" />
             
             <TextBox x:Name="opLog" Grid.Row="1"/>
         </Grid>
     </Grid>
-</Window>
+</Controls:MetroWindow>

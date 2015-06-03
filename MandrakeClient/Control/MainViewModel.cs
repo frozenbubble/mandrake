@@ -20,7 +20,7 @@ using Mandrake.Client;
 
 namespace Mandrake.Samples.Client.ViewModel
 {
-    internal class MainViewModel: DependencyObject
+    public class MainViewModel: DependencyObject
     {
 
         public static RoutedCommand DownloadCommand = new RoutedCommand();
@@ -107,7 +107,7 @@ namespace Mandrake.Samples.Client.ViewModel
             }
         }
 
-        private async void NewCommand_Executed(object sender, ExecutedRoutedEventArgs e)
+        public async void NewCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             string documentName = await Window.ShowInputAsync("Document name", "What's the name of the document you would like to create?");
             if (documentName != null && documentName != "")
@@ -117,12 +117,12 @@ namespace Mandrake.Samples.Client.ViewModel
             }
         }
 
-        private void Default_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        internal void Default_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.CanExecute = true;
+            e.CanExecute = true;//(ClientManager == null);
         }
 
-        private void SaveCommand_Executed(object sender, ExecutedRoutedEventArgs e)
+        public void SaveCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             var dialog = new SaveFileDialog();
             dialog.ShowDialog();
@@ -130,7 +130,7 @@ namespace Mandrake.Samples.Client.ViewModel
             if (dialog.FileName != null && !dialog.FileName.Equals("")) File.WriteAllText(dialog.FileName, Window.Editor.Text);
         }
 
-        private async void OpenCommand_Executed(object sender, ExecutedRoutedEventArgs e)
+        public async void OpenCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             var dialog = new OpenFileDialog();
 
@@ -143,7 +143,7 @@ namespace Mandrake.Samples.Client.ViewModel
             }
         }
 
-        private void FindCommand_Executed(object sender, ExecutedRoutedEventArgs e)
+        public void FindCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             var dialog = new FindAndReplaceWindow(Window.Editor.TextArea);
             dialog.Show();

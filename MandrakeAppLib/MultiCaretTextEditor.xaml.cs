@@ -139,7 +139,6 @@ namespace Mandrake.Client.View
                 var visualPosition = GetVisualPosition(offset);
                 ColoredCursors[id].Position = visualPosition;
             }));
-
         }
 
         private Point GetVisualPosition(int offset)

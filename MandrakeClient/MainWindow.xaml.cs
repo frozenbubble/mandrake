@@ -35,15 +35,18 @@ namespace Mandrake.Samples.Client
 
         public MainWindow()
         {
-            InitializeComponent();
-            editor.DocumentName = "New Session";
-            DownloadCommand.InputGestures.Add(new KeyGesture(Key.D, ModifierKeys.Control));
-            
-            callback = new ClientManager(editor);
             this.viewModel = MainViewModel.Current;
+
+            InitializeComponent();
+
+            editor.DocumentName = "New Session";
+            callback = new ClientManager(editor);
+
             this.viewModel.ClientManager = callback;
             this.DataContext = viewModel;
-
+            viewModel.Window = this;
+            
+            DownloadCommand.InputGestures.Add(new KeyGesture(Key.D, ModifierKeys.Control));
             callback.ClientRegistered += callback_ClientRegistered;
             callback.MessageArrived += viewModel.OnMessageArrived;
         }
@@ -56,13 +59,6 @@ namespace Mandrake.Samples.Client
         }
 
         private async void MetroWindow_Loaded(object sender, RoutedEventArgs e)
-        {
-            string username = viewModel.Username = await this.ShowInputAsync("Alias", "What's your name?");
-
-            if (username != null) Connect(username); 
-        }
-
-        private async void Connect(string username)
         {
             await viewModel.Connect();
             Register(editor);
@@ -120,7 +116,7 @@ namespace Mandrake.Samples.Client
 
         private void Default_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.CanExecute = true;
+            e.CanExecute = true;//viewModel.Default_CanExecute(sender, e);
         }
 
         private void SaveCommand_Executed(object sender, ExecutedRoutedEventArgs e)
